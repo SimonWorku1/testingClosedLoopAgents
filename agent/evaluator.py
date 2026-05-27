@@ -21,13 +21,36 @@ def _api_call_with_backoff(fn, max_retries: int = 6):
             delay = min(delay * 2, 60)
 
 RUBRIC = """
-You are a strict academic editor evaluating a research report. Score the report on each dimension below (0–2 points each, total 0–10):
+You are a brutally strict academic peer reviewer for a top-tier journal. Most reports are mediocre. A score of 2 on any dimension must be EARNED — it requires exceptional, publication-quality work on that dimension. When in doubt, score lower.
 
-1. **Accuracy & Factual Correctness** (0-2): Are claims verifiable and accurate? Are sources cited?
-2. **Depth & Comprehensiveness** (0-2): Does the report cover the topic thoroughly with specifics, data, and examples?
-3. **Structure & Clarity** (0-2): Is the report well-organized with clear sections, logical flow, and readable prose?
-4. **Multiple Perspectives** (0-2): Does the report present different viewpoints or dimensions of the topic?
-5. **Actionable Conclusions** (0-2): Does the report draw meaningful insights and conclusions from the research?
+Score the report on each dimension (0–2 points each, total 0–10):
+
+1. **Accuracy & Factual Correctness** (0-2):
+   - 0: Vague, unverifiable, or clearly wrong claims.
+   - 1: Some specific facts with partial citations, but gaps or unverified claims remain.
+   - 2: Every major claim is specific, verifiable, and cited with a named source (author, publication, date, or URL). No hand-wavy generalities.
+
+2. **Depth & Comprehensiveness** (0-2):
+   - 0: Surface-level overview, no data or examples.
+   - 1: Covers the main points but missing key subtopics, quantitative data, or concrete examples.
+   - 2: Exhaustive coverage with specific statistics, named studies, quantitative comparisons, and concrete real-world examples for every major claim.
+
+3. **Structure & Clarity** (0-2):
+   - 0: Disorganized, hard to follow, or wall-of-text prose.
+   - 1: Adequate structure but transitions are rough, sections unbalanced, or prose unclear in places.
+   - 2: Flawless organization with a clear executive summary, well-scoped sections, smooth transitions, and polished professional prose throughout.
+
+4. **Multiple Perspectives** (0-2):
+   - 0: Single viewpoint only.
+   - 1: Mentions other views but does not develop them fairly or with evidence.
+   - 2: Fairly presents at least 3 distinct, well-evidenced perspectives (e.g., scientific consensus, dissenting research, industry, regulatory, consumer) with named sources for each.
+
+5. **Actionable Conclusions** (0-2):
+   - 0: No conclusions, or only restates what was already said.
+   - 1: Draws some insights but they are generic or obvious.
+   - 2: Derives specific, non-obvious, evidence-backed recommendations or takeaways that a decision-maker could act on directly.
+
+A score of 9–10 should be rare and reflect genuinely exceptional research. Score 8 should require solid work across all dimensions with no significant gaps. Be harsh — it forces better reports.
 
 Return your evaluation as JSON in exactly this format (no other text):
 {
@@ -39,7 +62,7 @@ Return your evaluation as JSON in exactly this format (no other text):
     "conclusions": <integer 0, 1, or 2>
   },
   "total": <0-10>,
-  "feedback": "<2-3 sentences on main strengths and specific weaknesses to improve>"
+  "feedback": "<3-4 sentences: name the specific gaps, missing sources, or weak sections that prevented a higher score>"
 }
 """
 
