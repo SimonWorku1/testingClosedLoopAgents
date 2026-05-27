@@ -17,6 +17,11 @@ on:
         required: false
         default: ""
         type: string
+      prev_run_id:
+        description: "GitHub run ID of the previous iteration, for artifact download (set automatically)"
+        required: false
+        default: ""
+        type: string
       max_iterations:
         description: "Maximum number of improvement iterations"
         required: false
@@ -46,12 +51,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r agent/requirements.txt
 
-      # On iterations > 0, download the shared history artifact from the first run
+      # On iterations > 0, download the history artifact from the previous iteration's run.
+      # We must supply run-id because download-artifact@v4 only searches the current run by default.
       - name: Download history from previous iterations
         if: ${{ github.event.inputs.iteration != '0' }}
         uses: actions/download-artifact@v4
         with:
           name: research-history-${{ github.event.inputs.run_id }}
+          run-id: ${{ github.event.inputs.prev_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           path: outputs/
 
       - name: Run research iteration
@@ -116,6 +124,7 @@ jobs:
                 topic: '${{ github.event.inputs.topic }}',
                 iteration: String(nextIteration),
                 run_id: runId,
+                prev_run_id: '${{ github.run_id }}',
                 max_iterations: '${{ github.event.inputs.max_iterations }}',
               }
             });
