@@ -95,13 +95,17 @@ jobs:
 
       # Trigger next iteration if score not yet reached and iterations remain
       - name: Trigger next iteration
-        if: |
-          steps.research.outputs.done == 'false' &&
-          fromJSON(github.event.inputs.iteration) < fromJSON(github.event.inputs.max_iterations) - 1
+        if: steps.research.outputs.done == 'false'
         uses: actions/github-script@v7
         with:
           script: |
-            const nextIteration = parseInt('${{ github.event.inputs.iteration }}') + 1;
+            const iteration = parseInt('${{ github.event.inputs.iteration }}');
+            const maxIterations = parseInt('${{ github.event.inputs.max_iterations }}');
+            const nextIteration = iteration + 1;
+            if (nextIteration >= maxIterations) {
+              console.log(`Reached max iterations (${maxIterations}), stopping.`);
+              return;
+            }
             const runId = '${{ github.event.inputs.run_id }}' || '${{ github.run_id }}';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
