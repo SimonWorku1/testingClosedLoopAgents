@@ -74,18 +74,22 @@ async def run_iteration_async(
     previous_iterations: list[dict],
 ) -> list[dict]:
     """Launch NUM_AGENTS research workers in parallel and await all results."""
-    futures = [
-        loop.run_in_executor(
-            _executor,
-            _research_worker,
-            client,
-            topic,
-            agent_id,
-            iteration,
-            previous_iterations,
+    futures = []
+    for agent_id in range(NUM_AGENTS):
+        # Stagger starts by 3s to avoid simultaneous token bursts hitting rate limits
+        if agent_id > 0:
+            await asyncio.sleep(3)
+        futures.append(
+            loop.run_in_executor(
+                _executor,
+                _research_worker,
+                client,
+                topic,
+                agent_id,
+                iteration,
+                previous_iterations,
+            )
         )
-        for agent_id in range(NUM_AGENTS)
-    ]
     return list(await asyncio.gather(*futures))
 
 

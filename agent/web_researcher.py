@@ -5,9 +5,22 @@ import re
 import time
 import urllib.parse
 import urllib.request
-from typing import Any
 
 import anthropic
+
+
+def _api_call_with_backoff(fn, max_retries: int = 6):
+    """Call fn(); on RateLimitError retry with exponential backoff (2s, 4s, 8s, …)."""
+    delay = 2
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except anthropic.RateLimitError:
+            if attempt == max_retries - 1:
+                raise
+            print(f"    [rate limit] backing off {delay}s...")
+            time.sleep(delay)
+            delay = min(delay * 2, 60)
 
 SEARCH_TOOL = {
     "name": "search_web",
@@ -215,12 +228,14 @@ def run_research_agent(
     ]
 
     for _ in range(max_tool_rounds):
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=4096,
-            system=build_system_prompt(),
-            tools=TOOLS,
-            messages=messages,
+        response = _api_call_with_backoff(
+            lambda: client.messages.create(
+                model="claude-sonnet-4-6",
+                max_tokens=4096,
+                system=build_system_prompt(),
+                tools=TOOLS,
+                messages=messages,
+            )
         )
 
         # Collect assistant message
