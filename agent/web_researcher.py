@@ -270,7 +270,9 @@ def run_research_agent(
                         }
                     )
             messages.append({"role": "user", "content": tool_results})
-            time.sleep(0.3)  # be polite to upstream servers
+            # Sleep between rounds to stay under the 30k input tokens/min rate limit.
+            # Each round sends growing conversation history; 12s spacing keeps burst rate safe.
+            time.sleep(12)
         else:
             print(
                 f"    [Agent {agent_id + 1}] Unexpected stop_reason "
