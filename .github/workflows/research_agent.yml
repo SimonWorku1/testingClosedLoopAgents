@@ -20,7 +20,7 @@ on:
       max_iterations:
         description: "Maximum number of improvement iterations"
         required: false
-        default: "8"
+        default: "5"
         type: string
 
 permissions:
@@ -30,7 +30,7 @@ jobs:
   research:
     name: "Iteration ${{ github.event.inputs.iteration }} — ${{ github.event.inputs.topic }}"
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
