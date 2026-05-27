@@ -216,7 +216,7 @@ def run_research_agent(
 
     for _ in range(max_tool_rounds):
         response = client.messages.create(
-            model="claude-opus-4-7",
+            model="claude-sonnet-4-6",
             max_tokens=4096,
             system=build_system_prompt(),
             tools=TOOLS,
