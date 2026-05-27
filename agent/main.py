@@ -139,7 +139,9 @@ async def orchestrate(topic: str, output_dir: Path) -> dict:
                 f"\n✓ Target score reached! Agent {winner['agent_id'] + 1} "
                 f"scored {winner['score']}/10 in iteration {iteration + 1}."
             )
-            best_result = winner
+            if winner["score"] > best_score:
+                best_score = winner["score"]
+                best_result = winner
             break
     else:
         print(
@@ -172,7 +174,8 @@ async def orchestrate(topic: str, output_dir: Path) -> dict:
     )
 
     # Best report (Markdown)
-    assert best_result is not None
+    if best_result is None:
+        raise RuntimeError("No results were produced — all agent workers may have failed.")
     report_path = output_dir / f"best_report_{timestamp}.md"
     report_path.write_text(
         f"# Research Report: {topic}\n\n"

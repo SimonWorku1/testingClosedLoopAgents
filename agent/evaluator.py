@@ -17,11 +17,11 @@ You are a strict academic editor evaluating a research report. Score the report 
 Return your evaluation as JSON in exactly this format (no other text):
 {
   "scores": {
-    "accuracy": <0-2>,
-    "depth": <0-2>,
-    "structure": <0-2>,
-    "perspectives": <0-2>,
-    "conclusions": <0-2>
+    "accuracy": <integer 0, 1, or 2>,
+    "depth": <integer 0, 1, or 2>,
+    "structure": <integer 0, 1, or 2>,
+    "perspectives": <integer 0, 1, or 2>,
+    "conclusions": <integer 0, 1, or 2>
   },
   "total": <0-10>,
   "feedback": "<2-3 sentences on main strengths and specific weaknesses to improve>"

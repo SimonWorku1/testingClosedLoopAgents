@@ -253,6 +253,10 @@ def run_research_agent(
             messages.append({"role": "user", "content": tool_results})
             time.sleep(0.3)  # be polite to upstream servers
         else:
+            print(
+                f"    [Agent {agent_id + 1}] Unexpected stop_reason "
+                f"'{response.stop_reason}' — returning partial response."
+            )
             break
 
     # Fallback: extract whatever text exists
