@@ -2,8 +2,23 @@
 
 import json
 import re
+import time
 
 import anthropic
+
+
+def _api_call_with_backoff(fn, max_retries: int = 6):
+    """Call fn(); on RateLimitError retry with exponential backoff (2s, 4s, 8s, …)."""
+    delay = 2
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except anthropic.RateLimitError:
+            if attempt == max_retries - 1:
+                raise
+            print(f"    [evaluator rate limit] backing off {delay}s...")
+            time.sleep(delay)
+            delay = min(delay * 2, 60)
 
 RUBRIC = """
 You are a strict academic editor evaluating a research report. Score the report on each dimension below (0–2 points each, total 0–10):
@@ -44,11 +59,13 @@ def evaluate_report(
         "Evaluate this report using the rubric. Return JSON only."
     )
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=512,
-        system=RUBRIC,
-        messages=[{"role": "user", "content": prompt}],
+    response = _api_call_with_backoff(
+        lambda: client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=512,
+            system=RUBRIC,
+            messages=[{"role": "user", "content": prompt}],
+        )
     )
 
     raw = response.content[0].text.strip()

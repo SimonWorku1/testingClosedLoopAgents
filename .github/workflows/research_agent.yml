@@ -7,17 +7,30 @@ on:
         description: "Research topic to investigate"
         required: true
         type: string
-      output_dir:
-        description: "Output directory for reports (default: outputs)"
+      iteration:
+        description: "Current iteration number (0-indexed, set automatically)"
         required: false
-        default: "outputs"
+        default: "0"
         type: string
+      run_id:
+        description: "Shared run ID to group artifacts (set automatically)"
+        required: false
+        default: ""
+        type: string
+      max_iterations:
+        description: "Maximum number of improvement iterations"
+        required: false
+        default: "5"
+        type: string
+
+permissions:
+  actions: write   # needed to trigger the next iteration
 
 jobs:
   research:
-    name: "Research: ${{ github.event.inputs.topic }}"
+    name: "Iteration ${{ github.event.inputs.iteration }} — ${{ github.event.inputs.topic }}"
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -33,7 +46,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r agent/requirements.txt
 
-      - name: Run research agent
+      # On iterations > 0, download the shared history artifact from the first run
+      - name: Download history from previous iterations
+        if: ${{ github.event.inputs.iteration != '0' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: research-history-${{ github.event.inputs.run_id }}
+          path: outputs/
+
+      - name: Run research iteration
         id: research
         working-directory: agent
         env:
@@ -41,37 +62,57 @@ jobs:
         run: |
           python main.py \
             "${{ github.event.inputs.topic }}" \
-            "../${{ github.event.inputs.output_dir }}"
+            "../outputs" \
+            --iteration ${{ github.event.inputs.iteration }} \
+            --history-file ../outputs/history.json
 
-      - name: Upload reports as artifacts
+      - name: Upload history artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: research-reports-${{ github.run_id }}
-          path: ${{ github.event.inputs.output_dir }}/
+          # Always upload under the shared run_id so next iteration can find it.
+          # Use github.run_id as the shared key on iteration 0.
+          name: research-history-${{ github.event.inputs.run_id || github.run_id }}
+          path: outputs/
+          overwrite: true
           retention-days: 30
 
-      - name: Show best report in summary
+      - name: Write job summary
         if: always()
         run: |
-          SUMMARY_FILE="${{ github.event.inputs.output_dir }}/run_summary.json"
-          if [ -f "$SUMMARY_FILE" ]; then
-            SCORE=$(jq -r '.best_score' "$SUMMARY_FILE")
-            ITERS=$(jq -r '.iterations_run' "$SUMMARY_FILE")
-            REPORT=$(jq -r '.best_report_path' "$SUMMARY_FILE")
-
-            echo "## Research Agent Results" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
-            echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
-            echo "| Topic | ${{ github.event.inputs.topic }} |" >> $GITHUB_STEP_SUMMARY
-            echo "| Best Score | ${SCORE}/10 |" >> $GITHUB_STEP_SUMMARY
-            echo "| Iterations Run | ${ITERS} |" >> $GITHUB_STEP_SUMMARY
-            echo "| Agents per Iteration | 3 |" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            if [ -f "$REPORT" ]; then
-              echo "### Best Report" >> $GITHUB_STEP_SUMMARY
-              cat "$REPORT" >> $GITHUB_STEP_SUMMARY
-            fi
+          SCORE="${{ steps.research.outputs.score }}"
+          DONE="${{ steps.research.outputs.done }}"
+          ITER="${{ github.event.inputs.iteration }}"
+          echo "## Iteration $((ITER + 1)) — Score: ${SCORE}/10" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "$DONE" = "true" ]; then
+            echo "**Target score reached!**" >> $GITHUB_STEP_SUMMARY
           fi
+          REPORT=$(ls outputs/iteration_*.md 2>/dev/null | tail -1)
+          if [ -f "$REPORT" ]; then
+            cat "$REPORT" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # Trigger next iteration if score not yet reached and iterations remain
+      - name: Trigger next iteration
+        if: |
+          steps.research.outputs.done == 'false' &&
+          fromJSON(github.event.inputs.iteration) < fromJSON(github.event.inputs.max_iterations) - 1
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const nextIteration = parseInt('${{ github.event.inputs.iteration }}') + 1;
+            const runId = '${{ github.event.inputs.run_id }}' || '${{ github.run_id }}';
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'research_agent.yml',
+              ref: 'main',
+              inputs: {
+                topic: '${{ github.event.inputs.topic }}',
+                iteration: String(nextIteration),
+                run_id: runId,
+                max_iterations: '${{ github.event.inputs.max_iterations }}',
+              }
+            });
+            console.log(`Triggered iteration ${nextIteration} (run_id: ${runId})`);
