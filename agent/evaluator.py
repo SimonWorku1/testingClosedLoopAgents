@@ -45,7 +45,7 @@ def evaluate_report(
     )
 
     response = client.messages.create(
-        model="claude-opus-4-7",
+        model="claude-sonnet-4-6",
         max_tokens=512,
         system=RUBRIC,
         messages=[{"role": "user", "content": prompt}],
