@@ -97,7 +97,7 @@ jobs:
       - name: Trigger next iteration
         if: |
           steps.research.outputs.done == 'false' &&
-          github.event.inputs.iteration < github.event.inputs.max_iterations - 1
+          fromJSON(github.event.inputs.iteration) < fromJSON(github.event.inputs.max_iterations) - 1
         uses: actions/github-script@v7
         with:
           script: |

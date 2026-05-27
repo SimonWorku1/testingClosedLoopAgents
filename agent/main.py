@@ -33,7 +33,6 @@ TARGET_SCORE = 8
 # which is safely under the Tier 1 30k/min cap.
 AGENT_STAGGER_SECONDS = 30
 
-_shutdown = threading.Event()
 _executor = ThreadPoolExecutor(max_workers=NUM_AGENTS * 2)
 
 
@@ -47,8 +46,9 @@ def _agent_worker(
     agent_id: int,
     iteration: int,
     previous_iterations: list[dict],
+    shutdown: threading.Event,
 ) -> dict:
-    if _shutdown.is_set():
+    if shutdown.is_set():
         raise RuntimeError(f"Agent {agent_id + 1} cancelled before start.")
 
     t0 = time.time()
@@ -56,13 +56,13 @@ def _agent_worker(
     try:
         report = run_research_agent(
             client, topic, agent_id, iteration, previous_iterations,
-            shutdown_event=_shutdown,
+            shutdown_event=shutdown,
         )
     except Exception:
-        _shutdown.set()
+        shutdown.set()
         raise
 
-    if _shutdown.is_set():
+    if shutdown.is_set():
         raise RuntimeError(f"Agent {agent_id + 1} cancelled after research.")
 
     elapsed = time.time() - t0
@@ -71,7 +71,7 @@ def _agent_worker(
     try:
         score, feedback = evaluate_report(client, report, topic)
     except Exception:
-        _shutdown.set()
+        shutdown.set()
         raise
 
     elapsed = time.time() - t0
@@ -100,6 +100,9 @@ def run_iteration(
     Run NUM_AGENTS agents for one iteration, staggered by AGENT_STAGGER_SECONDS.
     Returns list of result dicts, one per agent.
     """
+    # Fresh event per call so a previous failure doesn't poison this run.
+    shutdown = threading.Event()
+
     print(f"\n--- Iteration {iteration + 1} | {NUM_AGENTS} agents ---")
     futures = []
     for agent_id in range(NUM_AGENTS):
@@ -108,7 +111,7 @@ def run_iteration(
             time.sleep(AGENT_STAGGER_SECONDS)
         futures.append(
             _executor.submit(
-                _agent_worker, client, topic, agent_id, iteration, previous_iterations
+                _agent_worker, client, topic, agent_id, iteration, previous_iterations, shutdown
             )
         )
 
@@ -119,6 +122,8 @@ def run_iteration(
             results.append(f.result())
         except Exception as exc:
             errors.append(exc)
+            for remaining in futures:
+                remaining.cancel()
 
     if errors:
         raise errors[0]
@@ -158,7 +163,9 @@ def action_mode(topic: str, iteration: int, history_file: Path, output_dir: Path
         "target_score": TARGET_SCORE,
         "iterations": previous_iterations + [iter_record],
     }
-    history_file.write_text(json.dumps(history, indent=2))
+    tmp = history_file.with_suffix(".tmp")
+    tmp.write_text(json.dumps(history, indent=2))
+    os.replace(tmp, history_file)
 
     report_path = output_dir / f"iteration_{iteration + 1:02d}_score{best['score']}.md"
     report_path.write_text(
@@ -226,7 +233,8 @@ def local_mode(topic: str, output_dir: Path, max_iterations: int = MAX_ITERATION
     else:
         print(f"\n✗ Max iterations reached. Best score: {best_score}/10")
 
-    assert best_result is not None
+    if best_result is None:
+        raise RuntimeError("No results produced across all iterations.")
     timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
 
     history_path = output_dir / f"run_history_{timestamp}.json"
