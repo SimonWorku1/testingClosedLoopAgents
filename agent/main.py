@@ -47,7 +47,7 @@ def _agent_worker(
     iteration: int,
     previous_iterations: list[dict],
     shutdown: threading.Event,
-) -> dict:
+) -> dict | None:
     if shutdown.is_set():
         raise RuntimeError(f"Agent {agent_id + 1} cancelled before start.")
 
@@ -58,9 +58,9 @@ def _agent_worker(
             client, topic, agent_id, iteration, previous_iterations,
             shutdown_event=shutdown,
         )
-    except Exception:
-        shutdown.set()
-        raise
+    except Exception as exc:
+        print(f"  [Agent {agent_id + 1}] Failed during research: {exc}", file=sys.stderr)
+        return None
 
     if shutdown.is_set():
         raise RuntimeError(f"Agent {agent_id + 1} cancelled after research.")
@@ -70,9 +70,9 @@ def _agent_worker(
 
     try:
         score, feedback = evaluate_report(client, report, topic)
-    except Exception:
-        shutdown.set()
-        raise
+    except Exception as exc:
+        print(f"  [Agent {agent_id + 1}] Failed during evaluation: {exc}", file=sys.stderr)
+        return None
 
     elapsed = time.time() - t0
     print(f"  [Agent {agent_id + 1}] Score: {score}/10  |  {elapsed:.1f}s  |  {feedback[:80]}")
@@ -116,17 +116,16 @@ def run_iteration(
         )
 
     results = []
-    errors = []
     for f in futures:
         try:
-            results.append(f.result())
+            result = f.result()
+            if result is not None:
+                results.append(result)
         except Exception as exc:
-            errors.append(exc)
-            for remaining in futures:
-                remaining.cancel()
+            print(f"  [Agent] Unexpected thread error: {exc}", file=sys.stderr)
 
-    if errors:
-        raise errors[0]
+    if not results:
+        raise RuntimeError("All agents failed — no results for this iteration.")
     return results
 
 
