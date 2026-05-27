@@ -104,12 +104,12 @@ jobs:
 
       # Trigger next iteration if score not yet reached and iterations remain
       - name: Trigger next iteration
-        if: steps.research.outputs.done == 'false'
+        if: steps.research.outputs.done == 'false' && steps.research.outcome == 'success'
         uses: actions/github-script@v7
         with:
           script: |
             const iteration = parseInt('${{ github.event.inputs.iteration }}');
-            const maxIterations = parseInt('${{ github.event.inputs.max_iterations }}');
+            const maxIterations = parseInt('${{ github.event.inputs.max_iterations }}') || 5;
             const nextIteration = iteration + 1;
             if (nextIteration >= maxIterations) {
               console.log(`Reached max iterations (${maxIterations}), stopping.`);
