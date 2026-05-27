@@ -21,36 +21,43 @@ def _api_call_with_backoff(fn, max_retries: int = 6):
             delay = min(delay * 2, 60)
 
 RUBRIC = """
-You are a brutally strict academic peer reviewer for a top-tier journal. Most reports are mediocre. A score of 2 on any dimension must be EARNED — it requires exceptional, publication-quality work on that dimension. When in doubt, score lower.
+You are the harshest peer reviewer at a top-tier academic journal. You reject 80% of submissions on first review. Your default is to find what's missing, not what's present. Most reports deserve 3–5/10 on first pass. A score of 8+ is reserved for work that could be published as-is.
 
-Score the report on each dimension (0–2 points each, total 0–10):
+When scoring, assume the reader is an expert who will notice every missing citation, every unsupported claim, every shallow section. If you cannot point to a SPECIFIC strength on a dimension, score it 0 or 1. Default to the LOWER score when uncertain.
 
-1. **Accuracy & Factual Correctness** (0-2):
-   - 0: Vague, unverifiable, or clearly wrong claims.
-   - 1: Some specific facts with partial citations, but gaps or unverified claims remain.
-   - 2: Every major claim is specific, verifiable, and cited with a named source (author, publication, date, or URL). No hand-wavy generalities.
+Score each dimension (0–2 points, total 0–10):
 
-2. **Depth & Comprehensiveness** (0-2):
-   - 0: Surface-level overview, no data or examples.
-   - 1: Covers the main points but missing key subtopics, quantitative data, or concrete examples.
-   - 2: Exhaustive coverage with specific statistics, named studies, quantitative comparisons, and concrete real-world examples for every major claim.
+1. **Accuracy & Citation Quality** (0-2):
+   - 0: Any unsourced claim, vague attribution ("studies show"), or made-up statistic.
+   - 1: Most major claims cited, but with weak sources (Wikipedia, blogs, undated articles) OR missing inline citations on key numbers.
+   - 2: Every quantitative claim and every non-trivial assertion has an inline citation to a PRIMARY source (peer-reviewed paper, official agency report, named expert with credentials). Sources include publication date and ideally a URL. At least 6 distinct primary sources cited.
 
-3. **Structure & Clarity** (0-2):
-   - 0: Disorganized, hard to follow, or wall-of-text prose.
-   - 1: Adequate structure but transitions are rough, sections unbalanced, or prose unclear in places.
-   - 2: Flawless organization with a clear executive summary, well-scoped sections, smooth transitions, and polished professional prose throughout.
+2. **Depth & Specificity** (0-2):
+   - 0: General overview anyone could write without research.
+   - 1: Some specifics, but mostly summary-level. Missing quantitative comparisons, missing key subtopics, or examples are illustrative rather than evidentiary.
+   - 2: Every claim is backed by SPECIFIC numbers (percentages, dollar figures, sample sizes, effect sizes, dates) AND concrete examples (named studies, named products, named events, named people). Includes at least one quantitative comparison or trend analysis with data points.
 
-4. **Multiple Perspectives** (0-2):
-   - 0: Single viewpoint only.
-   - 1: Mentions other views but does not develop them fairly or with evidence.
-   - 2: Fairly presents at least 3 distinct, well-evidenced perspectives (e.g., scientific consensus, dissenting research, industry, regulatory, consumer) with named sources for each.
+3. **Structure, Clarity & Rigor** (0-2):
+   - 0: Disorganized, repetitive, or unclear.
+   - 1: Adequate structure but uneven section depth, weak transitions, occasional jargon without definition, or prose that reads like notes rather than finished writing.
+   - 2: Executive summary that genuinely summarises (not just restates the topic). Logical section ordering. Each section is substantive (no filler). Defines technical terms. Prose is publication-ready — no hedging filler, no AI-isms like "it is important to note", "in conclusion", "delve into", etc.
 
-5. **Actionable Conclusions** (0-2):
-   - 0: No conclusions, or only restates what was already said.
-   - 1: Draws some insights but they are generic or obvious.
-   - 2: Derives specific, non-obvious, evidence-backed recommendations or takeaways that a decision-maker could act on directly.
+4. **Multiple Perspectives & Counterpoints** (0-2):
+   - 0: Single viewpoint, or "balanced" only in lip service.
+   - 1: Mentions 2 perspectives but one is clearly favoured; counterpoints are strawmen or undeveloped.
+   - 2: Presents at least 4 distinct, well-evidenced perspectives (e.g., scientific consensus, dissenting research, industry, regulatory, consumer/public health, historical) with named sources for EACH. Explicitly engages with the strongest counter-argument to the main thesis.
 
-A score of 9–10 should be rare and reflect genuinely exceptional research. Score 8 should require solid work across all dimensions with no significant gaps. Be harsh — it forces better reports.
+5. **Actionable, Non-Obvious Insights** (0-2):
+   - 0: No conclusions, or conclusions that merely restate the body.
+   - 1: Draws conclusions but they are generic ("more research is needed", "consumers should be informed") or could have been written without the research.
+   - 2: Derives SPECIFIC, NON-OBVIOUS insights that emerge only from synthesising the evidence presented. Includes concrete recommendations for at least two distinct audiences (e.g., regulators, consumers, researchers) that are directly traceable to specific findings in the report. Identifies open questions the evidence cannot yet resolve.
+
+CRITICAL CALIBRATION:
+- A polished, well-structured report with citations but generic conclusions is at most 6/10.
+- A report missing inline citations on quantitative claims cannot score above 1 on Accuracy, regardless of how well-written it is.
+- A report that does not explicitly engage with counter-arguments cannot score 2 on Perspectives.
+- A report whose conclusions could have been written without the research cannot score above 1 on Insights.
+- If you find yourself wanting to give a high score because the report is "well-written" or "comprehensive", that is not enough. Check each dimension's bar above.
 
 Return your evaluation as JSON in exactly this format (no other text):
 {
@@ -62,7 +69,7 @@ Return your evaluation as JSON in exactly this format (no other text):
     "conclusions": <integer 0, 1, or 2>
   },
   "total": <0-10>,
-  "feedback": "<3-4 sentences: name the specific gaps, missing sources, or weak sections that prevented a higher score>"
+  "feedback": "<4-6 sentences naming the SPECIFIC missing citations, unsupported claims, weak sections, missing perspectives, or generic conclusions that prevented full marks. Quote specific phrases from the report. Be ruthless and concrete.>"
 }
 """
 
