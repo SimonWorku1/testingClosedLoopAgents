@@ -122,7 +122,7 @@ def _duckduckgo_search(query: str, max_results: int = 5) -> list[dict]:
     return results
 
 
-def _fetch_page(url: str, max_chars: int = 6000) -> str:
+def _fetch_page(url: str, max_chars: int = 3000) -> str:
     """Fetch a URL and return stripped text content."""
     try:
         req = urllib.request.Request(url, headers=HEADERS)
@@ -217,7 +217,8 @@ def run_research_agent(
     agent_id: int,
     iteration: int,
     previous_iterations: list[dict],
-    max_tool_rounds: int = 8,
+    max_tool_rounds: int = 5,
+    shutdown_event=None,
 ) -> str:
     """Run a single research agent and return the final report text."""
     messages: list[dict] = [
@@ -228,10 +229,13 @@ def run_research_agent(
     ]
 
     for _ in range(max_tool_rounds):
+        if shutdown_event and shutdown_event.is_set():
+            return "[Cancelled]"
+
         response = _api_call_with_backoff(
             lambda: client.messages.create(
                 model="claude-sonnet-4-6",
-                max_tokens=4096,
+                max_tokens=2048,
                 system=build_system_prompt(),
                 tools=TOOLS,
                 messages=messages,

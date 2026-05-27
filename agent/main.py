@@ -12,6 +12,7 @@ import asyncio
 import json
 import os
 import sys
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -34,6 +35,10 @@ TARGET_SCORE = 8
 # ---------------------------------------------------------------------------
 _executor = ThreadPoolExecutor(max_workers=NUM_AGENTS * 2)
 
+# Shared cancellation signal — set by any worker that hits a fatal error so
+# sibling threads stop at their next checkpoint rather than running to completion.
+_shutdown = threading.Event()
+
 
 def _research_worker(
     client: anthropic.Anthropic,
@@ -43,15 +48,33 @@ def _research_worker(
     previous_iterations: list[dict],
 ) -> dict:
     """Thread worker: run one research agent and evaluate its report."""
+    if _shutdown.is_set():
+        raise RuntimeError(f"Agent {agent_id + 1} cancelled before start.")
+
     t0 = time.time()
     print(f"  [Agent {agent_id + 1}] Starting research (iteration {iteration + 1})...")
-    report = run_research_agent(client, topic, agent_id, iteration, previous_iterations)
+    try:
+        report = run_research_agent(
+            client, topic, agent_id, iteration, previous_iterations,
+            shutdown_event=_shutdown,
+        )
+    except Exception as exc:
+        _shutdown.set()
+        raise
+
+    if _shutdown.is_set():
+        raise RuntimeError(f"Agent {agent_id + 1} cancelled after research.")
+
     elapsed_research = time.time() - t0
-
     print(f"  [Agent {agent_id + 1}] Research done ({elapsed_research:.1f}s). Evaluating...")
-    score, feedback = evaluate_report(client, report, topic)
-    elapsed_total = time.time() - t0
 
+    try:
+        score, feedback = evaluate_report(client, report, topic)
+    except Exception as exc:
+        _shutdown.set()
+        raise
+
+    elapsed_total = time.time() - t0
     print(
         f"  [Agent {agent_id + 1}] Score: {score}/10  |  "
         f"Total time: {elapsed_total:.1f}s  |  Feedback: {feedback[:80]}..."
@@ -76,7 +99,7 @@ async def run_iteration_async(
     """Launch NUM_AGENTS research workers in parallel and await all results."""
     futures = []
     for agent_id in range(NUM_AGENTS):
-        # Stagger starts by 3s to avoid simultaneous token bursts hitting rate limits
+        # Stagger starts by 3s to spread token usage and reduce rate-limit collisions
         if agent_id > 0:
             await asyncio.sleep(3)
         futures.append(
@@ -90,7 +113,13 @@ async def run_iteration_async(
                 previous_iterations,
             )
         )
-    return list(await asyncio.gather(*futures))
+
+    # Collect all results; surface the first exception if any worker failed
+    results = await asyncio.gather(*futures, return_exceptions=True)
+    errors = [r for r in results if isinstance(r, BaseException)]
+    if errors:
+        raise errors[0]
+    return list(results)
 
 
 # ---------------------------------------------------------------------------
@@ -220,7 +249,11 @@ def main() -> None:
     topic = sys.argv[1]
     output_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else Path("outputs")
 
-    result = asyncio.run(orchestrate(topic, output_dir))
+    try:
+        result = asyncio.run(orchestrate(topic, output_dir))
+    except Exception as exc:
+        print(f"\nFATAL ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
 
     # Write a machine-readable summary for the GitHub Action step
     summary_path = output_dir / "run_summary.json"
