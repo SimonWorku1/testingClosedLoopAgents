@@ -54,7 +54,8 @@ jobs:
       # On iterations > 0, download the history artifact from the previous iteration's run.
       # We must supply run-id because download-artifact@v4 only searches the current run by default.
       - name: Download history from previous iterations
-        if: ${{ github.event.inputs.iteration != '0' }}
+        if: ${{ github.event.inputs.iteration != '0' && github.event.inputs.prev_run_id != '' }}
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: research-history-${{ github.event.inputs.run_id }}
