@@ -228,29 +228,28 @@ def run_research_agent(
         }
     ]
 
-    for _ in range(max_tool_rounds):
+    response = None
+    for round_idx in range(max_tool_rounds):
         if shutdown_event and shutdown_event.is_set():
             return "[Cancelled]"
 
         response = _api_call_with_backoff(
             lambda: client.messages.create(
                 model="claude-sonnet-4-6",
-                max_tokens=2048,
+                max_tokens=4096,
                 system=build_system_prompt(),
                 tools=TOOLS,
                 messages=messages,
             )
         )
 
-        # Collect assistant message
         messages.append({"role": "assistant", "content": response.content})
 
         if response.stop_reason == "end_turn":
-            # Extract text from final response
             for block in response.content:
-                if hasattr(block, "text"):
+                if hasattr(block, "text") and block.text.strip():
                     return block.text
-            return "[No text in response]"
+            break  # fall through to final no-tools call
 
         if response.stop_reason == "tool_use":
             tool_results = []
@@ -270,18 +269,36 @@ def run_research_agent(
                         }
                     )
             messages.append({"role": "user", "content": tool_results})
-            # Sleep between rounds to stay under the 30k input tokens/min rate limit.
-            # Each round sends growing conversation history; 12s spacing keeps burst rate safe.
             time.sleep(12)
-        else:
-            print(
-                f"    [Agent {agent_id + 1}] Unexpected stop_reason "
-                f"'{response.stop_reason}' — returning partial response."
-            )
-            break
+            continue
 
-    # Fallback: extract whatever text exists
-    for block in (response.content if response else []):
-        if hasattr(block, "text"):
+        # stop_reason == "max_tokens" or other: stop tool loop, force final report
+        print(
+            f"    [Agent {agent_id + 1}] stop_reason='{response.stop_reason}' "
+            f"after round {round_idx + 1} — forcing final report."
+        )
+        break
+
+    # Force a final report with no tools and a larger token budget.
+    if shutdown_event and shutdown_event.is_set():
+        return "[Cancelled]"
+
+    messages.append({
+        "role": "user",
+        "content": (
+            "Based on everything you have researched so far, write the final report now. "
+            "Do not call any more tools. Return ONLY the formatted report text."
+        ),
+    })
+    final = _api_call_with_backoff(
+        lambda: client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=8192,
+            system=build_system_prompt(),
+            messages=messages,
+        )
+    )
+    for block in final.content:
+        if hasattr(block, "text") and block.text.strip():
             return block.text
     return "[Agent did not produce a report]"
