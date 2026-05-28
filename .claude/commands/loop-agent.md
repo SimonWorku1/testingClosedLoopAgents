@@ -2,108 +2,150 @@
 
 Set up or update a self-improving closed-loop agent system for a given goal.
 
+This skill encodes hard-won lessons. The "Failure modes to prevent" section below is non-negotiable — every generated project must defend against every item listed there.
+
 ## Step 1 — Gather inputs
 
-Ask the user (in a single AskUserQuestion call with up to 4 questions) for anything not already provided:
+Ask the user (in a single AskUserQuestion call) for anything not already provided:
 
-1. **Goal** (required): What should the agents accomplish? (e.g. "research a topic and write a report", "generate and refine a Python script that solves X", "summarise and critique a set of documents")
-2. **Agents per iteration** (default 3): How many agents run in parallel each iteration?
-3. **Max iterations** (default 5): Maximum improvement cycles before stopping.
-4. **Target score** (default 8): Score out of 10 at which the loop stops early.
+1. **Goal** (required): What should the agents accomplish?
+2. **Agents per iteration** (default 3)
+3. **Max iterations** (default 5)
+4. **Target score** (default 8 out of 10)
 
-If the user already provided any of these in the invocation message, skip asking for them.
+If the user already provided any of these inline, skip those questions.
 
 ## Step 2 — Detect repo state
 
-Check whether `agent/main.py` exists in the current working directory.
+Check whether `agent/main.py` exists.
 
-- **Exists** → this is an existing closed-loop agent project. You will **adapt** the files in-place.
-- **Does not exist** → this is a fresh repo. You will **scaffold** the full project.
+- **Exists** → adapt the files in-place.
+- **Does not exist** → scaffold the full project.
 
 ## Step 3 — Analyse the goal
 
-Before writing any code, think carefully about what the goal requires:
+Decide:
 
-- **What does a worker agent need to do?** (search the web, call an API, read files, generate code, call a database, etc.)
-- **What tools does it need?** Design the tool schemas (name, description, input_schema) for any tools required. If web search is needed, use the DuckDuckGo HTML + urllib pattern from the existing codebase. If other resources are needed, implement them as pure-Python helpers with no extra pip dependencies where possible; otherwise add them to requirements.txt.
-- **What is a "good result"?** Translate the goal into a 5-dimension rubric (0–2 each, total 0–10) where each dimension is specific, measurable, and hard to game. Each score of 2 must require genuinely exceptional work. A score of 8+ should take multiple iterations to achieve.
-- **What system prompt should the worker use?** Write a system prompt that tells the worker exactly what to do, what format to return the result in, and what constitutes a high-quality output.
+- **What does a worker need to do?** (search the web, call an API, read files, run code, etc.)
+- **What tools?** Design schemas (name, description, input_schema). If web search is needed, reuse the DuckDuckGo HTML + urllib pattern. Prefer pure-Python helpers; otherwise add deps to requirements.txt.
+- **What is a "good result"?** Write a strict 5-dimension rubric (see Step 4 → evaluator.py for the bar — it must be brutal).
+- **What system prompt?** Tell the worker exactly what to do, the output format, and what high quality looks like.
 
 ## Step 4 — Write the files
 
-### Always write these files (create or overwrite):
+### `agent/worker.py`
 
-#### `agent/worker.py`
-Implements the agent that performs the task. Pattern:
-- `build_system_prompt() -> str` — the worker's system prompt tailored to the goal
-- `build_user_prompt(goal, agent_id, iteration, previous_iterations) -> str` — includes previous results as context so each iteration improves on the last
-- `TOOLS = [...]` — list of tool dicts the worker can call (empty list if no tools needed)
-- `_execute_tool(tool_name, tool_input) -> str` — dispatches tool calls
-- `run_worker_agent(client, goal, agent_id, iteration, previous_iterations, shutdown_event=None) -> str` — the main entry point; returns the agent's output as a string
+Public API:
+- `build_system_prompt() -> str`
+- `build_user_prompt(goal, agent_id, iteration, previous_iterations) -> str` — must include condensed summaries of previous iterations so each run improves on the last
+- `TOOLS = [...]` (empty list if none needed)
+- `_execute_tool(tool_name, tool_input) -> str`
+- `run_worker_agent(client, goal, agent_id, iteration, previous_iterations, shutdown_event=None) -> str`
 
-The agent loop must:
-1. Use `model="claude-sonnet-4-6"` and `max_tokens=4096` for tool-use rounds
-2. Sleep 12 seconds between tool-use rounds (rate limit guard)
-3. After the tool loop ends (any reason), make one final no-tools call with `max_tokens=8192` and "write your final output now, no more tools" instruction so the agent always produces text
-4. Support a `shutdown_event: threading.Event` parameter; check it before each API call and return `"[Cancelled]"` if set
-5. Use `_api_call_with_backoff` (copy the pattern from evaluator.py) for all API calls
+The agent loop MUST:
+1. Use `model="claude-sonnet-4-6"`, `max_tokens=4096` for tool-use rounds.
+2. Sleep 12 seconds between tool-use rounds (rate-limit guard).
+3. Always make one final no-tools call at the end with `max_tokens=8192` and an instruction like "write your final output now, no more tools" so the agent always produces text — never trust that the tool loop terminated with a text block.
+4. Accept `shutdown_event: threading.Event | None`; check it before each API call and return `"[Cancelled]"` if set.
+5. Wrap every API call in `_api_call_with_backoff` (pattern copied from evaluator.py — exponential 2s/4s/8s/16s/32s/60s on `anthropic.RateLimitError`, up to 6 retries).
 
-#### `agent/evaluator.py`
-Implements the LLM evaluator. Must contain:
-- `RUBRIC` — a strict, goal-specific rubric. Write the rubric so that:
-  - Score 2 on each dimension requires specific, verifiable evidence — not vague claims
-  - Score 9–10 should be rare; explicitly instruct the evaluator to be harsh
-  - Feedback must name specific gaps (3–4 sentences)
-- `evaluate_output(client, output, goal) -> tuple[int, str]` — returns `(score, feedback)`
+### `agent/evaluator.py`
 
-The evaluator must ask the model to return JSON only:
+Must contain:
+- `_api_call_with_backoff(fn, max_retries=6)` — the canonical backoff helper, imported by worker.py.
+- `RUBRIC` — a brutally strict 5-dimension rubric, 0–2 per dimension, total 0–10. The rubric MUST:
+  - Open with "You reject 80% of submissions on first review. Default to the LOWER score when uncertain."
+  - Define each score 0/1/2 with **specific verifiable evidence** required for 2 (counts, named sources, quantitative claims, etc.) — not adjectives like "thorough" or "well-organized".
+  - Include a CRITICAL CALIBRATION block with **hard caps**: "If X is missing, the dimension cannot exceed 1." Hard caps are the single most effective lever — every previous version of this skill passed on first try until hard caps were added.
+  - Forbid "AI-isms" ("delve into", "it is important to note", "in conclusion") under the Structure dimension so prose quality is enforced.
+  - Require feedback to quote specific phrases from the output (4–6 sentences).
+- `evaluate_<thing>(client, output, goal) -> tuple[int, str]` — returns `(score, feedback)`. Name the function specifically (e.g. `evaluate_report`, `evaluate_code`); main.py imports this name.
+
+Evaluator output format (instruct the model to return JSON only):
 ```json
-{
-  "scores": {"dim1": 0-2, "dim2": 0-2, ...},
-  "total": 0-10,
-  "feedback": "..."
-}
+{"scores": {"dim1": 0-2, ...}, "total": 0-10, "feedback": "..."}
 ```
 
-#### `agent/main.py`
-Orchestrator. Copy the structure from the existing `main.py` exactly, changing:
-- Import `run_worker_agent` from `worker` instead of `web_researcher`
-- Import `evaluate_output` from `evaluator`
-- Set `NUM_AGENTS`, `MAX_ITERATIONS`, `TARGET_SCORE` to the user's chosen values
-- Keep `AGENT_STAGGER_SECONDS = 30`
-- Keep all the action_mode / local_mode / _agent_worker / run_iteration logic intact
-- Update the report filename and content to reflect the goal
+### `agent/main.py`
 
-#### `agent/requirements.txt`
-`anthropic>=0.40.0` plus any additional packages the worker needs.
+The orchestrator. Copy the existing structure. Critical requirements (see Failure Modes section for the bugs these prevent):
 
-#### `.github/workflows/loop_agent.yml`
-Copy the structure from the existing `research_agent.yml` exactly, changing:
-- `workflow_id` in the self-trigger script to `loop_agent.yml`
-- The `topic` input renamed to `goal` with an appropriate description
-- Job name updated to reflect the goal type
-- The `python main.py` call to pass `goal` instead of `topic`
+- `NUM_AGENTS`, `MAX_ITERATIONS`, `TARGET_SCORE` per user input.
+- `AGENT_STAGGER_SECONDS = 30` (spreads token bursts).
+- `_agent_worker` returns `dict | None`. On any exception during research or evaluation, log the error and **return None — do NOT set the shutdown event**. The shutdown event is for cooperative cancellation, never a poison pill.
+- `run_iteration` collects results, filters out `None` returns, and only raises if **zero** agents succeeded. Partial success is success — a transient rate limit on Agent 2 must not discard Agent 1's good result.
+- Fresh `threading.Event()` per iteration (no cross-iteration poisoning).
+- `action_mode` writes `score` and `done` to `$GITHUB_OUTPUT`, atomically replaces history file via tmp + os.replace.
+- `argparse` matches the workflow invocation exactly.
 
-### If adapting an existing project:
-- Also delete or overwrite `agent/web_researcher.py` if the new goal no longer needs web search (replace its functionality in `worker.py`).
-- If `agent/web_researcher.py` is still needed, keep it and have `worker.py` import from it.
+### `agent/requirements.txt`
 
-## Step 5 — Verify consistency
+`anthropic>=0.40.0` plus whatever the worker actually imports.
+
+### `.github/workflows/loop_agent.yml`
+
+Copy the existing `research_agent.yml` structure. Critical requirements:
+
+- Inputs: `goal` (or `topic`), `iteration` (default "0"), `run_id` (default ""), `prev_run_id` (default ""), `max_iterations` (default "5").
+- `permissions: actions: write` (needed to self-dispatch AND to read cross-run artifacts).
+- Download step MUST include all of:
+  - `if: ${{ github.event.inputs.iteration != '0' && github.event.inputs.prev_run_id != '' }}`
+  - `continue-on-error: true`
+  - `run-id: ${{ github.event.inputs.prev_run_id }}`
+  - `github-token: ${{ secrets.GITHUB_TOKEN }}`
+  - These four together let manual mid-chain dispatches work and tolerate transient artifact lookup failures. `download-artifact@v4` only searches the current run by default — `run-id` + `github-token` are mandatory for cross-run download.
+- Upload step uses `if: always()` and the same artifact name `<workflow>-history-${{ github.event.inputs.run_id || github.run_id }}` so iteration 0 establishes the shared key.
+- Trigger-next step:
+  - `if: steps.research.outputs.done == 'false' && steps.research.outcome == 'success'` — the outcome guard is mandatory; without it any Python crash silently keeps chaining.
+  - `parseInt(maxIterations) || 5` — fallback for NaN/empty input, else `nextIteration >= NaN` is always false and the cap never fires.
+  - Passes `prev_run_id: '${{ github.run_id }}'` and `run_id: <preserved>` to the next iteration.
+
+### If adapting an existing project
+
+- If `worker.py` already exists with a different name (e.g. `web_researcher.py`), either rename it or replace it. Don't leave both — main.py imports must be unambiguous.
+- Re-check the rubric against the current goal; an old rubric for a different goal is worse than no rubric.
+
+## Step 5 — Failure modes to prevent (READ THIS, every time)
+
+Every one of these has bitten this project. The generated code must defend against each.
+
+1. **Shutdown poisoning.** One agent's `RateLimitError` cancels every sibling and the iteration crashes with successful results discarded. → Per-agent exceptions return `None` and never call `shutdown.set()`. `run_iteration` keeps partial results.
+
+2. **First-try pass.** A "strict" rubric without hard caps still hands out 8/10 on the first iteration because the model rewards verbosity. → Rubric MUST have explicit hard caps ("missing inline citations → max 1 on Accuracy regardless of other quality").
+
+3. **Cross-run artifact download.** `download-artifact@v4` defaults to the current run. Iteration 1 looks for iteration 0's artifact and finds nothing. → `run-id` + `github-token` + `prev_run_id` input + propagate it via the trigger script.
+
+4. **Infinite chain on crash.** Default `if: outputs.done == 'false'` treats a crashed step (empty outputs) the same as score-below-target. → Add `&& steps.research.outcome == 'success'`.
+
+5. **Max-iterations bypass.** Manual dispatch with blank `max_iterations` → `parseInt('') === NaN` → `nextIteration >= NaN` is false forever. → `|| 5` fallback.
+
+6. **Mid-chain manual dispatch fails hard.** User re-runs iteration 3 without filling in `prev_run_id` and the whole step explodes. → `if:` requires `prev_run_id != ''`, plus `continue-on-error: true` for transient artifact failures.
+
+7. **Worker exits without text.** Tool-use loop hits `max_tokens` mid-tool, never emits a text block, evaluator gets empty output → 0/10. → Always make one final no-tools call after the tool loop.
+
+8. **Stale shutdown event.** Reusing a `threading.Event` across iterations means a previous failure permanently cancels future runs. → Construct a fresh `Event()` inside `run_iteration`.
+
+9. **History file write torn by crash.** Direct `write_text` on the history file leaves a half-written JSON if the process is killed between iterations. → Write to `.tmp` then `os.replace`.
+
+10. **Workflow input name mismatch.** Skill says "rename `topic` to `goal`" but the trigger script's `createWorkflowDispatch` inputs still pass `topic`. → After renaming, grep the whole workflow file for the old name.
+
+## Step 6 — Verify consistency
 
 Before committing, check:
-- `main.py` imports match what `worker.py` and `evaluator.py` export
-- The `evaluate_output` function signature matches how `main.py` calls it
-- The workflow `python main.py` invocation passes the right `--goal` or `--topic` flag (update argparse in main.py if needed)
-- `requirements.txt` includes every import used across all agent files
+- `main.py` import names match `worker.py` and `evaluator.py` exports.
+- Workflow `python main.py` invocation matches `argparse` in main.py.
+- All five workflow input names appear consistently in: `on.workflow_dispatch.inputs`, every `github.event.inputs.X` reference, and the `createWorkflowDispatch` inputs object.
+- `requirements.txt` covers every import.
+- Re-read the rubric. If a "well-written but generic" output would score above 6, tighten it.
 
-## Step 6 — Commit and push
+## Step 7 — Commit and push
 
-Stage all changed files and commit with a message describing the goal and configuration. Push to the current branch.
+Single commit on the current branch with a message naming the goal and configuration.
 
-## Step 7 — Tell the user
+## Step 8 — Tell the user
 
-Report:
-- What mode was used (scaffold vs adapt)
-- What tools the worker has access to
-- A one-paragraph summary of the rubric (what makes a 2 vs a 1 on the hardest dimension)
-- How to trigger the workflow: go to Actions → loop_agent.yml → Run workflow → enter the goal
+- Scaffold vs adapt mode.
+- What tools the worker has.
+- Hardest rubric dimension and what separates a 2 from a 1.
+- How to trigger: Actions → workflow → Run workflow → enter the goal.
+- One-line note: "If a manual mid-chain dispatch is needed, fill in both `run_id` (the run ID of iteration 0) and `prev_run_id` (the run ID of the previous iteration); otherwise the new run starts without history."
