@@ -3,41 +3,60 @@ name: Ad Budget Optimizer
 on:
   workflow_dispatch:
     inputs:
-      day:
-        description: "Current day number (set automatically)"
+      attempt:
+        description: "Attempt number (set automatically on auto-resume)"
         required: false
         default: "1"
         type: string
-      run_id:
-        description: "Shared run ID to group artifacts (set automatically)"
-        required: false
-        default: ""
-        type: string
-      prev_run_id:
-        description: "GitHub run ID of the previous day, for artifact download (set automatically)"
-        required: false
-        default: ""
-        type: string
-      resume_run_id:
-        description: "To resume a failed single-job run: paste the run ID of the failed job here"
-        required: false
-        default: ""
-        type: string
 
 permissions:
-  actions: write
+  contents: write   # push checkpoints to the budget-state branch
+  actions: write    # re-dispatch this workflow to auto-resume on failure
+
+env:
+  CODE_BRANCH: two
+  STATE_BRANCH: budget-state
+  MAX_ATTEMPTS: 5
 
 jobs:
-  day:
-    name: "Day ${{ github.event.inputs.day }} — Ad Budget Optimizer"
+  optimize:
+    name: "Ad Budget Optimizer (attempt ${{ github.event.inputs.attempt }})"
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 60
+    # Serialize: never let two runs touch the state branch at once
+    concurrency:
+      group: budget-optimizer
+      cancel-in-progress: false
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: two
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "Budget Optimizer Bot"
+
+      # Set up a worktree on the state branch. This is the durable checkpoint
+      # store: state.json is committed+pushed here after every day, so a VM
+      # crash loses at most the in-progress day.
+      - name: Prepare state worktree
+        run: |
+          STATE_DIR="${{ github.workspace }}/state-data"
+          if git ls-remote --exit-code --heads origin "$STATE_BRANCH" >/dev/null 2>&1; then
+            echo "Resuming from existing state branch."
+            git fetch origin "$STATE_BRANCH"
+            git worktree add "$STATE_DIR" "origin/$STATE_BRANCH"
+            git -C "$STATE_DIR" checkout -B "$STATE_BRANCH" "origin/$STATE_BRANCH"
+          else
+            echo "No state branch yet — starting a fresh campaign."
+            git worktree add --detach "$STATE_DIR" HEAD
+            git -C "$STATE_DIR" checkout --orphan "$STATE_BRANCH"
+            git -C "$STATE_DIR" rm -rf . >/dev/null 2>&1 || true
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -49,97 +68,56 @@ jobs:
       - name: Install dependencies
         run: pip install -r agent/requirements.txt
 
-      # Download state from the previous day's run (self-invoking chain).
-      # Skipped on day 1 (no prev_run_id) or if the artifact lookup fails.
-      - name: Download state from previous day
-        if: ${{ github.event.inputs.prev_run_id != '' }}
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: budget-state-${{ github.event.inputs.run_id }}
-          run-id: ${{ github.event.inputs.prev_run_id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: agent/outputs/
-
-      # Resume a failed single-job run: download its partial artifact by run ID.
-      - name: Download state from failed run (resume)
-        if: ${{ github.event.inputs.resume_run_id != '' }}
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: budget-state-${{ github.event.inputs.resume_run_id }}
-          run-id: ${{ github.event.inputs.resume_run_id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: agent/outputs/
-
-      - name: Run day ${{ github.event.inputs.day }}
+      - name: Run optimizer (resumes from last checkpoint)
         id: optimizer
         working-directory: agent
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          if [ "${{ github.event.inputs.day }}" = "1" ] && [ "${{ github.event.inputs.prev_run_id }}" = "" ] && [ "${{ github.event.inputs.resume_run_id }}" = "" ]; then
-            # No day chaining inputs set — run the full loop in one job
-            python main.py outputs --state-file outputs/state.json
-          else
-            # Self-invoking mode — run a single day
-            python main.py outputs \
-              --day ${{ github.event.inputs.day }} \
-              --state-file outputs/state.json
-          fi
+          STATE_DIR="${{ github.workspace }}/state-data"
+          python main.py "$STATE_DIR" \
+            --state-file "$STATE_DIR/state.json" \
+            --git-checkpoint "$STATE_DIR"
 
-      - name: Upload state artifact
+      - name: Upload results artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: budget-state-${{ github.event.inputs.run_id || github.run_id }}
-          path: agent/outputs/
-          overwrite: true
+          name: budget-optimizer-results
+          path: state-data/
           retention-days: 30
 
       - name: Write job summary
         if: always()
         run: |
-          DAY="${{ github.event.inputs.day }}"
-          SIGN_UPS="${{ steps.optimizer.outputs.day_sign_ups }}"
-          TOTAL="${{ steps.optimizer.outputs.total_sign_ups }}"
-          REMAINING="${{ steps.optimizer.outputs.remaining_budget }}"
-          TOP="${{ steps.optimizer.outputs.top_channel }}"
-          DONE="${{ steps.optimizer.outputs.done }}"
-          echo "## Day ${DAY}" >> $GITHUB_STEP_SUMMARY
-          echo "| | |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "| Sign-ups today | ${SIGN_UPS} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Total sign-ups | ${TOTAL} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Budget remaining | \$${REMAINING} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Top channel | ${TOP} |" >> $GITHUB_STEP_SUMMARY
-          if [ "$DONE" = "true" ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Budget exhausted — campaign complete!**" >> $GITHUB_STEP_SUMMARY
+          STATE_DIR="${{ github.workspace }}/state-data"
+          echo "## Ad Budget Optimizer" >> $GITHUB_STEP_SUMMARY
+          if [ -f "$STATE_DIR/daily_log.txt" ]; then
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat "$STATE_DIR/daily_log.txt" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No daily log produced." >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Trigger next day
-        if: steps.optimizer.outputs.done == 'false' && steps.optimizer.outcome == 'success'
+      # If the job failed, automatically re-dispatch to resume from the last
+      # checkpoint — capped at MAX_ATTEMPTS so a deterministic bug can't loop.
+      - name: Auto-resume on failure
+        if: failure()
         uses: actions/github-script@v7
         with:
           script: |
-            const day = parseInt('${{ github.event.inputs.day }}');
-            const maxDays = 20;
-            const nextDay = day + 1;
-            if (nextDay > maxDays) {
-              console.log(`Reached max days (${maxDays}), stopping.`);
+            const attempt = parseInt('${{ github.event.inputs.attempt }}') || 1;
+            const maxAttempts = parseInt('${{ env.MAX_ATTEMPTS }}') || 5;
+            if (attempt >= maxAttempts) {
+              console.log(`Reached MAX_ATTEMPTS (${maxAttempts}); not resuming.`);
               return;
             }
-            const runId = '${{ github.event.inputs.run_id }}' || '${{ github.run_id }}';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'budget_optimizer.yml',
               ref: 'main',
-              inputs: {
-                day: String(nextDay),
-                run_id: runId,
-                prev_run_id: '${{ github.run_id }}',
-              }
+              inputs: { attempt: String(attempt + 1) },
             });
-            console.log(`Triggered Day ${nextDay} (run_id: ${runId})`);
+            console.log(`Failure on attempt ${attempt} — dispatched attempt ${attempt + 1}.`);
