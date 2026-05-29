@@ -6,3 +6,4 @@ Day  5 | Spent $100 | Sign-ups:   6 | Total:   29 | Budget left: $500 | Top: dis
 Day  6 | Spent $100 | Sign-ups:   6 | Total:   35 | Budget left: $400 | Top: display
 Day  7 | Spent $100 | Sign-ups:   7 | Total:   42 | Budget left: $300 | Top: display
 Day  8 | Spent $100 | Sign-ups:   8 | Total:   50 | Budget left: $200 | Top: display
+Day  9 | Spent $100 | Sign-ups:   7 | Total:   57 | Budget left: $100 | Top: display
