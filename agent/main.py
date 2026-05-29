@@ -189,59 +189,150 @@ def day_mode(day: int, state_file: Path, output_dir: Path) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Local full-loop mode
+# Local full-loop mode  (single job, resumable)
 # ---------------------------------------------------------------------------
 
-def local_mode(output_dir: Path) -> int:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+MAX_DAY_RETRIES = 3  # retries per day before giving up and saving progress
+
+
+def _run_one_day(
+    client: anthropic.Anthropic,
+    env_remaining: float,
+    allocation: dict,
+    history: list[dict],
+    day: int,
+    total_sign_ups: int,
+) -> tuple[dict, dict | None]:
+    """
+    Run a single day and return (record, next_allocation).
+    Raises on unrecoverable error so the caller can retry.
+    """
+    actual_budget = min(DAILY_BUDGET, env_remaining)
+    if actual_budget < DAILY_BUDGET - 0.01:
+        factor = actual_budget / DAILY_BUDGET
+        allocation = {ch: round(v * factor, 2) for ch, v in allocation.items()}
+        diff = round(actual_budget - sum(allocation.values()), 2)
+        allocation[CHANNELS[0]] = round(allocation[CHANNELS[0]] + diff, 2)
+
     env = AdEnvironment()
+    env.total_budget = env_remaining
+    result = env.spend_daily_budget(allocation)
+    total_sign_ups_after = total_sign_ups + result["sign_ups"]
+
+    cr = result["channel_results"]
+    top_channel = max(
+        (ch for ch in CHANNELS if cr.get(ch, {}).get("sign_ups", 0) > 0),
+        key=lambda ch: cr[ch]["sign_ups"],
+        default=CHANNELS[0],
+    )
+
+    record = {
+        "day": day,
+        "allocation": allocation,
+        "channel_results": cr,
+        "day_sign_ups": result["sign_ups"],
+        "total_sign_ups": total_sign_ups_after,
+        "remaining_budget_after": result["remaining_budget"],
+    }
+
+    next_allocation = None
+    if result["remaining_budget"] >= 1.0:
+        next_budget = min(DAILY_BUDGET, result["remaining_budget"])
+        next_allocation = decide_allocation(client, result["remaining_budget"], next_budget, history + [record])
+
+    _print_day(day, result, top_channel, next_allocation)
+    return record, next_allocation
+
+
+def _save_state(state_file: Path, remaining: float, allocation: dict,
+                total_sign_ups: int, history: list[dict]) -> None:
+    state = {
+        "remaining_budget": remaining,
+        "next_allocation": allocation,
+        "total_sign_ups": total_sign_ups,
+        "history": history,
+    }
+    tmp = state_file.with_suffix(".tmp")
+    tmp.write_text(json.dumps(state, indent=2))
+    os.replace(tmp, state_file)
+
+
+def local_mode(output_dir: Path, state_file: Path) -> int:
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"\n{'='*62}")
-    print(f"  AD BUDGET OPTIMIZER  (local full-loop)")
-    print(f"  Total budget: ${env.total_budget:.0f}  |  Daily budget: ${DAILY_BUDGET:.0f}")
-    print(f"{'='*62}")
+    # Resume from saved state if it exists, otherwise start fresh
+    if state_file.exists():
+        state = json.loads(state_file.read_text())
+        remaining = state["remaining_budget"]
+        allocation = state["next_allocation"]
+        total_sign_ups = state["total_sign_ups"]
+        history = state["history"]
+        start_day = len(history) + 1
+        print(f"\n{'='*62}")
+        print(f"  AD BUDGET OPTIMIZER  — resuming from Day {start_day}")
+        print(f"  Budget remaining: ${remaining:.2f}  |  Days completed: {len(history)}")
+        print(f"{'='*62}")
+    else:
+        remaining = 1000.0
+        allocation = {ch: round(DAILY_BUDGET / len(CHANNELS), 2) for ch in CHANNELS}
+        total_sign_ups = 0
+        history = []
+        start_day = 1
+        print(f"\n{'='*62}")
+        print(f"  AD BUDGET OPTIMIZER")
+        print(f"  Total budget: ${remaining:.0f}  |  Daily budget: ${DAILY_BUDGET:.0f}")
+        print(f"  Channels: {', '.join(CHANNELS)}")
+        print(f"{'='*62}")
 
-    history: list[dict] = []
-    total_sign_ups = 0
-    day = 0
-    allocation = {ch: round(DAILY_BUDGET / len(CHANNELS), 2) for ch in CHANNELS}
+    day = start_day - 1
 
-    while env.total_budget >= 1.0:
+    while remaining >= 1.0:
         day += 1
-        actual_budget = min(DAILY_BUDGET, env.total_budget)
-        if actual_budget < DAILY_BUDGET - 0.01:
-            factor = actual_budget / DAILY_BUDGET
-            allocation = {ch: round(v * factor, 2) for ch, v in allocation.items()}
-            diff = round(actual_budget - sum(allocation.values()), 2)
-            allocation[CHANNELS[0]] = round(allocation[CHANNELS[0]] + diff, 2)
 
-        result = env.spend_daily_budget(allocation)
-        total_sign_ups += result["sign_ups"]
-        cr = result["channel_results"]
-        top_channel = max(
-            (ch for ch in CHANNELS if cr.get(ch, {}).get("sign_ups", 0) > 0),
-            key=lambda ch: cr[ch]["sign_ups"],
-            default=CHANNELS[0],
-        )
+        # Retry loop: handles transient API/JSON errors without losing progress
+        last_exc = None
+        for attempt in range(1, MAX_DAY_RETRIES + 1):
+            try:
+                record, next_allocation = _run_one_day(
+                    client, remaining, allocation, history, day, total_sign_ups
+                )
+                break
+            except Exception as exc:
+                last_exc = exc
+                print(f"  [Day {day} attempt {attempt}/{MAX_DAY_RETRIES} failed: {exc}]", file=sys.stderr)
+                if attempt < MAX_DAY_RETRIES:
+                    import time
+                    time.sleep(2 ** attempt)
+        else:
+            # All retries exhausted — save what we have and abort
+            print(f"\nDay {day} failed after {MAX_DAY_RETRIES} attempts. Progress saved to {state_file}.", file=sys.stderr)
+            _save_state(state_file, remaining, allocation, total_sign_ups, history)
+            raise last_exc
 
-        record = {
-            "day": day, "allocation": allocation.copy(),
-            "channel_results": cr, "day_sign_ups": result["sign_ups"],
-            "total_sign_ups": total_sign_ups,
-            "remaining_budget_after": result["remaining_budget"],
-        }
+        # Day succeeded — commit progress immediately
+        total_sign_ups = record["total_sign_ups"]
+        remaining = record["remaining_budget_after"]
         history.append(record)
-
-        next_allocation = None
-        if env.total_budget >= 1.0:
-            next_allocation = decide_allocation(
-                client, env.total_budget, min(DAILY_BUDGET, env.total_budget), history
-            )
-
-        _print_day(day, result, top_channel, next_allocation)
         if next_allocation:
             allocation = next_allocation
+
+        # Append to the running daily log
+        with open(output_dir / "daily_log.txt", "a") as f:
+            top = max(record["channel_results"], key=lambda ch: record["channel_results"][ch]["sign_ups"])
+            f.write(
+                f"Day {day:2d} | Spent ${DAILY_BUDGET:.0f} | "
+                f"Sign-ups: {record['day_sign_ups']:3d} | "
+                f"Total: {total_sign_ups:4d} | "
+                f"Budget left: ${remaining:.0f} | "
+                f"Top: {top}\n"
+            )
+
+        with open(output_dir / "daily_log.jsonl", "a") as f:
+            f.write(json.dumps(record) + "\n")
+
+        # Persist state after every successful day so a crash can resume
+        _save_state(state_file, remaining, allocation, total_sign_ups, history)
 
     _print_final_summary(history)
 
@@ -264,11 +355,13 @@ def main() -> None:
     parser.add_argument("--state-file", default="outputs/state.json")
     args = parser.parse_args()
 
+    state_file = Path(args.state_file)
+
     try:
         if args.day is not None:
-            day_mode(args.day, Path(args.state_file), Path(args.output_dir))
+            day_mode(args.day, state_file, Path(args.output_dir))
         else:
-            score = local_mode(Path(args.output_dir))
+            score = local_mode(Path(args.output_dir), state_file)
             print(f"\nFinal score: {score} sign-ups")
     except Exception as exc:
         print(f"\nFATAL ERROR: {exc}", file=sys.stderr)
