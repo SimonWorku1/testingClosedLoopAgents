@@ -18,24 +18,14 @@ Respond with ONLY a valid JSON object, no explanation:
 {"search": <number>, "social": <number>, "video": <number>, "display": <number>}"""
 
 
+HISTORY_WINDOW = 5  # days of recent detail sent to Claude per call
+
+
 def _build_history_text(channel_history: list[dict], daily_budget: float) -> str:
     if not channel_history:
         return "(No history yet — this is Day 1.)"
 
-    lines = ["Previous days:"]
-    for record in channel_history:
-        day = record["day"]
-        day_su = record["day_sign_ups"]
-        lines.append(f"\n  Day {day} — {day_su} sign-ups total:")
-        for ch in CHANNELS:
-            data = record["channel_results"].get(ch, {})
-            spend = data.get("spend", 0)
-            su = data.get("sign_ups", 0)
-            cpa = data.get("effective_cpa", 0)
-            if spend > 0:
-                lines.append(f"    {ch}: ${spend:.0f} → {su} sign-ups (CPA ${cpa:.1f})")
-
-    # Cumulative channel summary
+    # Cumulative stats across ALL days (computed from full history on disk)
     totals = {ch: {"spend": 0.0, "sign_ups": 0} for ch in CHANNELS}
     for record in channel_history:
         for ch in CHANNELS:
@@ -43,14 +33,29 @@ def _build_history_text(channel_history: list[dict], daily_budget: float) -> str
             totals[ch]["spend"] += data.get("spend", 0)
             totals[ch]["sign_ups"] += data.get("sign_ups", 0)
 
-    lines.append("\n  Cumulative averages:")
+    lines = [f"Cumulative stats across all {len(channel_history)} days:"]
     for ch in CHANNELS:
         t = totals[ch]
         if t["sign_ups"] > 0:
             avg_cpa = t["spend"] / t["sign_ups"]
-            lines.append(f"    {ch}: ${t['spend']:.0f} spent, {t['sign_ups']} sign-ups, avg CPA ${avg_cpa:.1f}")
+            lines.append(f"  {ch}: ${t['spend']:.0f} spent, {t['sign_ups']} sign-ups, avg CPA ${avg_cpa:.1f}")
         else:
-            lines.append(f"    {ch}: no sign-ups yet")
+            lines.append(f"  {ch}: ${t['spend']:.0f} spent, no sign-ups yet")
+
+    # Recent detail: only the last HISTORY_WINDOW days
+    recent = channel_history[-HISTORY_WINDOW:]
+    lines.append(f"\nLast {len(recent)} day(s) in detail:")
+    for record in recent:
+        day = record["day"]
+        day_su = record["day_sign_ups"]
+        lines.append(f"\n  Day {day} — {day_su} sign-ups:")
+        for ch in CHANNELS:
+            data = record["channel_results"].get(ch, {})
+            spend = data.get("spend", 0)
+            su = data.get("sign_ups", 0)
+            cpa = data.get("effective_cpa", 0)
+            if spend > 0:
+                lines.append(f"    {ch}: ${spend:.0f} → {su} sign-ups (CPA ${cpa:.1f})")
 
     return "\n".join(lines)
 
