@@ -1,12 +1,12 @@
 {
-  "remaining_budget": 400.0,
+  "remaining_budget": 300.0,
   "next_allocation": {
     "search": 5,
     "social": 5,
     "video": 5,
     "display": 85
   },
-  "total_sign_ups": 35,
+  "total_sign_ups": 42,
   "history": [
     {
       "day": 1,
@@ -211,6 +211,40 @@
       "day_sign_ups": 6,
       "total_sign_ups": 35,
       "remaining_budget_after": 400.0
+    },
+    {
+      "day": 7,
+      "allocation": {
+        "search": 5,
+        "social": 5,
+        "video": 5,
+        "display": 85
+      },
+      "channel_results": {
+        "search": {
+          "spend": 5,
+          "sign_ups": 0,
+          "effective_cpa": 16.56
+        },
+        "social": {
+          "spend": 5,
+          "sign_ups": 0,
+          "effective_cpa": 23.17
+        },
+        "video": {
+          "spend": 5,
+          "sign_ups": 0,
+          "effective_cpa": 37.62
+        },
+        "display": {
+          "spend": 85,
+          "sign_ups": 7,
+          "effective_cpa": 11.85
+        }
+      },
+      "day_sign_ups": 7,
+      "total_sign_ups": 42,
+      "remaining_budget_after": 300.0
     }
   ]
 }
