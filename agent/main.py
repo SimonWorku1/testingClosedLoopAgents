@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-Ad Budget Optimizer — self-invoking mode.
+Ad Budget Optimizer — single job with durable checkpointing.
 
-Each GitHub Actions run executes ONE day, saves state as an artifact,
-then re-triggers itself for the next day. Stops when budget is exhausted.
-
-Can also be run locally as a full simulation loop (omit --day flag).
+Runs the full multi-day simulation in one process. After each day it
+writes state.json and (when --git-checkpoint is set) commits + pushes it
+to a dedicated branch, so if the VM dies the next run resumes from the
+last completed day instead of losing all progress.
 """
 
 import argparse
 import json
 import os
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -21,7 +22,6 @@ from ad_environment import AdEnvironment
 from budget_agent import CHANNELS, decide_allocation
 
 DAILY_BUDGET = 100.0
-MAX_DAYS = 20  # hard cap against infinite self-invocation
 
 
 # ---------------------------------------------------------------------------
@@ -92,104 +92,7 @@ def _print_final_summary(history: list[dict]) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Single-day mode (GitHub Actions)
-# ---------------------------------------------------------------------------
-
-def day_mode(day: int, state_file: Path, output_dir: Path) -> None:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    # Load persisted state (missing on day 1)
-    if state_file.exists():
-        state = json.loads(state_file.read_text())
-    else:
-        state = {
-            "remaining_budget": 1000.0,
-            "next_allocation": {ch: round(DAILY_BUDGET / len(CHANNELS), 2) for ch in CHANNELS},
-            "total_sign_ups": 0,
-            "history": [],
-        }
-
-    remaining = state["remaining_budget"]
-    allocation = state["next_allocation"]
-    total_sign_ups = state["total_sign_ups"]
-    history = state["history"]
-
-    _print_header(remaining, day)
-
-    # Scale down allocation on the final day
-    actual_budget = min(DAILY_BUDGET, remaining)
-    if actual_budget < DAILY_BUDGET - 0.01:
-        factor = actual_budget / DAILY_BUDGET
-        allocation = {ch: round(v * factor, 2) for ch, v in allocation.items()}
-        diff = round(actual_budget - sum(allocation.values()), 2)
-        allocation[CHANNELS[0]] = round(allocation[CHANNELS[0]] + diff, 2)
-
-    # Run today
-    env = AdEnvironment()
-    env.total_budget = remaining
-    result = env.spend_daily_budget(allocation)
-    total_sign_ups += result["sign_ups"]
-
-    cr = result["channel_results"]
-    top_channel = max(
-        (ch for ch in CHANNELS if cr.get(ch, {}).get("sign_ups", 0) > 0),
-        key=lambda ch: cr[ch]["sign_ups"],
-        default=CHANNELS[0],
-    )
-
-    record = {
-        "day": day,
-        "allocation": allocation,
-        "channel_results": cr,
-        "day_sign_ups": result["sign_ups"],
-        "total_sign_ups": total_sign_ups,
-        "remaining_budget_after": result["remaining_budget"],
-    }
-    history.append(record)
-
-    done = result["remaining_budget"] < 1.0
-
-    # Ask Claude for tomorrow's allocation (if there's budget left)
-    next_allocation = None
-    if not done:
-        next_budget = min(DAILY_BUDGET, result["remaining_budget"])
-        next_allocation = decide_allocation(
-            client, result["remaining_budget"], next_budget, history
-        )
-
-    _print_day(day, result, top_channel, next_allocation)
-    if done:
-        _print_final_summary(history)
-
-    # Save updated state atomically
-    new_state = {
-        "remaining_budget": result["remaining_budget"],
-        "next_allocation": next_allocation or allocation,
-        "total_sign_ups": total_sign_ups,
-        "history": history,
-    }
-    tmp = state_file.with_suffix(".tmp")
-    tmp.write_text(json.dumps(new_state, indent=2))
-    os.replace(tmp, state_file)
-
-    # Save per-day report
-    day_report = output_dir / f"day_{day:02d}.json"
-    day_report.write_text(json.dumps(record, indent=2))
-
-    # Write GitHub outputs
-    github_output = os.environ.get("GITHUB_OUTPUT")
-    if github_output:
-        with open(github_output, "a") as f:
-            f.write(f"done={'true' if done else 'false'}\n")
-            f.write(f"day_sign_ups={result['sign_ups']}\n")
-            f.write(f"total_sign_ups={total_sign_ups}\n")
-            f.write(f"remaining_budget={result['remaining_budget']:.2f}\n")
-            f.write(f"top_channel={top_channel}\n")
-
-
-# ---------------------------------------------------------------------------
-# Local full-loop mode  (single job, resumable)
+# Full-loop mode  (single job, resumable + durable checkpoint)
 # ---------------------------------------------------------------------------
 
 MAX_DAY_RETRIES = 3  # retries per day before giving up and saving progress
@@ -257,7 +160,34 @@ def _save_state(state_file: Path, remaining: float, allocation: dict,
     os.replace(tmp, state_file)
 
 
-def local_mode(output_dir: Path, state_file: Path) -> int:
+def _git_checkpoint(checkpoint_dir: Path, day: int) -> None:
+    """
+    Commit and push the checkpoint dir to its branch so it survives VM death.
+    Failures are logged but never abort the run — the local state.json is
+    still intact, and the next successful day will push again.
+    """
+    d = str(checkpoint_dir)
+    try:
+        subprocess.run(["git", "-C", d, "add", "-A"], check=True)
+        # Skip the commit/push if nothing actually changed
+        staged = subprocess.run(["git", "-C", d, "diff", "--cached", "--quiet"])
+        if staged.returncode == 0:
+            return
+        subprocess.run(
+            ["git", "-C", d, "commit", "-m", f"checkpoint: day {day}"],
+            check=True, stdout=subprocess.DEVNULL,
+        )
+        subprocess.run(
+            ["git", "-C", d, "push", "origin", "HEAD:budget-state"],
+            check=True, stdout=subprocess.DEVNULL,
+        )
+        print(f"  [checkpoint: day {day} pushed to budget-state]")
+    except subprocess.CalledProcessError as exc:
+        print(f"  [checkpoint warning: git push failed ({exc}); progress kept locally]",
+              file=sys.stderr)
+
+
+def local_mode(output_dir: Path, state_file: Path, checkpoint_dir: Path | None = None) -> int:
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -334,6 +264,10 @@ def local_mode(output_dir: Path, state_file: Path) -> int:
         # Persist state after every successful day so a crash can resume
         _save_state(state_file, remaining, allocation, total_sign_ups, history)
 
+        # Durably checkpoint off-VM so a hard crash doesn't lose progress
+        if checkpoint_dir is not None:
+            _git_checkpoint(checkpoint_dir, day)
+
     _print_final_summary(history)
 
     timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
@@ -350,19 +284,18 @@ def local_mode(output_dir: Path, state_file: Path) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("output_dir", nargs="?", default="outputs")
-    parser.add_argument("--day", type=int, default=None,
-                        help="Single-day mode (1-indexed). Omit for full local loop.")
     parser.add_argument("--state-file", default="outputs/state.json")
+    parser.add_argument("--git-checkpoint", default=None,
+                        help="Directory (a git worktree on the state branch) to "
+                             "commit+push after each day for durable resume.")
     args = parser.parse_args()
 
     state_file = Path(args.state_file)
+    checkpoint_dir = Path(args.git_checkpoint) if args.git_checkpoint else None
 
     try:
-        if args.day is not None:
-            day_mode(args.day, state_file, Path(args.output_dir))
-        else:
-            score = local_mode(Path(args.output_dir), state_file)
-            print(f"\nFinal score: {score} sign-ups")
+        score = local_mode(Path(args.output_dir), state_file, checkpoint_dir)
+        print(f"\nFinal score: {score} sign-ups")
     except Exception as exc:
         print(f"\nFATAL ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
