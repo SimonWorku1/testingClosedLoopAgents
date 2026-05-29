@@ -1,263 +1,176 @@
 #!/usr/bin/env python3
 """
-Autonomous closed-loop research agent — single-iteration mode.
+Ad Budget Optimizer — closed-loop agent that allocates a $1,000 budget
+across 4 advertising channels to maximize sign-ups.
 
-Each GitHub Action run executes ONE iteration (with NUM_AGENTS agents in
-parallel), saves results as an artifact, then re-triggers itself for the
-next iteration.
-
-Can also be run locally in full-loop mode (omit --iteration flag).
+Each day: Claude decides the allocation → AdEnvironment returns results →
+agent analyses per-channel CPA → Claude reallocates for the next day.
+Stops when budget is exhausted.
 """
 
-import argparse
 import json
 import os
 import sys
-import threading
-import time
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
 import anthropic
 
-from evaluator import evaluate_report
-from web_researcher import run_research_agent
+from ad_environment import AdEnvironment
+from budget_agent import CHANNELS, decide_allocation
 
-NUM_AGENTS = 3
-MAX_ITERATIONS = 5
-TARGET_SCORE = 8
-
-# Seconds between agent starts — spreads token bursts across the rate-limit window.
-# At 30s stagger + 12s inter-round sleep, peak rate stays ~20-25k tokens/min
-# which is safely under the Tier 1 30k/min cap.
-AGENT_STAGGER_SECONDS = 30
-
-_executor = ThreadPoolExecutor(max_workers=NUM_AGENTS * 2)
+DAILY_BUDGET = 100.0
 
 
 # ---------------------------------------------------------------------------
-# Single agent worker (runs in a thread)
+# Display helpers
 # ---------------------------------------------------------------------------
 
-def _agent_worker(
-    client: anthropic.Anthropic,
-    topic: str,
-    agent_id: int,
-    iteration: int,
-    previous_iterations: list[dict],
-    shutdown: threading.Event,
-) -> dict | None:
-    if shutdown.is_set():
-        raise RuntimeError(f"Agent {agent_id + 1} cancelled before start.")
+def _print_header(total_budget: float) -> None:
+    print(f"\n{'='*62}")
+    print(f"  AD BUDGET OPTIMIZER")
+    print(f"  Total budget: ${total_budget:.0f}  |  Daily budget: ${DAILY_BUDGET:.0f}")
+    print(f"  Channels: {', '.join(CHANNELS)}")
+    print(f"{'='*62}")
 
-    t0 = time.time()
-    print(f"  [Agent {agent_id + 1}] Starting research...")
-    try:
-        report = run_research_agent(
-            client, topic, agent_id, iteration, previous_iterations,
-            shutdown_event=shutdown,
+
+def _print_day(day: int, result: dict, top_channel: str, next_allocation: dict | None) -> None:
+    cr = result["channel_results"]
+    print(
+        f"\nDay {day:2d} | "
+        f"Spent ${result['spend']:.0f} → {result['sign_ups']} sign-ups | "
+        f"Budget left: ${result['remaining_budget']:.0f}"
+    )
+    print(f"  {'Channel':<10} {'Spend':>8} {'Sign-ups':>9} {'CPA':>8}")
+    print(f"  {'-'*38}")
+    for ch in CHANNELS:
+        data = cr.get(ch, {"spend": 0, "sign_ups": 0, "effective_cpa": 0})
+        cpa_str = f"${data['effective_cpa']:.1f}" if data["sign_ups"] > 0 else "  n/a"
+        marker = " ◄ best" if ch == top_channel else ""
+        print(f"  {ch:<10} ${data['spend']:>6.0f}   {data['sign_ups']:>6}   {cpa_str:>6}{marker}")
+
+    if next_allocation:
+        shift_summary = "  → Next day: " + " | ".join(
+            f"{ch} ${v:.0f}" for ch, v in next_allocation.items()
         )
-    except Exception as exc:
-        print(f"  [Agent {agent_id + 1}] Failed during research: {exc}", file=sys.stderr)
-        return None
-
-    if shutdown.is_set():
-        raise RuntimeError(f"Agent {agent_id + 1} cancelled after research.")
-
-    elapsed = time.time() - t0
-    print(f"  [Agent {agent_id + 1}] Research done ({elapsed:.1f}s). Evaluating...")
-
-    try:
-        score, feedback = evaluate_report(client, report, topic)
-    except Exception as exc:
-        print(f"  [Agent {agent_id + 1}] Failed during evaluation: {exc}", file=sys.stderr)
-        return None
-
-    elapsed = time.time() - t0
-    print(f"  [Agent {agent_id + 1}] Score: {score}/10  |  {elapsed:.1f}s  |  {feedback[:80]}")
-    return {
-        "agent_id": agent_id,
-        "iteration": iteration + 1,
-        "report": report,
-        "score": score,
-        "feedback": feedback,
-        "elapsed_seconds": round(elapsed, 1),
-    }
-
-
-# ---------------------------------------------------------------------------
-# One iteration: launch NUM_AGENTS workers with staggered starts
-# ---------------------------------------------------------------------------
-
-def run_iteration(
-    client: anthropic.Anthropic,
-    topic: str,
-    iteration: int,
-    previous_iterations: list[dict],
-) -> list[dict]:
-    """
-    Run NUM_AGENTS agents for one iteration, staggered by AGENT_STAGGER_SECONDS.
-    Returns list of result dicts, one per agent.
-    """
-    # Fresh event per call so a previous failure doesn't poison this run.
-    shutdown = threading.Event()
-
-    print(f"\n--- Iteration {iteration + 1} | {NUM_AGENTS} agents ---")
-    futures = []
-    for agent_id in range(NUM_AGENTS):
-        if agent_id > 0:
-            print(f"  Waiting {AGENT_STAGGER_SECONDS}s before starting Agent {agent_id + 1}...")
-            time.sleep(AGENT_STAGGER_SECONDS)
-        futures.append(
-            _executor.submit(
-                _agent_worker, client, topic, agent_id, iteration, previous_iterations, shutdown
+        # Describe the biggest shift
+        prev_spend = {ch: cr.get(ch, {}).get("spend", 0) for ch in CHANNELS}
+        biggest_gain = max(CHANNELS, key=lambda c: next_allocation[c] - prev_spend.get(c, 0))
+        biggest_loss = min(CHANNELS, key=lambda c: next_allocation[c] - prev_spend.get(c, 0))
+        gain = next_allocation[biggest_gain] - prev_spend.get(biggest_gain, 0)
+        loss = next_allocation[biggest_loss] - prev_spend.get(biggest_loss, 0)
+        if abs(gain) > 1 and abs(loss) > 1:
+            print(
+                f"  → Shifting ${gain:.0f} toward {biggest_gain}, "
+                f"${abs(loss):.0f} away from {biggest_loss}."
             )
-        )
+        print(shift_summary)
 
-    results = []
-    for f in futures:
-        try:
-            result = f.result()
-            if result is not None:
-                results.append(result)
-        except Exception as exc:
-            print(f"  [Agent] Unexpected thread error: {exc}", file=sys.stderr)
 
-    if not results:
-        raise RuntimeError("All agents failed — no results for this iteration.")
-    return results
+def _print_summary(day: int, total_sign_ups: int, channel_history: list[dict]) -> None:
+    print(f"\n{'='*62}")
+    print(f"  SIMULATION COMPLETE")
+    print(f"  Days run:        {day}")
+    print(f"  Total sign-ups:  {total_sign_ups}")
+    print(f"  Sign-ups/day:    {total_sign_ups / day:.1f}")
+
+    totals = {ch: {"spend": 0.0, "sign_ups": 0} for ch in CHANNELS}
+    for record in channel_history:
+        for ch in CHANNELS:
+            data = record["channel_results"].get(ch, {})
+            totals[ch]["spend"] += data.get("spend", 0)
+            totals[ch]["sign_ups"] += data.get("sign_ups", 0)
+
+    print(f"\n  {'Channel':<10} {'Total Spend':>12} {'Sign-ups':>10} {'Avg CPA':>10}")
+    print(f"  {'-'*46}")
+    for ch in CHANNELS:
+        t = totals[ch]
+        avg_cpa = t["spend"] / t["sign_ups"] if t["sign_ups"] > 0 else float("inf")
+        cpa_str = f"${avg_cpa:.1f}" if avg_cpa != float("inf") else "  n/a"
+        print(f"  {ch:<10} ${t['spend']:>10.0f}   {t['sign_ups']:>7}   {cpa_str:>8}")
+    print(f"{'='*62}")
 
 
 # ---------------------------------------------------------------------------
-# Action mode: one iteration, read/write shared history file
+# Core simulation
 # ---------------------------------------------------------------------------
 
-def action_mode(topic: str, iteration: int, history_file: Path, output_dir: Path) -> None:
-    """Run a single iteration. Used by the self-invoking GitHub Action."""
+def run_simulation(output_dir: Path) -> int:
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    env = AdEnvironment()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    previous_iterations: list[dict] = []
-    if history_file.exists():
-        data = json.loads(history_file.read_text())
-        previous_iterations = data.get("iterations", [])
+    _print_header(env.total_budget)
 
-    agent_results = run_iteration(client, topic, iteration, previous_iterations)
+    channel_history: list[dict] = []
+    day = 0
+    total_sign_ups = 0
 
-    # Pick best result from this iteration
-    best = max(agent_results, key=lambda r: r["score"])
-    scores = [r["score"] for r in agent_results]
-    print(f"\nIteration {iteration + 1} scores: {scores}  |  Best: {best['score']}/10")
+    # Day 1: equal split
+    allocation = {ch: round(DAILY_BUDGET / len(CHANNELS), 2) for ch in CHANNELS}
 
-    iter_record = {
-        "iteration": iteration + 1,
-        "results": agent_results,
-        "best_score": best["score"],
-        "best_agent": best["agent_id"],
-    }
+    while env.total_budget >= 1.0:
+        day += 1
 
-    history = {
-        "topic": topic,
-        "target_score": TARGET_SCORE,
-        "iterations": previous_iterations + [iter_record],
-    }
-    tmp = history_file.with_suffix(".tmp")
-    tmp.write_text(json.dumps(history, indent=2))
-    os.replace(tmp, history_file)
+        # Scale down on the final day when budget < DAILY_BUDGET
+        actual_budget = min(DAILY_BUDGET, env.total_budget)
+        if actual_budget < DAILY_BUDGET - 0.01:
+            factor = actual_budget / DAILY_BUDGET
+            allocation = {ch: round(v * factor, 2) for ch, v in allocation.items()}
+            diff = round(actual_budget - sum(allocation.values()), 2)
+            allocation[CHANNELS[0]] = round(allocation[CHANNELS[0]] + diff, 2)
 
-    report_path = output_dir / f"iteration_{iteration + 1:02d}_score{best['score']}.md"
-    report_path.write_text(
-        f"# Iteration {iteration + 1} Report: {topic}\n\n"
-        f"> **Best Score:** {best['score']}/10 (Agent {best['agent_id'] + 1})  \n"
-        f"> **All Scores:** {scores}  \n"
-        f"> **Feedback:** {best['feedback']}\n\n---\n\n"
-        + best["report"]
-    )
+        result = env.spend_daily_budget(allocation)
+        total_sign_ups += result["sign_ups"]
 
-    done = best["score"] >= TARGET_SCORE
-    print(f"\n{'='*50}")
-    print(f"Iteration {iteration + 1} complete — best score {best['score']}/10")
-    print(f"Status: {'DONE (target reached)' if done else 'continuing...'}")
-    print(f"{'='*50}")
+        # Identify today's best channel
+        cr = result["channel_results"]
+        top_channel = max(
+            (ch for ch in CHANNELS if cr.get(ch, {}).get("sign_ups", 0) > 0),
+            key=lambda ch: cr[ch]["sign_ups"],
+            default=CHANNELS[0],
+        )
 
-    (output_dir / "iteration_output.json").write_text(json.dumps({
-        "score": best["score"],
-        "done": done,
-        "next_iteration": iteration + 1,
-        "report_path": str(report_path),
+        record = {
+            "day": day,
+            "allocation": allocation.copy(),
+            "result": result,
+            "channel_results": cr,
+            "day_sign_ups": result["sign_ups"],
+            "total_sign_ups": total_sign_ups,
+        }
+        channel_history.append(record)
+
+        # Decide next allocation before printing so we can show the shift
+        next_allocation = None
+        if env.total_budget >= 1.0:
+            next_budget = min(DAILY_BUDGET, env.total_budget)
+            next_allocation = decide_allocation(client, env.total_budget, next_budget, channel_history)
+
+        _print_day(day, result, top_channel, next_allocation)
+
+        if next_allocation:
+            allocation = next_allocation
+
+    _print_summary(day, total_sign_ups, channel_history)
+
+    # Persist run data
+    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    run_path = output_dir / f"run_{timestamp}.json"
+    run_path.write_text(json.dumps({
+        "timestamp": timestamp,
+        "total_sign_ups": total_sign_ups,
+        "days_run": day,
+        "history": channel_history,
     }, indent=2))
 
     github_output = os.environ.get("GITHUB_OUTPUT")
     if github_output:
         with open(github_output, "a") as f:
-            f.write(f"score={best['score']}\n")
-            f.write(f"done={'true' if done else 'false'}\n")
-            f.write(f"next_iteration={iteration + 1}\n")
+            f.write(f"total_sign_ups={total_sign_ups}\n")
+            f.write(f"days_run={day}\n")
 
-
-# ---------------------------------------------------------------------------
-# Local full-loop mode
-# ---------------------------------------------------------------------------
-
-def local_mode(topic: str, output_dir: Path, max_iterations: int = MAX_ITERATIONS) -> None:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    print(f"\n{'='*60}")
-    print(f"Topic: {topic}")
-    print(f"Agents/iteration: {NUM_AGENTS}  |  Max iterations: {max_iterations}  |  Target: {TARGET_SCORE}/10")
-    print(f"{'='*60}")
-
-    previous_iterations: list[dict] = []
-    best_result: dict | None = None
-    best_score = -1
-
-    for i in range(max_iterations):
-        agent_results = run_iteration(client, topic, i, previous_iterations)
-        best = max(agent_results, key=lambda r: r["score"])
-        scores = [r["score"] for r in agent_results]
-        print(f"Scores: {scores}  |  Best: {best['score']}/10")
-
-        iter_record = {"iteration": i + 1, "results": agent_results, "best_score": best["score"]}
-        previous_iterations.append(iter_record)
-
-        if best["score"] > best_score:
-            best_score = best["score"]
-            best_result = best
-
-        if best["score"] >= TARGET_SCORE:
-            print(f"\n✓ Target reached at iteration {i + 1}!")
-            break
-    else:
-        print(f"\n✗ Max iterations reached. Best score: {best_score}/10")
-
-    if best_result is None:
-        raise RuntimeError("No results produced across all iterations.")
-    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-
-    history_path = output_dir / f"run_history_{timestamp}.json"
-    history_path.write_text(json.dumps({
-        "topic": topic, "timestamp": timestamp,
-        "best_score": best_score, "iterations": previous_iterations,
-    }, indent=2))
-
-    report_path = output_dir / f"best_report_{timestamp}.md"
-    report_path.write_text(
-        f"# Research Report: {topic}\n\n"
-        f"> **Score:** {best_result['score']}/10  \n"
-        f"> **Feedback:** {best_result['feedback']}\n\n---\n\n"
-        + best_result["report"]
-    )
-
-    summary = {
-        "best_report_path": str(report_path),
-        "history_path": str(history_path),
-        "best_score": best_score,
-        "iterations_run": len(previous_iterations),
-    }
-    (output_dir / "run_summary.json").write_text(json.dumps(summary, indent=2))
-    print(json.dumps(summary, indent=2))
+    return total_sign_ups
 
 
 # ---------------------------------------------------------------------------
@@ -265,20 +178,10 @@ def local_mode(topic: str, output_dir: Path, max_iterations: int = MAX_ITERATION
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("topic", help="Research topic")
-    parser.add_argument("output_dir", nargs="?", default="outputs")
-    parser.add_argument("--iteration", type=int, default=None,
-                        help="Single iteration mode (0-indexed). Omit for full local loop.")
-    parser.add_argument("--history-file", default="outputs/history.json")
-    parser.add_argument("--max-iterations", type=int, default=MAX_ITERATIONS)
-    args = parser.parse_args()
-
+    output_dir = Path("outputs")
     try:
-        if args.iteration is not None:
-            action_mode(args.topic, args.iteration, Path(args.history_file), Path(args.output_dir))
-        else:
-            local_mode(args.topic, Path(args.output_dir), args.max_iterations)
+        score = run_simulation(output_dir)
+        print(f"\nFinal score: {score} sign-ups")
     except Exception as exc:
         print(f"\nFATAL ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
