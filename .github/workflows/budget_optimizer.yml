@@ -3,8 +3,17 @@ name: Ad Budget Optimizer
 on:
   workflow_dispatch:
     inputs:
+      campaign:
+        description: "Campaign name (e.g. 'acme', 'globex'). Each name gets its own isolated history."
+        required: true
+        type: string
+      fresh_start:
+        description: "Wipe existing history for this campaign and start from scratch."
+        required: false
+        default: "false"
+        type: string
       attempt:
-        description: "Attempt number (set automatically on auto-resume)"
+        description: "Attempt number (set automatically on auto-resume — do not fill in)"
         required: false
         default: "1"
         type: string
@@ -14,18 +23,17 @@ permissions:
   actions: write    # re-dispatch this workflow to auto-resume on failure
 
 env:
-  CODE_BRANCH: two
   STATE_BRANCH: budget-state
   MAX_ATTEMPTS: 5
 
 jobs:
   optimize:
-    name: "Ad Budget Optimizer (attempt ${{ github.event.inputs.attempt }})"
+    name: "${{ github.event.inputs.campaign }} (attempt ${{ github.event.inputs.attempt }})"
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    # Serialize: never let two runs touch the state branch at once
+    # One run per campaign at a time — never two VMs writing the same state.
     concurrency:
-      group: budget-optimizer
+      group: budget-optimizer-${{ github.event.inputs.campaign }}
       cancel-in-progress: false
 
     steps:
@@ -40,23 +48,31 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "Budget Optimizer Bot"
 
-      # Set up a worktree on the state branch. This is the durable checkpoint
-      # store: state.json is committed+pushed here after every day, so a VM
-      # crash loses at most the in-progress day.
+      # Mount the budget-state branch as a worktree. Each campaign lives in
+      # its own subdirectory, so multiple companies never touch each other's files.
       - name: Prepare state worktree
         run: |
-          STATE_DIR="${{ github.workspace }}/state-data"
+          STATE_ROOT="${{ github.workspace }}/state-data"
+          CAMPAIGN_DIR="$STATE_ROOT/campaigns/${{ github.event.inputs.campaign }}"
+
           if git ls-remote --exit-code --heads origin "$STATE_BRANCH" >/dev/null 2>&1; then
-            echo "Resuming from existing state branch."
             git fetch origin "$STATE_BRANCH"
-            git worktree add "$STATE_DIR" "origin/$STATE_BRANCH"
-            git -C "$STATE_DIR" checkout -B "$STATE_BRANCH" "origin/$STATE_BRANCH"
+            git worktree add "$STATE_ROOT" "origin/$STATE_BRANCH"
+            git -C "$STATE_ROOT" checkout -B "$STATE_BRANCH" "origin/$STATE_BRANCH"
           else
-            echo "No state branch yet — starting a fresh campaign."
-            git worktree add --detach "$STATE_DIR" HEAD
-            git -C "$STATE_DIR" checkout --orphan "$STATE_BRANCH"
-            git -C "$STATE_DIR" rm -rf . >/dev/null 2>&1 || true
+            echo "No state branch yet — creating it."
+            git worktree add --detach "$STATE_ROOT" HEAD
+            git -C "$STATE_ROOT" checkout --orphan "$STATE_BRANCH"
+            git -C "$STATE_ROOT" rm -rf . >/dev/null 2>&1 || true
           fi
+
+          # Fresh start: wipe this campaign's directory if requested.
+          if [ "${{ github.event.inputs.fresh_start }}" = "true" ] && [ -d "$CAMPAIGN_DIR" ]; then
+            echo "fresh_start=true — wiping $CAMPAIGN_DIR"
+            rm -rf "$CAMPAIGN_DIR"
+          fi
+
+          mkdir -p "$CAMPAIGN_DIR"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -68,40 +84,40 @@ jobs:
       - name: Install dependencies
         run: pip install -r agent/requirements.txt
 
-      - name: Run optimizer (resumes from last checkpoint)
+      - name: Run optimizer
         id: optimizer
         working-directory: agent
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          STATE_DIR="${{ github.workspace }}/state-data"
-          python main.py "$STATE_DIR" \
-            --state-file "$STATE_DIR/state.json" \
-            --git-checkpoint "$STATE_DIR"
+          CAMPAIGN_DIR="${{ github.workspace }}/state-data/campaigns/${{ github.event.inputs.campaign }}"
+          python main.py "$CAMPAIGN_DIR" \
+            --state-file "$CAMPAIGN_DIR/state.json" \
+            --git-checkpoint "${{ github.workspace }}/state-data"
 
       - name: Upload results artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: budget-optimizer-results
-          path: state-data/
-          retention-days: 30
+          name: "${{ github.event.inputs.campaign }}-results"
+          path: "state-data/campaigns/${{ github.event.inputs.campaign }}/"
+          retention-days: 90
 
       - name: Write job summary
         if: always()
         run: |
-          STATE_DIR="${{ github.workspace }}/state-data"
-          echo "## Ad Budget Optimizer" >> $GITHUB_STEP_SUMMARY
-          if [ -f "$STATE_DIR/daily_log.txt" ]; then
+          CAMPAIGN_DIR="${{ github.workspace }}/state-data/campaigns/${{ github.event.inputs.campaign }}"
+          echo "## ${{ github.event.inputs.campaign }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f "$CAMPAIGN_DIR/daily_log.txt" ]; then
             echo '```' >> $GITHUB_STEP_SUMMARY
-            cat "$STATE_DIR/daily_log.txt" >> $GITHUB_STEP_SUMMARY
+            cat "$CAMPAIGN_DIR/daily_log.txt" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           else
             echo "No daily log produced." >> $GITHUB_STEP_SUMMARY
           fi
 
-      # If the job failed, automatically re-dispatch to resume from the last
-      # checkpoint — capped at MAX_ATTEMPTS so a deterministic bug can't loop.
+      # On failure: auto-resume up to MAX_ATTEMPTS, passing campaign + attempt forward.
       - name: Auto-resume on failure
         if: failure()
         uses: actions/github-script@v7
@@ -118,6 +134,10 @@ jobs:
               repo: context.repo.repo,
               workflow_id: 'budget_optimizer.yml',
               ref: 'main',
-              inputs: { attempt: String(attempt + 1) },
+              inputs: {
+                campaign: '${{ github.event.inputs.campaign }}',
+                fresh_start: 'false',
+                attempt: String(attempt + 1),
+              },
             });
-            console.log(`Failure on attempt ${attempt} — dispatched attempt ${attempt + 1}.`);
+            console.log(`Attempt ${attempt} failed — resuming as attempt ${attempt + 1}.`);
