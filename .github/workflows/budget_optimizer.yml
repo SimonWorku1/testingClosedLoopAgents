@@ -2,15 +2,31 @@ name: Ad Budget Optimizer
 
 on:
   workflow_dispatch:
+    inputs:
+      day:
+        description: "Current day number (set automatically)"
+        required: false
+        default: "1"
+        type: string
+      run_id:
+        description: "Shared run ID to group artifacts (set automatically)"
+        required: false
+        default: ""
+        type: string
+      prev_run_id:
+        description: "GitHub run ID of the previous day, for artifact download (set automatically)"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   actions: write
 
 jobs:
-  optimize:
-    name: Run Budget Optimization Simulation
+  day:
+    name: "Day ${{ github.event.inputs.day }} — Ad Budget Optimizer"
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -28,29 +44,80 @@ jobs:
       - name: Install dependencies
         run: pip install -r agent/requirements.txt
 
-      - name: Run optimizer
+      # Download state from the previous day's run.
+      # Skipped on day 1 (no prev_run_id) or if the artifact lookup fails.
+      - name: Download state from previous day
+        if: ${{ github.event.inputs.prev_run_id != '' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: budget-state-${{ github.event.inputs.run_id }}
+          run-id: ${{ github.event.inputs.prev_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: agent/outputs/
+
+      - name: Run day ${{ github.event.inputs.day }}
         id: optimizer
         working-directory: agent
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python main.py
+        run: |
+          python main.py outputs \
+            --day ${{ github.event.inputs.day }} \
+            --state-file outputs/state.json
 
-      - name: Upload results
+      - name: Upload state artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: optimization-results
+          name: budget-state-${{ github.event.inputs.run_id || github.run_id }}
           path: agent/outputs/
+          overwrite: true
           retention-days: 30
 
       - name: Write job summary
         if: always()
         run: |
-          SIGN_UPS="${{ steps.optimizer.outputs.total_sign_ups }}"
-          DAYS="${{ steps.optimizer.outputs.days_run }}"
-          echo "## Ad Budget Optimizer Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Total sign-ups | ${SIGN_UPS} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Days run | ${DAYS} |" >> $GITHUB_STEP_SUMMARY
+          DAY="${{ github.event.inputs.day }}"
+          SIGN_UPS="${{ steps.optimizer.outputs.day_sign_ups }}"
+          TOTAL="${{ steps.optimizer.outputs.total_sign_ups }}"
+          REMAINING="${{ steps.optimizer.outputs.remaining_budget }}"
+          TOP="${{ steps.optimizer.outputs.top_channel }}"
+          DONE="${{ steps.optimizer.outputs.done }}"
+          echo "## Day ${DAY}" >> $GITHUB_STEP_SUMMARY
+          echo "| | |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Sign-ups today | ${SIGN_UPS} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Total sign-ups | ${TOTAL} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Budget remaining | \$${REMAINING} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Top channel | ${TOP} |" >> $GITHUB_STEP_SUMMARY
+          if [ "$DONE" = "true" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Budget exhausted — campaign complete!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Trigger next day
+        if: steps.optimizer.outputs.done == 'false' && steps.optimizer.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const day = parseInt('${{ github.event.inputs.day }}');
+            const maxDays = 20;
+            const nextDay = day + 1;
+            if (nextDay > maxDays) {
+              console.log(`Reached max days (${maxDays}), stopping.`);
+              return;
+            }
+            const runId = '${{ github.event.inputs.run_id }}' || '${{ github.run_id }}';
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'budget_optimizer.yml',
+              ref: 'main',
+              inputs: {
+                day: String(nextDay),
+                run_id: runId,
+                prev_run_id: '${{ github.run_id }}',
+              }
+            });
+            console.log(`Triggered Day ${nextDay} (run_id: ${runId})`);
