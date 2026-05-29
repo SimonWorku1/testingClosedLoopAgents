@@ -80,6 +80,25 @@ def decide_allocation(
     )
 
     raw = response.content[0].text.strip()
+
+    # Strip markdown code fences if present
+    if "```" in raw:
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+        raw = raw.strip()
+
+    # Extract just the JSON object in case there's surrounding text
+    import re
+    match = re.search(r"\{[^{}]+\}", raw, re.DOTALL)
+    if match:
+        raw = match.group(0)
+
+    # Replace JS-only non-finite values that are invalid JSON
+    raw = re.sub(r":\s*NaN\b", ": 0", raw)
+    raw = re.sub(r":\s*Infinity\b", ": 0", raw)
+    raw = re.sub(r":\s*-Infinity\b", ": 0", raw)
+
     allocation = json.loads(raw)
 
     # Ensure all channels present
