@@ -43,16 +43,23 @@ Public API:
 - `run_worker_agent(client, goal, agent_id, iteration, previous_iterations, shutdown_event=None) -> str`
 
 The agent loop MUST:
-1. Use `model="claude-sonnet-4-6"`, `max_tokens=4096` for tool-use rounds.
-2. Sleep 12 seconds between tool-use rounds (rate-limit guard).
-3. Always make one final no-tools call at the end with `max_tokens=8192` and an instruction like "write your final output now, no more tools" so the agent always produces text — never trust that the tool loop terminated with a text block.
+1. Go through the provider-agnostic `llm_client.py` (see below) — never import an SDK directly and never hardcode the model name. The model comes from the client (`LLM_MODEL` env / per-provider default).
+2. Self-pace via the client's rate-limit handling — do NOT hardcode a fixed sleep between rounds. The client reads response headers and sleeps only when the token bucket is actually low (failure mode #11).
+3. Always make one final no-tools call at the end with a large `max_tokens` and an instruction like "write your final output now, no more tools" so the agent always produces text — never trust that the tool loop terminated with a text block.
 4. Accept `shutdown_event: threading.Event | None`; check it before each API call and return `"[Cancelled]"` if set.
-5. Wrap every API call in `_api_call_with_backoff` (pattern copied from evaluator.py — exponential 2s/4s/8s/16s/32s/60s on `anthropic.RateLimitError`, up to 6 retries).
+5. Rely on the client's built-in `retry-after` + exponential backoff (up to 6 retries) rather than a per-call backoff helper of its own.
+
+### `agent/llm_client.py`
+
+Provider-agnostic LLM client (copy from the budget-optimizer example). Responsibilities:
+- `make_client()` selects OpenAI or Anthropic from whichever key is present (`OPENAI_API_KEY` / `ANTHROPIC_API_KEY`); override with `LLM_PROVIDER` / `LLM_MODEL`.
+- One `complete(system=, user=, max_tokens=)` method so agent code is SDK-free.
+- Self-pacing: honour `retry-after` on 429s, proactively sleep when `*-remaining-tokens` is low. Handles both providers' header names and reset formats. This is the single defence for failure mode #11.
 
 ### `agent/evaluator.py`
 
 Must contain:
-- `_api_call_with_backoff(fn, max_retries=6)` — the canonical backoff helper, imported by worker.py.
+- All LLM calls go through `llm_client.py` (which owns retry/backoff and pacing) — the evaluator does not need its own backoff helper.
 - `RUBRIC` — a brutally strict 5-dimension rubric, 0–2 per dimension, total 0–10. The rubric MUST:
   - Open with "You reject 80% of submissions on first review. Default to the LOWER score when uncertain."
   - Define each score 0/1/2 with **specific verifiable evidence** required for 2 (counts, named sources, quantitative claims, etc.) — not adjectives like "thorough" or "well-organized".
@@ -80,7 +87,7 @@ The orchestrator. Copy the existing structure. Critical requirements (see Failur
 
 ### `agent/requirements.txt`
 
-`anthropic>=0.40.0` plus whatever the worker actually imports.
+Both SDKs so either key works at runtime: `anthropic>=0.40.0` and `openai>=1.40.0`, plus whatever the worker actually imports.
 
 ### `.github/workflows/loop_agent.yml`
 
@@ -128,6 +135,11 @@ Every one of these has bitten this project. The generated code must defend again
 9. **History file write torn by crash.** Direct `write_text` on the history file leaves a half-written JSON if the process is killed between iterations. → Write to `.tmp` then `os.replace`.
 
 10. **Workflow input name mismatch.** Skill says "rename `topic` to `goal`" but the trigger script's `createWorkflowDispatch` inputs still pass `topic`. → After renaming, grep the whole workflow file for the old name.
+
+11. **Hardcoded provider / hardcoded rate limit.**
+    - *Symptom:* code authenticates fine in dev but fails at exam/eval time with `AuthenticationError`, or runs into `429`s and dies because it assumed a tier it doesn't have. The key handed to you at runtime may be a *different provider* (OpenAI vs Anthropic) and an *unknown tier*.
+    - *Root cause:* the agent imports one SDK directly (`anthropic.Anthropic(...)`) and/or sleeps a fixed number of seconds between calls.
+    - *Fix:* put a provider-agnostic `llm_client.py` between the agent and any SDK. Select the provider at runtime from whichever key is present (`OPENAI_API_KEY` / `ANTHROPIC_API_KEY`, override via `LLM_PROVIDER`/`LLM_MODEL`). Expose one `complete(system=, user=)` method. Self-pace off the response's rate-limit headers — honour `retry-after` on 429s (reactive floor) **and** proactively sleep when `*-remaining-tokens` is low until `*-reset`. Header names differ per provider (`x-ratelimit-*` vs `anthropic-ratelimit-*`) and reset formats differ (OpenAI duration `"6m0s"` vs Anthropic RFC-3339 timestamp) — parse both. The workflow forwards *both* keys so the same code runs on either. Never hardcode a sleep interval; the headers tell you the real budget.
 
 ## Step 6 — Verify consistency
 

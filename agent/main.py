@@ -16,10 +16,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-import anthropic
-
 from ad_environment import AdEnvironment
 from budget_agent import CHANNELS, decide_allocation
+from llm_client import LLMClient, make_client
 
 DAILY_BUDGET = 100.0
 
@@ -99,7 +98,7 @@ MAX_DAY_RETRIES = 3  # retries per day before giving up and saving progress
 
 
 def _run_one_day(
-    client: anthropic.Anthropic,
+    client: LLMClient,
     env_remaining: float,
     allocation: dict,
     history: list[dict],
@@ -188,7 +187,8 @@ def _git_checkpoint(checkpoint_dir: Path, day: int) -> None:
 
 
 def local_mode(output_dir: Path, state_file: Path, checkpoint_dir: Path | None = None) -> int:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    client = make_client()
+    print(f"  [LLM provider: {client.provider_name}  |  model: {client.model}]")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Resume from saved state if it exists, otherwise start fresh

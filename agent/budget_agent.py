@@ -1,5 +1,7 @@
 import json
-import anthropic
+import re
+
+from llm_client import LLMClient
 
 CHANNELS = ["search", "social", "video", "display"]
 
@@ -61,12 +63,12 @@ def _build_history_text(channel_history: list[dict], daily_budget: float) -> str
 
 
 def decide_allocation(
-    client: anthropic.Anthropic,
+    client: LLMClient,
     remaining_budget: float,
     daily_budget: float,
     channel_history: list[dict],
 ) -> dict[str, float]:
-    """Ask Claude for the next day's allocation. Returns a channel → spend dict."""
+    """Ask the model for the next day's allocation. Returns a channel → spend dict."""
     history_text = _build_history_text(channel_history, daily_budget)
 
     user_message = (
@@ -77,14 +79,11 @@ def decide_allocation(
         f"Allocations must sum to exactly ${daily_budget:.2f}. JSON only."
     )
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=256,
+    raw = client.complete(
         system=_SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_message}],
-    )
-
-    raw = response.content[0].text.strip()
+        user=user_message,
+        max_tokens=256,
+    ).strip()
 
     # Strip markdown code fences if present
     if "```" in raw:
@@ -94,7 +93,6 @@ def decide_allocation(
         raw = raw.strip()
 
     # Extract just the JSON object in case there's surrounding text
-    import re
     match = re.search(r"\{[^{}]+\}", raw, re.DOTALL)
     if match:
         raw = match.group(0)
