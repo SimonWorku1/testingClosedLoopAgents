@@ -1,5 +1,5 @@
 {
-  "next_instances": 167,
+  "next_instances": 131,
   "consecutive_in_band": 0,
   "history": [
     {
@@ -19,6 +19,15 @@
       "in_band": false,
       "consecutive_in_band": 0,
       "diagnosis": "CPU pinned at 100% \u2014 cluster is SATURATED and badly under-provisioned (true demand is even higher than shown)"
+    },
+    {
+      "iteration": 3,
+      "instances": 167,
+      "cpu_utilization": 10.97,
+      "error": -4.03,
+      "in_band": false,
+      "consecutive_in_band": 0,
+      "diagnosis": "CPU 10.97% is -4.03% BELOW the 15% target \u2014 too many instances, over-provisioned (overshot \u2014 flipped high\u2192low vs last iteration)"
     }
   ]
 }
