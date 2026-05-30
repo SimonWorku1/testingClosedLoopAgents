@@ -1,6 +1,6 @@
 {
   "next_instances": 131,
-  "consecutive_in_band": 2,
+  "consecutive_in_band": 3,
   "history": [
     {
       "iteration": 1,
@@ -73,6 +73,15 @@
       "in_band": true,
       "consecutive_in_band": 2,
       "diagnosis": "on target \u2014 CPU 14.38% is inside the 14-16% band"
+    },
+    {
+      "iteration": 9,
+      "instances": 131,
+      "cpu_utilization": 14.77,
+      "error": -0.23,
+      "in_band": true,
+      "consecutive_in_band": 3,
+      "diagnosis": "on target \u2014 CPU 14.77% is inside the 14-16% band"
     }
   ]
 }
