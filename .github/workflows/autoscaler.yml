@@ -1,0 +1,150 @@
+name: Autonomous Server Auto-Scaler
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_name:
+        description: "Run name (e.g. 'staging', 'blackfriday'). Each gets its own isolated history."
+        required: true
+        type: string
+      fresh_start:
+        description: "Wipe existing history for this run and start from scratch."
+        required: false
+        default: "false"
+        type: string
+      attempt:
+        description: "Attempt number (set automatically on auto-resume — do not fill in)"
+        required: false
+        default: "1"
+        type: string
+
+permissions:
+  contents: write   # push checkpoints to the scaler-state branch
+  actions: write    # re-dispatch this workflow to auto-resume on a crash
+
+env:
+  STATE_BRANCH: scaler-state
+  MAX_ATTEMPTS: 5
+
+jobs:
+  scale:
+    name: "${{ github.event.inputs.run_name }} (attempt ${{ github.event.inputs.attempt }})"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # One run per name at a time — never two VMs writing the same state.
+    concurrency:
+      group: autoscaler-${{ github.event.inputs.run_name }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: three
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "Auto-Scaler Bot"
+
+      # Mount the scaler-state branch as a worktree. Each run lives in its own
+      # subdirectory so multiple runs never touch each other's files.
+      - name: Prepare state worktree
+        run: |
+          STATE_ROOT="${{ github.workspace }}/state-data"
+          RUN_DIR="$STATE_ROOT/runs/${{ github.event.inputs.run_name }}"
+
+          if git ls-remote --exit-code --heads origin "$STATE_BRANCH" >/dev/null 2>&1; then
+            git fetch origin "$STATE_BRANCH"
+            git worktree add "$STATE_ROOT" "origin/$STATE_BRANCH"
+            git -C "$STATE_ROOT" checkout -B "$STATE_BRANCH" "origin/$STATE_BRANCH"
+          else
+            echo "No state branch yet — creating it."
+            git worktree add --detach "$STATE_ROOT" HEAD
+            git -C "$STATE_ROOT" checkout --orphan "$STATE_BRANCH"
+            git -C "$STATE_ROOT" rm -rf . >/dev/null 2>&1 || true
+          fi
+
+          # Fresh start: wipe this run's directory if requested.
+          if [ "${{ github.event.inputs.fresh_start }}" = "true" ] && [ -d "$RUN_DIR" ]; then
+            echo "fresh_start=true — wiping $RUN_DIR"
+            rm -rf "$RUN_DIR"
+          fi
+
+          mkdir -p "$RUN_DIR"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: agent/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r agent/requirements.txt
+
+      - name: Run auto-scaler
+        id: scaler
+        working-directory: agent
+        env:
+          # The agent picks whichever key is present (OpenAI wins if both set).
+          # Override selection with the LLM_PROVIDER / LLM_MODEL repo variables.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+        run: |
+          RUN_DIR="${{ github.workspace }}/state-data/runs/${{ github.event.inputs.run_name }}"
+          python main.py "$RUN_DIR" \
+            --state-file "$RUN_DIR/state.json" \
+            --git-checkpoint "${{ github.workspace }}/state-data"
+
+      - name: Upload results artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: "${{ github.event.inputs.run_name }}-results"
+          path: "state-data/runs/${{ github.event.inputs.run_name }}/"
+          retention-days: 90
+
+      - name: Write job summary
+        if: always()
+        run: |
+          RUN_DIR="${{ github.workspace }}/state-data/runs/${{ github.event.inputs.run_name }}"
+          echo "## ${{ github.event.inputs.run_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f "$RUN_DIR/trace.txt" ]; then
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat "$RUN_DIR/trace.txt" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No trace produced." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # Auto-resume ONLY on a real crash (job failure), not on a clean
+      # "couldn't stabilize" outcome — main.py exits 0 when it runs to a
+      # conclusion, so this never fires past the iteration budget.
+      - name: Auto-resume on crash
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const attempt = parseInt('${{ github.event.inputs.attempt }}') || 1;
+            const maxAttempts = parseInt('${{ env.MAX_ATTEMPTS }}') || 5;
+            if (attempt >= maxAttempts) {
+              console.log(`Reached MAX_ATTEMPTS (${maxAttempts}); not resuming.`);
+              return;
+            }
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'autoscaler.yml',
+              ref: 'main',
+              inputs: {
+                run_name: '${{ github.event.inputs.run_name }}',
+                fresh_start: 'false',
+                attempt: String(attempt + 1),
+              },
+            });
+            console.log(`Attempt ${attempt} crashed — resuming as attempt ${attempt + 1}.`);
