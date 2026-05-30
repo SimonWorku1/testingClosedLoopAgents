@@ -45,8 +45,39 @@ def _print_header(resuming: bool, start_iter: int) -> None:
     print(f"{'='*64}")
 
 
-def _print_step(record: dict, consecutive: int, next_instances: int | None,
-                reasoning: str | None) -> None:
+def _diagnose(record: dict, prev: dict | None) -> str:
+    """Plain-English explanation of what went wrong with this reading."""
+    cpu = record["cpu_utilization"]
+    err = record["error"]
+
+    if record["in_band"]:
+        return f"on target — CPU {cpu:.2f}% is inside the {BAND[0]:.0f}-{BAND[1]:.0f}% band"
+
+    if cpu >= 100.0:
+        msg = ("CPU pinned at 100% — cluster is SATURATED and badly "
+               "under-provisioned (true demand is even higher than shown)")
+    elif cpu <= 1.0:
+        msg = ("CPU floored at 1% — massively over-provisioned, "
+               "burning budget on idle instances")
+    elif err > 0:
+        msg = (f"CPU {cpu:.2f}% is {err:+.2f}% ABOVE the 15% target — "
+               "too few instances, still under-provisioned")
+    else:
+        msg = (f"CPU {cpu:.2f}% is {err:+.2f}% BELOW the 15% target — "
+               "too many instances, over-provisioned")
+
+    # Compare against the previous iteration to flag overshoot / oscillation.
+    if prev is not None:
+        if prev["in_band"]:
+            msg += " (overshot — left the band after being inside it last iteration)"
+        elif (prev["error"] > 0) != (err > 0) and abs(err) > 0.5:
+            flipped = "high→low" if prev["error"] > 0 else "low→high"
+            msg += f" (overshot — flipped {flipped} vs last iteration)"
+    return msg
+
+
+def _print_step(record: dict, consecutive: int, diagnosis: str,
+                next_instances: int | None, reasoning: str | None) -> None:
     cpu = record["cpu_utilization"]
     in_band = BAND[0] <= cpu <= BAND[1]
     flag = f"IN BAND ({consecutive}/{CONSECUTIVE_REQUIRED})" if in_band else "out of band"
@@ -59,6 +90,7 @@ def _print_step(record: dict, consecutive: int, next_instances: int | None,
         f"{record['instances']:>4d} instances -> CPU {cpu:6.2f}% | "
         f"error {record['error']:+6.2f}% | {flag}"
     )
+    print(f"  diagnosis: {diagnosis}")
     if next_instances is not None:
         delta = next_instances - record["instances"]
         direction = "scale UP" if delta > 0 else ("scale DOWN" if delta < 0 else "hold")
@@ -178,6 +210,7 @@ def run(output_dir: Path, state_file: Path, checkpoint_dir: Path | None = None) 
         in_band = BAND[0] <= cpu <= BAND[1]
         consecutive = consecutive + 1 if in_band else 0
 
+        prev = history[-1] if history else None  # reading before this one
         record = {
             "iteration": iteration,
             "instances": instances,
@@ -186,11 +219,13 @@ def run(output_dir: Path, state_file: Path, checkpoint_dir: Path | None = None) 
             "in_band": in_band,
             "consecutive_in_band": consecutive,
         }
+        diagnosis = _diagnose(record, prev)
+        record["diagnosis"] = diagnosis
         history.append(record)
 
         # --- check terminal condition --------------------------------------
         if consecutive >= CONSECUTIVE_REQUIRED:
-            _print_step(record, consecutive, next_instances=None, reasoning=None)
+            _print_step(record, consecutive, diagnosis, next_instances=None, reasoning=None)
             success = True
             _write_logs(output_dir, record, next_instances=None, reasoning="STABILIZED")
             _save_state(state_file, instances, consecutive, history)
@@ -215,7 +250,7 @@ def run(output_dir: Path, state_file: Path, checkpoint_dir: Path | None = None) 
             _save_state(state_file, instances, consecutive, history)
             raise last_exc
 
-        _print_step(record, consecutive, next_instances, reasoning)
+        _print_step(record, consecutive, diagnosis, next_instances, reasoning)
         _write_logs(output_dir, record, next_instances, reasoning)
 
         instances = next_instances
@@ -244,10 +279,10 @@ def _write_logs(output_dir: Path, record: dict, next_instances: int | None,
             f"Iter {record['iteration']:2d} | {record['instances']:>4d} instances "
             f"-> CPU {record['cpu_utilization']:6.2f}% | error {record['error']:+6.2f}% | "
             f"{'in-band' if record['in_band'] else 'out'} "
-            f"({record['consecutive_in_band']}/{CONSECUTIVE_REQUIRED})"
-            + (f" | next {next_instances} ({reasoning})" if next_instances is not None
-               else f" | {reasoning}")
-            + "\n"
+            f"({record['consecutive_in_band']}/{CONSECUTIVE_REQUIRED})\n"
+            f"        diagnosis: {record.get('diagnosis', '')}\n"
+            + (f"        -> next {next_instances} instances ({reasoning})\n"
+               if next_instances is not None else f"        -> {reasoning}\n")
         )
     with open(output_dir / "trace.jsonl", "a") as f:
         out = dict(record)
