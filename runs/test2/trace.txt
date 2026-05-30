@@ -1,3 +1,6 @@
 Iter  1 |    5 instances -> CPU 100.00% | error +85.00% | out (0/3)
         diagnosis: CPU pinned at 100% — cluster is SATURATED and badly under-provisioned (true demand is even higher than shown)
         -> next 25 instances (CPU is saturated at 100% with 5 instances, so scale up aggressively using N_next = 5 * (100/15)^(1/1.2) ≈ 25 to drive utilization toward 15%.)
+Iter  2 |   25 instances -> CPU 100.00% | error +85.00% | out (0/3)
+        diagnosis: CPU pinned at 100% — cluster is SATURATED and badly under-provisioned (true demand is even higher than shown)
+        -> next 167 instances (Cluster is saturated at 25 instances (CPU=100%), so applying the scaling formula aggressively: 25 * (100/15)^(1/1.2) ≈ 167 to break through saturation and approach 15% CPU.)
