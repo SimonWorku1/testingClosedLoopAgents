@@ -88,7 +88,12 @@ jobs:
         id: optimizer
         working-directory: agent
         env:
+          # The agent picks whichever key is present (OpenAI wins if both set).
+          # Override selection with the LLM_PROVIDER / LLM_MODEL repo variables.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
         run: |
           CAMPAIGN_DIR="${{ github.workspace }}/state-data/campaigns/${{ github.event.inputs.campaign }}"
           python main.py "$CAMPAIGN_DIR" \
