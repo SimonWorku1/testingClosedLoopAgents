@@ -1,0 +1,15 @@
+{
+  "next_instances": 25,
+  "consecutive_in_band": 0,
+  "history": [
+    {
+      "iteration": 1,
+      "instances": 5,
+      "cpu_utilization": 100.0,
+      "error": 85.0,
+      "in_band": false,
+      "consecutive_in_band": 0,
+      "diagnosis": "CPU pinned at 100% \u2014 cluster is SATURATED and badly under-provisioned (true demand is even higher than shown)"
+    }
+  ]
+}
