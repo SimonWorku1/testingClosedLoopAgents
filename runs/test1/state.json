@@ -1,6 +1,6 @@
 {
   "next_instances": 132,
-  "consecutive_in_band": 0,
+  "consecutive_in_band": 1,
   "history": [
     {
       "iteration": 1,
@@ -55,6 +55,15 @@
       "in_band": false,
       "consecutive_in_band": 0,
       "diagnosis": "CPU 13.94% is -1.06% BELOW the 15% target \u2014 too many instances, over-provisioned (overshot \u2014 left the band after being inside it last iteration)"
+    },
+    {
+      "iteration": 7,
+      "instances": 132,
+      "cpu_utilization": 14.07,
+      "error": -0.93,
+      "in_band": true,
+      "consecutive_in_band": 1,
+      "diagnosis": "on target \u2014 CPU 14.07% is inside the 14-16% band"
     }
   ]
 }
