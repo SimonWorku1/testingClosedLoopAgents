@@ -11,6 +11,7 @@ dataset.
 import hashlib
 import json
 import random
+import statistics
 import time
 from pathlib import Path
 
@@ -114,20 +115,50 @@ def _deterministic_nudge(question_id: str) -> float:
     return -0.5 if h % 2 == 0 else 0.5
 
 
-def build_prop_questions(df: pd.DataFrame) -> list[dict]:
+# Default small roster: high-volume, low-variance stars (most predictable props).
+# Matched case-insensitively as substrings against PLAYER_NAME.
+DEFAULT_ROSTER = ["Wilson", "Stewart", "Collier"]
+
+
+def build_prop_questions(df: pd.DataFrame,
+                         players: list[str] | None = None) -> list[dict]:
     """
     For each player-game (after MIN_PRIOR_GAMES prior games), generate one
     prop question per stat. Strictly temporally ordered — no lookahead.
 
+    `players`: list of name substrings to focus on (a small roster gives the
+    agent coherent, repeated reps on the same players so it can learn
+    mean-reversion patterns). None → DEFAULT_ROSTER. Pass ["*"] for the
+    top-N-by-minutes broad set.
+
     The agent NEVER sees `actual_value` or `correct_pick`; those are
     evaluated by main.py after the agent submits its pick.
     """
-    top_ids = (
-        df.groupby("PLAYER_ID")["MIN"].sum()
-        .sort_values(ascending=False)
-        .head(TOP_N_PLAYERS)
-        .index.tolist()
-    )
+    if players is None:
+        players = DEFAULT_ROSTER
+    if players == ["*"]:
+        players = None
+
+    if players:
+        names = df["PLAYER_NAME"]
+        mask = pd.Series(False, index=df.index)
+        for sub in players:
+            mask |= names.str.contains(sub, case=False, na=False)
+        matched = df[mask]["PLAYER_NAME"].unique().tolist()
+        if not matched:
+            raise RuntimeError(
+                f"No players matched {players}. Available example names: "
+                f"{sorted(df['PLAYER_NAME'].unique())[:10]}"
+            )
+        print(f"  [data] Roster focus: {matched}")
+        top_ids = df[mask]["PLAYER_ID"].unique().tolist()
+    else:
+        top_ids = (
+            df.groupby("PLAYER_ID")["MIN"].sum()
+            .sort_values(ascending=False)
+            .head(TOP_N_PLAYERS)
+            .index.tolist()
+        )
     df = df[df["PLAYER_ID"].isin(top_ids)].copy()
 
     questions = []
@@ -159,6 +190,14 @@ def build_prop_questions(df: pd.DataFrame) -> list[dict]:
                 last3 = series[max(0, i - 3): i]
                 last5 = series[max(0, i - 5): i]
 
+                # Volatility from PRIOR games only (no lookahead): how erratic is
+                # this player on this stat? High volatility => the line is a poor
+                # predictor => the agent should lean toward passing.
+                volatility = statistics.stdev(prior) if len(prior) >= 2 else 0.0
+                cv = (volatility / rolling_avg) if rolling_avg > 0 else 0.0
+                # Streak: how many of the last 3 prior games were over the line?
+                overs_last3 = sum(1 for v in last3 if v > line)
+
                 questions.append({
                     "question_id": qid,
                     "player_name": name,
@@ -177,6 +216,9 @@ def build_prop_questions(df: pd.DataFrame) -> list[dict]:
                     "season_avg": round(sum(series[:i]) / i, 1),
                     "last_3_avg": round(sum(last3) / len(last3), 1) if last3 else None,
                     "last_5_avg": round(sum(last5) / len(last5), 1) if last5 else None,
+                    "volatility": round(volatility, 1),       # std dev of prior games
+                    "cv": round(cv, 2),                        # coefficient of variation
+                    "overs_last3": overs_last3,                # of last 3, how many over line
                     "games_played": i,
                 })
 
