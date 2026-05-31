@@ -7,6 +7,11 @@ on:
         description: "Run name (e.g. 'season2024', 'test1'). Each gets its own isolated state."
         required: true
         type: string
+      players:
+        description: "Comma-separated player name substrings to focus on (small roster learns best). '*' = all top players."
+        required: false
+        default: "Wilson,Stewart,Collier"
+        type: string
       fresh_start:
         description: "Wipe existing state for this run and start from scratch."
         required: false
@@ -98,7 +103,8 @@ jobs:
           python main.py "$RUN_DIR" \
             --data-dir "$RUN_DIR/data" \
             --state-file "$RUN_DIR/state.json" \
-            --git-checkpoint "${{ github.workspace }}/state-data"
+            --git-checkpoint "${{ github.workspace }}/state-data" \
+            --players "${{ github.event.inputs.players }}"
 
       - name: Upload results artifact
         uses: actions/upload-artifact@v4
@@ -143,6 +149,7 @@ jobs:
               ref: 'main',
               inputs: {
                 run_name: '${{ github.event.inputs.run_name }}',
+                players: '${{ github.event.inputs.players }}',
                 fresh_start: 'false',
                 attempt: String(attempt + 1),
               },
