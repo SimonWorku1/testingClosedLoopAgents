@@ -1110,3 +1110,11 @@
   [XX] Angel Reese            Pts+Reb+Ast  line 22.1 | under → actual 30.0 | committed UNDER on Pts+Reb+Ast line 22.1, actual 30.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
   [pass] Rhyne Howard           Points       line 15.9 (conf 2)
   [pass] Rhyne Howard           Rebounds     line 5.5 (conf 1)
+
+=== Batch 140 ===
+  [pass] Rhyne Howard           Assists      line 2.6 (conf 2)
+  [pass] Rhyne Howard           Pts+Reb+Ast  line 25.1 (conf 2)
+  [pass] Stefanie Dolson        Points       line 6.8 (conf 2)
+  [pass] Stefanie Dolson        Rebounds     line 3.3 (conf 1)
+  [pass] Stefanie Dolson        Assists      line 1.2 (conf 1)
+  [XX] Stefanie Dolson        Pts+Reb+Ast  line 12.3 | under → actual 13.0 | committed UNDER on Pts+Reb+Ast line 12.3, actual 13.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed

@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 834,
+  "next_question_idx": 840,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -840,12 +840,25 @@
       "last_3_avg": 20.3,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "203828_PRA_20240606",
+      "player_name": "Stefanie Dolson",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 12.3,
+      "actual": 13.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last-3 avg (11.0) and last-5 avg (10.8) both clearly below the 12.3 line with agreeing downward trend, and cv 0.30 is acceptably low volatility for a committed UNDER.",
+      "committed": true,
+      "last_3_avg": 11.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     false,
     false,
-    false,
     true,
     true,
     false,
@@ -862,7 +875,8 @@
     true,
     true,
     true,
+    false,
     false
   ],
-  "passes": 774
+  "passes": 779
 }
