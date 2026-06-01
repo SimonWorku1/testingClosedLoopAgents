@@ -8,9 +8,19 @@ on:
         required: true
         type: string
       players:
-        description: "Comma-separated player name substrings to focus on (small roster learns best). '*' = all top players."
+        description: "Comma-separated player name substrings. '*' = all top players."
         required: false
-        default: "Wilson,Stewart,Collier"
+        default: "*"
+        type: string
+      stats:
+        description: "Comma-separated stat keys to include (e.g. 'AST' or 'AST,PRA'). Empty = all stats."
+        required: false
+        default: "AST"
+        type: string
+      top_players:
+        description: "Limit to top N players by minutes (e.g. 20 for a faster run). Empty = all."
+        required: false
+        default: "20"
         type: string
       fresh_start:
         description: "Wipe existing state for this run and start from scratch."
@@ -104,7 +114,12 @@ jobs:
             --data-dir "$RUN_DIR/data" \
             --state-file "$RUN_DIR/state.json" \
             --git-checkpoint "${{ github.workspace }}/state-data" \
-            --players "${{ github.event.inputs.players }}"
+            --players "${{ github.event.inputs.players }}" \
+            ${STATS:+--stats "$STATS"} \
+            ${TOP_PLAYERS:+--top-players "$TOP_PLAYERS"}
+        env:
+          STATS: ${{ github.event.inputs.stats }}
+          TOP_PLAYERS: ${{ github.event.inputs.top_players }}
 
       - name: Upload results artifact
         uses: actions/upload-artifact@v4
@@ -150,6 +165,8 @@ jobs:
               inputs: {
                 run_name: '${{ github.event.inputs.run_name }}',
                 players: '${{ github.event.inputs.players }}',
+                stats: '${{ github.event.inputs.stats }}',
+                top_players: '${{ github.event.inputs.top_players }}',
                 fresh_start: 'false',
                 attempt: String(attempt + 1),
               },

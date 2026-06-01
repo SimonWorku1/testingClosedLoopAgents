@@ -162,15 +162,16 @@ DEFAULT_ROSTER = ["Wilson", "Stewart", "Collier"]
 
 
 def build_prop_questions(df: pd.DataFrame,
-                         players: list[str] | None = None) -> list[dict]:
+                         players: list[str] | None = None,
+                         stats: list[str] | None = None) -> list[dict]:
     """
     For each player-game (after MIN_PRIOR_GAMES prior games), generate one
     prop question per stat. Strictly temporally ordered — no lookahead.
 
-    `players`: list of name substrings to focus on (a small roster gives the
-    agent coherent, repeated reps on the same players so it can learn
-    mean-reversion patterns). None → DEFAULT_ROSTER. Pass ["*"] for the
-    top-N-by-minutes broad set.
+    `players`: list of name substrings to focus on. None → DEFAULT_ROSTER.
+               Pass ["*"] for the top-N-by-minutes broad set.
+    `stats`: list of stat keys to include e.g. ["AST"] or ["PTS","PRA"].
+             None → all PROPS.
 
     The agent NEVER sees `actual_value` or `correct_pick`; those are
     evaluated by main.py after the agent submits its pick.
@@ -209,7 +210,8 @@ def build_prop_questions(df: pd.DataFrame,
         name = rows[0]["PLAYER_NAME"]
         team = rows[0]["TEAM_ABBREVIATION"]
 
-        for stat_key, stat_name in PROPS:
+        active_props = [(k, n) for k, n in PROPS if stats is None or k in stats]
+        for stat_key, stat_name in active_props:
             series = [_stat_value(r, stat_key) for r in rows]
 
             for i in range(MIN_PRIOR_GAMES, len(rows)):
@@ -264,5 +266,6 @@ def build_prop_questions(df: pd.DataFrame,
                 })
 
     questions.sort(key=lambda q: q["game_date"])
-    print(f"  [data] {len(questions)} prop questions for {len(PROPS)} stat types")
+    stat_labels = stats if stats else [k for k, _ in PROPS]
+    print(f"  [data] {len(questions)} prop questions for {stat_labels}")
     return questions

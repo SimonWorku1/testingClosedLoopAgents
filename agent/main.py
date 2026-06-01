@@ -175,8 +175,10 @@ def _append_logs(output_dir: Path, evals: list[dict], questions_map: dict,
 
 def run(output_dir: Path, data_dir: Path, state_file: Path,
         checkpoint_dir: Path | None = None,
-        players: list[str] | None = None) -> bool:
-    from wnba_data import build_prop_questions, fetch_gamelogs
+        players: list[str] | None = None,
+        stats: list[str] | None = None,
+        top_players: int | None = None) -> bool:
+    from wnba_data import build_prop_questions, fetch_gamelogs, TOP_N_PLAYERS
 
     client = make_client()
     print(f"  [LLM provider: {client.provider_name}  |  model: {client.model}]")
@@ -195,8 +197,12 @@ def run(output_dir: Path, data_dir: Path, state_file: Path,
     except Exception as exc:
         print(f"  [reliability scan skipped: {exc}]")
 
+    import wnba_data
+    if top_players is not None:
+        wnba_data.TOP_N_PLAYERS = top_players
+
     df = fetch_gamelogs(data_dir)
-    full_questions = build_prop_questions(df, players=players)
+    full_questions = build_prop_questions(df, players=players, stats=stats)
     if not full_questions:
         raise RuntimeError("No prop questions generated — check data fetch.")
 
@@ -408,9 +414,16 @@ def main() -> None:
     parser.add_argument("--players", default="",
                         help="Comma-separated player name substrings to focus on "
                              "(e.g. 'Wilson,Stewart,Collier'). Empty = default roster.")
+    parser.add_argument("--stats", default="",
+                        help="Comma-separated stat keys to include "
+                             "(e.g. 'AST' or 'AST,PRA'). Empty = all stats.")
+    parser.add_argument("--top-players", type=int, default=None,
+                        help="Limit to top N players by minutes (e.g. 20). "
+                             "Fewer players = faster run.")
     args = parser.parse_args()
 
     players = [p.strip() for p in args.players.split(",") if p.strip()] or None
+    stats = [s.strip().upper() for s in args.stats.split(",") if s.strip()] or None
 
     try:
         success = run(
@@ -419,6 +432,8 @@ def main() -> None:
             state_file=Path(args.state_file),
             checkpoint_dir=Path(args.git_checkpoint) if args.git_checkpoint else None,
             players=players,
+            stats=stats,
+            top_players=args.top_players,
         )
     except Exception as exc:
         print(f"\nFATAL ERROR: {exc}", file=sys.stderr)
