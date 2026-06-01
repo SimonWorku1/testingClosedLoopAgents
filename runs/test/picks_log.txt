@@ -494,3 +494,11 @@
   [pass] Jonquel Jones          Rebounds     line 7.4 (conf 3)
   [pass] Jonquel Jones          Assists      line 1.8 (conf 1)
   [XX] Jonquel Jones          Pts+Reb+Ast  line 25.1 | under → actual 29.0 | committed UNDER on Pts+Reb+Ast line 25.1, actual 29.0 → OVER was right; last-3 (18.0) was 6.6 below rolling avg — form signal misfired
+
+=== Batch 63 ===
+  [pass] Tina Charles           Points       line 13.5 (conf 2)
+  [pass] Tina Charles           Rebounds     line 8.9 (conf 2)
+  [pass] Tina Charles           Assists      line 1.7 (conf 2)
+  [pass] Tina Charles           Pts+Reb+Ast  line 25.1 (conf 2)
+  [pass] DiJonai Carrington     Points       line 12.7 (conf 2)
+  [pass] DiJonai Carrington     Rebounds     line 6.2 (conf 2)
