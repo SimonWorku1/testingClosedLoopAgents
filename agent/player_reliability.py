@@ -135,6 +135,36 @@ def _score_player_stat(values: list[float], rolling_window: int = 10,
         elif autocorr > 0.10:
             player_type = "streaker"
 
+    # --- next-game prediction -------------------------------------------
+    # The line PrizePicks posts ≈ rolling_avg_10 ± 0.5.
+    # We predict the player's actual output by applying a form adjustment:
+    #   reverter: pull last-3 deviation back toward the rolling avg
+    #   streaker: nudge slightly in the direction of recent form
+    #   random  : prediction = rolling avg (no edge)
+    #
+    # Reversion strength is calibrated to the player's historical rate:
+    #   rate 0.50 → no adjustment; rate 0.70 → pull back 40% of the deviation
+    recent_window = values[-rolling_window:]
+    rolling_avg = sum(recent_window) / len(recent_window)
+    last3 = values[-3:]
+    last3_avg = sum(last3) / len(last3)
+    form_diff = last3_avg - rolling_avg  # positive = running hot
+
+    if player_type == "reverter":
+        rev = reversion_rate if reversion_rate is not None else 0.55
+        pull = (rev - 0.50) * 2          # 0.70 rate → 0.40 pull strength
+        predicted = rolling_avg - form_diff * pull
+    elif player_type == "streaker":
+        predicted = rolling_avg + form_diff * 0.15  # slight continuation
+    else:
+        predicted = rolling_avg
+
+    predicted = round(max(0.0, predicted), 1)
+    # The PrizePicks line is rolling_avg ± 0.5; we compare our prediction
+    # against that to advise over or under.
+    approx_line = round(rolling_avg, 1)
+    implied_pick = "over" if predicted > approx_line else "under"
+
     return {
         "n_games": len(values),
         "mean": round(mean, 2),
@@ -144,6 +174,11 @@ def _score_player_stat(values: list[float], rolling_window: int = 10,
         "autocorr": round(autocorr, 3) if autocorr is not None else None,
         "player_type": player_type,
         "reliability_score": reliability_score,
+        "rolling_avg": round(rolling_avg, 1),
+        "last3_avg": round(last3_avg, 1),
+        "predicted": predicted,
+        "approx_line": approx_line,
+        "implied_pick": implied_pick,
     }
 
 
@@ -260,28 +295,37 @@ find_reliable_players = find_reliable_props
 
 def print_reliability_report(top_props: list[dict]) -> None:
     """Pretty-print the reliability report to stdout."""
+    stat_labels = {"PTS": "pts", "REB": "reb", "AST": "ast", "PRA": "PRA"}
     print(f"\n{'='*72}")
-    print("  MOST BETTABLE PROPS — top (player, stat[, vs team]) by predictability")
+    print("  MOST BETTABLE PROPS — predicted output vs PrizePicks line")
     print(f"{'='*72}")
     for rank, p in enumerate(top_props, 1):
         rev = (f"{p['reversion_rate']:.0%}" if p["reversion_rate"] is not None
                else "n/a")
         ac = f"{p['autocorr']:+.2f}" if p["autocorr"] is not None else "n/a"
         context = f"vs {p['vs_team']}" if p.get("vs_team", "all") != "all" else "overall"
+        unit = stat_labels.get(p["stat_key"], p["stat_key"].lower())
+        pick_arrow = "▲ OVER " if p["implied_pick"] == "over" else "▼ UNDER"
+        form_note = (
+            f"  (last 3: {p['last3_avg']} — "
+            + ("running HOT" if p['last3_avg'] > p['rolling_avg'] else "running COLD")
+            + ")"
+        )
+
+        print(f"\n  #{rank}  {p['player_name']:<26}  {p['stat_key']}  ({context})")
         print(
-            f"\n  #{rank}  {p['player_name']:<26}  {p['stat_key']}  ({context})"
+            f"       {pick_arrow}  Bet they get  {p['predicted']} {unit}"
+            f"  |  line ≈ {p['approx_line']}{form_note}"
         )
         print(
-            f"       Reliability score : {p['reliability_score']:.3f}"
+            f"       Reliability : {p['reliability_score']:.3f}   "
+            f"CV: {p['cv']:.2f}   "
+            f"Reversion rate: {rev}   "
+            f"Type: {p['player_type']}"
         )
         print(
-            f"       CV (lower=stable) : {p['cv']:.2f}   "
-            f"Hit rate: {p['hit_rate']:.1%}   "
-            f"Reversion rate: {rev}"
-        )
-        print(
-            f"       Autocorr (lag-1)  : {ac}   "
-            f"Type: {p['player_type']}   "
+            f"       Autocorr    : {ac}   "
+            f"Rolling avg (10g): {p['rolling_avg']}   "
             f"Games in sample: {p['n_games']}"
         )
     print(f"\n{'='*72}")
