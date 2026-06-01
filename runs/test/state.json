@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 852,
+  "next_question_idx": 858,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -854,11 +854,24 @@
       "last_3_avg": 11.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1630150_PTS_20240606",
+      "player_name": "Chennedy Carter",
+      "stat_name": "Points",
+      "line": 13.0,
+      "actual": 25.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Strong mean-reversion signal: overs_last3 = 3/3 with last-3 avg 3.3 above the line, moderate volatility (cv 0.35), and an away game context \u2014 classic setup for regression to the mean.",
+      "committed": true,
+      "last_3_avg": 16.3,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     false,
-    false,
     true,
     true,
     false,
@@ -875,8 +888,9 @@
     true,
     true,
     true,
+    false,
     false,
     false
   ],
-  "passes": 791
+  "passes": 796
 }
