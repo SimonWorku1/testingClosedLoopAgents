@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 300,
+  "next_question_idx": 306,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -504,12 +504,25 @@
       "last_3_avg": 4.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1629477_AST_20240706",
+      "player_name": "Sabrina Ionescu",
+      "stat_name": "Assists",
+      "line": 8.1,
+      "actual": 4.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Rolling avg (7.6), last-3 avg (6.7), and last-5 avg (7.6) all below the 8.1 line with moderate CV 0.36, providing a clear and stable under signal.",
+      "committed": true,
+      "last_3_avg": 6.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
     true,
-    true,
     false,
     true,
     true,
@@ -526,7 +539,8 @@
     false,
     false,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 264
+  "passes": 269
 }
