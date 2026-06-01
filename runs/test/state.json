@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 120,
+  "next_question_idx": 126,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -112,6 +112,20 @@
       "last_3_avg": 27.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1641648_REB_20240528",
+      "player_name": "Aliyah Boston",
+      "stat_name": "Rebounds",
+      "line": 5.6,
+      "actual": 6.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.26) provides a reliable anchor, last-3 avg of 5.0 is clearly below the 5.6 line, and last-5 avg of 6.0 suggests the recent dip is a real trend rather than noise \u2014 solid under signal.",
+      "committed": true,
+      "last_3_avg": 5.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
@@ -122,7 +136,8 @@
     true,
     true,
     false,
-    true
+    true,
+    false
   ],
-  "passes": 112
+  "passes": 117
 }
