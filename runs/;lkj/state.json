@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 12,
+  "next_question_idx": 18,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -14,10 +14,25 @@
       "last_3_avg": 5.7,
       "correct_pick": "over",
       "correct": true
+    },
+    {
+      "question_id": "204333_AST_20240528",
+      "player_name": "Natasha Cloud",
+      "stat_name": "Assists",
+      "line": 9.3,
+      "actual": 3.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Natasha Cloud has gone over all 3 recent games with last_3_avg of 10.7 well above the 9.3 line, overs_last3=3/3 is a strong mean-reversion signal, and moderate volatility (cv 0.32) makes the line a reliable anchor for an under call.",
+      "committed": true,
+      "last_3_avg": 10.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
+    true,
     true
   ],
-  "passes": 11
+  "passes": 16
 }
