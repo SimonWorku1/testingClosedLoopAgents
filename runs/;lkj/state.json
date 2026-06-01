@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 174,
+  "next_question_idx": 180,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -336,11 +336,24 @@
       "last_3_avg": 5.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1628276_AST_20240619",
+      "player_name": "Kelsey Plum",
+      "stat_name": "Assists",
+      "line": 5.1,
+      "actual": 8.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Clean UNDER signal: overs_last3=0/3, last-3 avg 4.0 and last-5 avg 3.8 both well below the 5.1 line, supported by low volatility (cv=0.34).",
+      "committed": true,
+      "last_3_avg": 4.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     false,
-    false,
     true,
     false,
     true,
@@ -357,8 +370,9 @@
     false,
     true,
     true,
+    false,
     false,
     false
   ],
-  "passes": 150
+  "passes": 155
 }
