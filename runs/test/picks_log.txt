@@ -502,3 +502,11 @@
   [pass] Tina Charles           Pts+Reb+Ast  line 25.1 (conf 2)
   [pass] DiJonai Carrington     Points       line 12.7 (conf 2)
   [pass] DiJonai Carrington     Rebounds     line 6.2 (conf 2)
+
+=== Batch 64 ===
+  [pass] DiJonai Carrington     Assists      line 2.2 (conf 2)
+  [pass] DiJonai Carrington     Pts+Reb+Ast  line 20.0 (conf 2)
+  [pass] Tyasha Harris          Points       line 10.8 (conf 2)
+  [pass] Tyasha Harris          Rebounds     line 2.0 (conf 1)
+  [pass] Tyasha Harris          Assists      line 3.7 (conf 2)
+  [pass] Tyasha Harris          Pts+Reb+Ast  line 14.5 (conf 2)
