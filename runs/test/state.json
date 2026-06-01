@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 516,
+  "next_question_idx": 522,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -476,10 +476,23 @@
       "last_3_avg": 27.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "203825_AST_20240602",
+      "player_name": "Kayla McBride",
+      "stat_name": "Assists",
+      "line": 4.4,
+      "actual": 4.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Assists have moderate volatility (cv 0.35), overs_last3 is 0/3, last_3_avg of 3.0 is clearly below the 4.4 line, and last_5_avg of 3.6 also trails the line \u2014 consistent cold trend supports UNDER.",
+      "committed": true,
+      "last_3_avg": 3.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    true,
     false,
     false,
     true,
@@ -498,7 +511,8 @@
     false,
     true,
     true,
-    false
+    false,
+    true
   ],
-  "passes": 482
+  "passes": 487
 }
