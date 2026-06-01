@@ -126,3 +126,11 @@
   [pass] Caitlin Clark          Rebounds     line 5.9 (conf 2)
   [OK] Caitlin Clark          Assists      line 6.8 | under → actual 6.0
   [pass] Caitlin Clark          Pts+Reb+Ast  line 26.6 (conf 3)
+
+=== Batch 17 ===
+  [pass] Dearica Hamby          Points       line 21.1 (conf 2)
+  [pass] Dearica Hamby          Rebounds     line 12.7 (conf 2)
+  [XX] Dearica Hamby          Assists      line 3.3 | under → actual 5.0 | committed UNDER on Assists line 3.3, actual 5.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Dearica Hamby          Pts+Reb+Ast  line 38.1 (conf 2)
+  [pass] Alyssa Thomas          Points       line 14.9 (conf 2)
+  [pass] Alyssa Thomas          Rebounds     line 9.1 (conf 2)

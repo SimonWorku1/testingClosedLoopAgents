@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 96,
+  "next_question_idx": 102,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -84,6 +84,20 @@
       "last_3_avg": 7.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "204324_AST_20240528",
+      "player_name": "Dearica Hamby",
+      "stat_name": "Assists",
+      "line": 3.3,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "All 3 recent games went OVER and last-3 avg is +1.7 above line, signaling mean reversion; however, cv 0.57 is high volatility \u2014 but the overs_last3=3 reversion signal is the strongest trigger in the model, and assists are inherently capped by game flow.",
+      "committed": true,
+      "last_3_avg": 5.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
@@ -92,7 +106,8 @@
     false,
     true,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 90
+  "passes": 95
 }
