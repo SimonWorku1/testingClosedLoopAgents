@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 390,
+  "next_question_idx": 396,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -308,10 +308,23 @@
       "last_3_avg": 17.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1627675_REB_20240531",
+      "player_name": "Courtney Williams",
+      "stat_name": "Rebounds",
+      "line": 6.2,
+      "actual": 3.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.18), overs_last3 = 0/3, last_3_avg 5.3 vs line 6.2 (-0.9), and last_5 also below line \u2014 strong consistent signal for under with reliable low-variance stat.",
+      "committed": true,
+      "last_3_avg": 5.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    false,
     true,
     true,
     true,
@@ -330,7 +343,8 @@
     true,
     false,
     true,
-    false
+    false,
+    true
   ],
-  "passes": 368
+  "passes": 373
 }

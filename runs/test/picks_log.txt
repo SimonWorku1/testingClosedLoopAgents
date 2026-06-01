@@ -518,3 +518,11 @@
   [OK] Sophie Cunningham      Pts+Reb+Ast  line 15.5 | over  → actual 18.0
   [XX] Brionna Jones          Points       line 12.8 | under → actual 22.0 | committed UNDER on Points line 12.8, actual 22.0 → OVER was right; last-3 (17.0) was 4.7 above rolling avg — form signal misfired
   [pass] Brionna Jones          Rebounds     line 5.7 (conf 2)
+
+=== Batch 66 ===
+  [pass] Brionna Jones          Assists      line 0.7 (conf 2)
+  [pass] Brionna Jones          Pts+Reb+Ast  line 19.2 (conf 2)
+  [pass] Courtney Williams      Points       line 12.3 (conf 2)
+  [OK] Courtney Williams      Rebounds     line 6.2 | under → actual 3.0
+  [pass] Courtney Williams      Assists      line 5.7 (conf 2)
+  [pass] Courtney Williams      Pts+Reb+Ast  line 24.2 (conf 2)
