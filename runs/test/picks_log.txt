@@ -966,3 +966,11 @@
   [pass] Kayla Thornton         Pts+Reb+Ast  line 9.8 (conf 2)
   [pass] Myisha Hines-Allen     Points       line 5.0 (conf 2)
   [pass] Myisha Hines-Allen     Rebounds     line 3.1 (conf 2)
+
+=== Batch 122 ===
+  [pass] Myisha Hines-Allen     Assists      line 1.9 (conf 2)
+  [pass] Myisha Hines-Allen     Pts+Reb+Ast  line 11.0 (conf 2)
+  [pass] Aaliyah Edwards        Points       line 7.0 (conf 3)
+  [pass] Aaliyah Edwards        Rebounds     line 4.8 (conf 1)
+  [pass] Aaliyah Edwards        Assists      line 1.4 (conf 2)
+  [pass] Aaliyah Edwards        Pts+Reb+Ast  line 11.1 (conf 2)
