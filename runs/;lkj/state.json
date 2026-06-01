@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 324,
+  "next_question_idx": 330,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -546,10 +546,23 @@
       "last_3_avg": 12.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "203400_AST_20240710",
+      "player_name": "Skylar Diggins",
+      "stat_name": "Assists",
+      "line": 6.5,
+      "actual": 8.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Diggins has very low volatility (cv=0.22), rolling avg and last-3/last-5 all consistently above the 6.5 line, making this a clean trend-over signal.",
+      "committed": true,
+      "last_3_avg": 7.3,
+      "correct_pick": "over",
+      "correct": true
     }
   ],
   "window": [
-    false,
     true,
     true,
     false,
@@ -568,7 +581,8 @@
     false,
     true,
     true,
-    false
+    false,
+    true
   ],
-  "passes": 285
+  "passes": 290
 }
