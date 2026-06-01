@@ -1054,3 +1054,11 @@
   [pass] Monique Billings       Rebounds     line 8.3 (conf 2)
   [pass] Monique Billings       Assists      line 3.3 (conf 2)
   [pass] Monique Billings       Pts+Reb+Ast  line 26.2 (conf 2)
+
+=== Batch 133 ===
+  [pass] Kia Nurse              Points       line 13.5 (conf 2)
+  [pass] Kia Nurse              Rebounds     line 1.9 (conf 2)
+  [pass] Kia Nurse              Assists      line 2.9 (conf 3)
+  [pass] Kia Nurse              Pts+Reb+Ast  line 16.2 (conf 2)
+  [pass] Sevgi Uzun             Points       line 7.5 (conf 2)
+  [pass] Sevgi Uzun             Rebounds     line 3.2 (conf 2)
