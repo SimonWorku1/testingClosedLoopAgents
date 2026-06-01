@@ -486,3 +486,11 @@
   [pass] Natasha Cloud          Assists      line 6.3 (conf 2)
   [pass] Skylar Diggins         Assists      line 8.3 (conf 2)
   [OK] Jewell Loyd            Assists      line 3.5 | over  → actual 7.0
+
+=== Batch 62 ===
+  [pass] Kayla McBride          Assists      line 3.9 (conf 2)
+  [pass] Aliyah Boston          Assists      line 2.3 (conf 1)
+  [pass] Jackie Young           Assists      line 4.4 (conf 2)
+  [pass] Kahleah Copper         Assists      line 2.0 (conf 1)
+  [pass] Ariel Atkins           Assists      line 4.3 (conf 2)
+  [pass] Dearica Hamby          Assists      line 4.0 (conf 2)
