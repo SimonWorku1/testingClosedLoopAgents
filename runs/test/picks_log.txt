@@ -958,3 +958,11 @@
   [pass] Leonie Fiebich         Rebounds     line 1.1 (conf 2)
   [pass] Leonie Fiebich         Assists      line 0.9 (conf 2)
   [pass] Leonie Fiebich         Pts+Reb+Ast  line 7.7 (conf 2)
+
+=== Batch 121 ===
+  [pass] Kayla Thornton         Points       line 6.3 (conf 2)
+  [pass] Kayla Thornton         Rebounds     line 1.2 (conf 2)
+  [pass] Kayla Thornton         Assists      line 0.3 (conf 1)
+  [pass] Kayla Thornton         Pts+Reb+Ast  line 9.8 (conf 2)
+  [pass] Myisha Hines-Allen     Points       line 5.0 (conf 2)
+  [pass] Myisha Hines-Allen     Rebounds     line 3.1 (conf 2)
