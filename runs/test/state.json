@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 816,
+  "next_question_idx": 822,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -798,11 +798,24 @@
       "last_3_avg": 4.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1627673_REB_20240606",
+      "player_name": "Jonquel Jones",
+      "stat_name": "Rebounds",
+      "line": 9.5,
+      "actual": 8.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "overs_last3 = 3/3 with last-3 avg 11.7 well above the 9.5 line, moderate cv (0.32) makes reversion signal trustworthy, and away game context adds mild downward pressure.",
+      "committed": true,
+      "last_3_avg": 11.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
-    true,
     false,
     false,
     false,
@@ -817,10 +830,11 @@
     true,
     true,
     false,
+    true,
     true,
     true,
     true,
     true
   ],
-  "passes": 759
+  "passes": 764
 }

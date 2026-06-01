@@ -1086,3 +1086,11 @@
   [pass] Sabrina Ionescu        Rebounds     line 3.8 (conf 2)
   [OK] Sabrina Ionescu        Assists      line 5.8 | under → actual 5.0
   [pass] Sabrina Ionescu        Pts+Reb+Ast  line 28.0 (conf 2)
+
+=== Batch 137 ===
+  [pass] Ariel Atkins           Points       line 13.7 (conf 2)
+  [pass] Ariel Atkins           Rebounds     line 3.6 (conf 2)
+  [pass] Ariel Atkins           Assists      line 2.7 (conf 2)
+  [pass] Ariel Atkins           Pts+Reb+Ast  line 21.1 (conf 2)
+  [pass] Jonquel Jones          Points       line 13.5 (conf 2)
+  [OK] Jonquel Jones          Rebounds     line 9.5 | under → actual 8.0
