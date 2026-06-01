@@ -166,3 +166,11 @@
   [pass] Jewell Loyd            Pts+Reb+Ast  line 30.2 (conf 2)
   [pass] Aliyah Boston          Points       line 9.6 (conf 2)
   [XX] Aliyah Boston          Rebounds     line 5.6 | under → actual 6.0 | committed UNDER on Rebounds line 5.6, actual 6.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 22 ===
+  [pass] Aliyah Boston          Assists      line 1.5 (conf 2)
+  [pass] Aliyah Boston          Pts+Reb+Ast  line 18.8 (conf 2)
+  [pass] Kahleah Copper         Points       line 28.7 (conf 2)
+  [pass] Kahleah Copper         Rebounds     line 3.5 (conf 2)
+  [XX] Kahleah Copper         Assists      line 2.9 | under → actual 4.0 | committed UNDER on Assists line 2.9, actual 4.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [OK] Kahleah Copper         Pts+Reb+Ast  line 36.1 | under → actual 16.0
