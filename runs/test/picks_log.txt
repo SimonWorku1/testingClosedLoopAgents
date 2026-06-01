@@ -286,3 +286,11 @@
   [pass] Diana Taurasi          Rebounds     line 5.7 (conf 2)
   [pass] Diana Taurasi          Assists      line 0.8 (conf 2)
   [pass] Diana Taurasi          Pts+Reb+Ast  line 22.8 (conf 2)
+
+=== Batch 37 ===
+  [pass] Alanna Smith           Points       line 15.5 (conf 2)
+  [pass] Alanna Smith           Rebounds     line 4.5 (conf 2)
+  [pass] Alanna Smith           Assists      line 1.9 (conf 1)
+  [pass] Alanna Smith           Pts+Reb+Ast  line 23.9 (conf 2)
+  [XX] Stefanie Dolson        Points       line 8.7 | under → actual 10.0 | committed UNDER on Points line 8.7, actual 10.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Stefanie Dolson        Rebounds     line 4.3 (conf 2)

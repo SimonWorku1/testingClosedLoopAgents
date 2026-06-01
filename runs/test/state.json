@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 216,
+  "next_question_idx": 222,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -210,6 +210,20 @@
       "last_3_avg": 16.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "203828_PTS_20240529",
+      "player_name": "Stefanie Dolson",
+      "stat_name": "Points",
+      "line": 8.7,
+      "actual": 10.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Both last-3 (7.7) and last-5 (7.4) averages are consistently below the 8.7 line with moderate cv=0.30, forming a coherent downward trend signal.",
+      "committed": true,
+      "last_3_avg": 7.7,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
@@ -227,7 +241,8 @@
     false,
     false,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 201
+  "passes": 206
 }
