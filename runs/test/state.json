@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 630,
+  "next_question_idx": 636,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -574,10 +574,23 @@
       "last_3_avg": 24.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "204319_PRA_20240604",
+      "player_name": "Jewell Loyd",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 30.0,
+      "actual": 28.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "0/3 overs with last-3 avg 3.0 below the line and last-5 avg (30.6) above the line both support mean reversion OVER, with acceptable volatility (cv=0.30).",
+      "committed": true,
+      "last_3_avg": 27.0,
+      "correct_pick": "under",
+      "correct": false
     }
   ],
   "window": [
-    false,
     true,
     true,
     true,
@@ -595,8 +608,9 @@
     false,
     true,
     true,
+    false,
     false,
     false
   ],
-  "passes": 589
+  "passes": 594
 }
