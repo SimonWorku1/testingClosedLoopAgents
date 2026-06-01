@@ -94,3 +94,11 @@
   [pass] Shatori Walker-Kimbrough Rebounds     line 1.5 (conf 1)
   [pass] Shatori Walker-Kimbrough Assists      line 0.3 (conf 1)
   [pass] Shatori Walker-Kimbrough Pts+Reb+Ast  line 9.1 (conf 1)
+
+=== Batch 13 ===
+  [pass] Betnijah Laney-Hamilton Points       line 12.9 (conf 2)
+  [OK] Betnijah Laney-Hamilton Rebounds     line 3.5 | under → actual 3.0
+  [pass] Betnijah Laney-Hamilton Assists      line 2.9 (conf 2)
+  [pass] Betnijah Laney-Hamilton Pts+Reb+Ast  line 19.3 (conf 2)
+  [pass] Jordan Horston         Points       line 5.1 (conf 2)
+  [pass] Jordan Horston         Rebounds     line 6.7 (conf 2)
