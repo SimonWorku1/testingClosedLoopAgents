@@ -558,3 +558,11 @@
   [pass] Caitlin Clark          Assists      line 12.2 (conf 2)
   [pass] Dearica Hamby          Assists      line 4.5 (conf 2)
   [pass] Allisha Gray           Assists      line 3.3 (conf 2)
+
+=== Batch 71 ===
+  [pass] A'ja Wilson            Assists      line 1.4 (conf 2)
+  [pass] Kelsey Plum            Assists      line 3.7 (conf 2)
+  [pass] Alyssa Thomas          Assists      line 7.1 (conf 2)
+  [pass] Kelsey Mitchell        Assists      line 1.0 (conf 2)
+  [pass] DeWanna Bonner         Assists      line 1.7 (conf 2)
+  [OK] Natasha Cloud          Assists      line 6.5 | under → actual 4.0

@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 420,
+  "next_question_idx": 426,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -700,6 +700,20 @@
       "last_3_avg": 2.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "204333_AST_20240818",
+      "player_name": "Natasha Cloud",
+      "stat_name": "Assists",
+      "line": 6.5,
+      "actual": 4.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Moderate volatility (cv=0.34), last-3 and last-5 both consistently below the 6.5 line, and overs_last3=1/3 support a sustained under trend.",
+      "committed": true,
+      "last_3_avg": 6.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -708,7 +722,6 @@
     false,
     false,
     false,
-    false,
     true,
     true,
     false,
@@ -721,8 +734,9 @@
     true,
     false,
     false,
+    true,
     true,
     true
   ],
-  "passes": 370
+  "passes": 375
 }
