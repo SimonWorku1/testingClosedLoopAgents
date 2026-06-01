@@ -374,3 +374,11 @@
   [pass] Nneka Ogwumike         Pts+Reb+Ast  line 29.1 (conf 2)
   [pass] Rickea Jackson         Points       line 9.7 (conf 2)
   [pass] Rickea Jackson         Rebounds     line 2.7 (conf 2)
+
+=== Batch 48 ===
+  [pass] Rickea Jackson         Assists      line 0.8 (conf 2)
+  [pass] Rickea Jackson         Pts+Reb+Ast  line 12.2 (conf 2)
+  [pass] Ezi Magbegor           Points       line 13.9 (conf 3)
+  [pass] Ezi Magbegor           Rebounds     line 9.2 (conf 2)
+  [pass] Ezi Magbegor           Assists      line 2.2 (conf 2)
+  [pass] Ezi Magbegor           Pts+Reb+Ast  line 24.4 (conf 2)
