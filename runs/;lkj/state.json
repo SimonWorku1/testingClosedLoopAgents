@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 162,
+  "next_question_idx": 168,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -322,10 +322,23 @@
       "last_3_avg": 4.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "203400_AST_20240616",
+      "player_name": "Skylar Diggins",
+      "stat_name": "Assists",
+      "line": 6.4,
+      "actual": 8.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "overs_last3=0/3 with last-3 avg of 5.0 vs line 6.4 (1.4 below), last-5 also below at 5.2, rolling avg below line too, and cv=0.37 is moderate \u2014 consistent cold trend justifies committing under.",
+      "committed": true,
+      "last_3_avg": 5.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    true,
     false,
     false,
     true,
@@ -344,7 +357,8 @@
     false,
     true,
     true,
+    false,
     false
   ],
-  "passes": 139
+  "passes": 144
 }
