@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 180,
+  "next_question_idx": 186,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -350,10 +350,23 @@
       "last_3_avg": 4.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1641648_AST_20240619",
+      "player_name": "Aliyah Boston",
+      "stat_name": "Assists",
+      "line": 2.7,
+      "actual": 2.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.38), last-3 avg of 3.7 is +1.0 above line with 2/3 recent overs \u2014 mean reversion toward the line favors UNDER, consistent with a prior winning Boston assists UNDER.",
+      "committed": true,
+      "last_3_avg": 3.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    false,
     true,
     false,
     true,
@@ -372,7 +385,8 @@
     true,
     false,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 155
+  "passes": 160
 }
