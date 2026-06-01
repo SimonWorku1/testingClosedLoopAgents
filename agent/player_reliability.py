@@ -293,8 +293,16 @@ def find_reliable_props(df, top_n: int = 3,
 find_reliable_players = find_reliable_props
 
 
-def print_reliability_report(top_props: list[dict]) -> None:
-    """Pretty-print the reliability report to stdout."""
+def print_reliability_report(top_props: list[dict],
+                              pp_lines: dict | None = None) -> None:
+    """
+    Pretty-print the reliability report to stdout.
+
+    pp_lines: optional dict from prizepicks_lines.fetch_lines(). When provided,
+    the real PrizePicks line replaces the reconstructed rolling-avg estimate and
+    over/under is decided against the actual posted number.
+    """
+    from prizepicks_lines import match_line
     stat_labels = {"PTS": "pts", "REB": "reb", "AST": "ast", "PRA": "PRA"}
     print(f"\n{'='*72}")
     print("  MOST BETTABLE PROPS — predicted output vs PrizePicks line")
@@ -305,7 +313,21 @@ def print_reliability_report(top_props: list[dict]) -> None:
         ac = f"{p['autocorr']:+.2f}" if p["autocorr"] is not None else "n/a"
         context = f"vs {p['vs_team']}" if p.get("vs_team", "all") != "all" else "overall"
         unit = stat_labels.get(p["stat_key"], p["stat_key"].lower())
-        pick_arrow = "▲ OVER " if p["implied_pick"] == "over" else "▼ UNDER"
+
+        # Use real PrizePicks line when available, else fall back to rolling avg.
+        real_line = (
+            match_line(pp_lines, p["player_name"], p["stat_key"])
+            if pp_lines
+            else None
+        )
+        if real_line is not None:
+            line_display = f"{real_line}  ← PrizePicks"
+            pick = "over" if p["predicted"] > real_line else "under"
+        else:
+            line_display = f"{p['approx_line']}  (est. — no live line)"
+            pick = p["implied_pick"]
+
+        pick_arrow = "▲ OVER " if pick == "over" else "▼ UNDER"
         form_note = (
             f"  (last 3: {p['last3_avg']} — "
             + ("running HOT" if p['last3_avg'] > p['rolling_avg'] else "running COLD")
@@ -314,8 +336,8 @@ def print_reliability_report(top_props: list[dict]) -> None:
 
         print(f"\n  #{rank}  {p['player_name']:<26}  {p['stat_key']}  ({context})")
         print(
-            f"       {pick_arrow}  Bet they get  {p['predicted']} {unit}"
-            f"  |  line ≈ {p['approx_line']}{form_note}"
+            f"       {pick_arrow}  Predicted: {p['predicted']} {unit}"
+            f"  |  line: {line_display}{form_note}"
         )
         print(
             f"       Reliability : {p['reliability_score']:.3f}   "
