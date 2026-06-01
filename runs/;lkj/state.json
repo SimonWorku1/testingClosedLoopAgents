@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 390,
+  "next_question_idx": 396,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -644,10 +644,23 @@
       "last_3_avg": 5.0,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1629477_AST_20240815",
+      "player_name": "Sabrina Ionescu",
+      "stat_name": "Assists",
+      "line": 5.7,
+      "actual": 6.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Ionescu's last-3 and last-5 averages (5.0 and 4.8) are both clearly below the 5.7 line, matching my two recent winning UNDER bets on her assists.",
+      "committed": true,
+      "last_3_avg": 5.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    true,
     false,
     true,
     false,
@@ -666,7 +679,8 @@
     true,
     true,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 344
+  "passes": 349
 }

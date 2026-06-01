@@ -518,3 +518,11 @@
   [pass] Kelsey Mitchell        Assists      line 1.0 (conf 2)
   [pass] Kayla McBride          Assists      line 3.5 (conf 3)
   [pass] Aliyah Boston          Assists      line 3.1 (conf 2)
+
+=== Batch 66 ===
+  [pass] Dearica Hamby          Assists      line 2.9 (conf 2)
+  [pass] Natasha Cloud          Assists      line 6.5 (conf 3)
+  [pass] Breanna Stewart        Assists      line 5.0 (conf 2)
+  [pass] Kayla McBride          Assists      line 2.5 (conf 3)
+  [XX] Sabrina Ionescu        Assists      line 5.7 | under → actual 6.0 | committed UNDER on Assists line 5.7, actual 6.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Kahleah Copper         Assists      line 1.4 (conf 1)
