@@ -30,3 +30,11 @@
   [pass] Kelsey Mitchell        Rebounds     line 1.0 (conf 1)
   [pass] Kelsey Mitchell        Assists      line 2.3 (conf 1)
   [pass] Kelsey Mitchell        Pts+Reb+Ast  line 17.5 (conf 3)
+
+=== Batch 5 ===
+  [pass] Skylar Diggins         Points       line 12.5 (conf 2)
+  [pass] Skylar Diggins         Rebounds     line 2.9 (conf 1)
+  [pass] Skylar Diggins         Assists      line 5.1 (conf 2)
+  [pass] Skylar Diggins         Pts+Reb+Ast  line 20.5 (conf 2)
+  [pass] Jewell Loyd            Points       line 19.3 (conf 2)
+  [pass] Jewell Loyd            Rebounds     line 7.5 (conf 2)
