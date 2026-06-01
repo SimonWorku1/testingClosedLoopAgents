@@ -214,3 +214,11 @@
   [pass] Diana Taurasi          Pts+Reb+Ast  line 24.7 (conf 2)
   [pass] NaLyssa Smith          Points       line 9.6 (conf 2)
   [pass] NaLyssa Smith          Rebounds     line 6.2 (conf 2)
+
+=== Batch 28 ===
+  [pass] NaLyssa Smith          Assists      line 1.2 (conf 2)
+  [pass] NaLyssa Smith          Pts+Reb+Ast  line 18.1 (conf 2)
+  [pass] Kia Nurse              Points       line 11.1 (conf 1)
+  [pass] Kia Nurse              Rebounds     line 0.9 (conf 2)
+  [pass] Kia Nurse              Assists      line 2.9 (conf 2)
+  [pass] Kia Nurse              Pts+Reb+Ast  line 13.9 (conf 1)
