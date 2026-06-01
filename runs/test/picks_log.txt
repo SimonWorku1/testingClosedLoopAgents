@@ -1078,3 +1078,11 @@
   [pass] Breanna Stewart        Pts+Reb+Ast  line 32.1 (conf 2)
   [pass] Marina Mabrey          Points       line 17.2 (conf 2)
   [pass] Marina Mabrey          Rebounds     line 7.2 (conf 2)
+
+=== Batch 136 ===
+  [pass] Marina Mabrey          Assists      line 4.2 (conf 2)
+  [pass] Marina Mabrey          Pts+Reb+Ast  line 27.8 (conf 2)
+  [pass] Sabrina Ionescu        Points       line 18.4 (conf 2)
+  [pass] Sabrina Ionescu        Rebounds     line 3.8 (conf 2)
+  [OK] Sabrina Ionescu        Assists      line 5.8 | under → actual 5.0
+  [pass] Sabrina Ionescu        Pts+Reb+Ast  line 28.0 (conf 2)
