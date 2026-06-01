@@ -366,3 +366,11 @@
   [pass] Kayla McBride          Assists      line 3.2 (conf 2)
   [pass] Aliyah Boston          Assists      line 2.7 (conf 2)
   [XX] Marina Mabrey          Assists      line 3.2 | under → actual 4.0 | committed UNDER on Assists line 3.2, actual 4.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 47 ===
+  [pass] Sabrina Ionescu        Assists      line 7.0 (conf 2)
+  [pass] Jackie Young           Assists      line 3.5 (conf 2)
+  [XX] Ariel Atkins           Assists      line 4.6 | under → actual 5.0 | committed UNDER on Assists line 4.6, actual 5.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Arike Ogunbowale       Assists      line 5.2 (conf 1)
+  [pass] Natasha Cloud          Assists      line 7.4 (conf 2)
+  [pass] Kahleah Copper         Assists      line 2.8 (conf 1)
