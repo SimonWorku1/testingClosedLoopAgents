@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 342,
+  "next_question_idx": 348,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -574,11 +574,37 @@
       "last_3_avg": 4.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "203400_AST_20240712",
+      "player_name": "Skylar Diggins",
+      "stat_name": "Assists",
+      "line": 6.7,
+      "actual": 12.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.22) with overs_last3 = 3/3 and last-3 avg well above line (+1.6) is a strong mean reversion setup, and this exact pattern worked on Diggins previously.",
+      "committed": true,
+      "last_3_avg": 8.3,
+      "correct_pick": "over",
+      "correct": false
+    },
+    {
+      "question_id": "204319_AST_20240712",
+      "player_name": "Jewell Loyd",
+      "stat_name": "Assists",
+      "line": 3.6,
+      "actual": 5.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.29) with consistent last-3 and last-5 averages both above the line signals a reliable over trend.",
+      "committed": true,
+      "last_3_avg": 4.0,
+      "correct_pick": "over",
+      "correct": true
     }
   ],
   "window": [
-    true,
-    false,
     false,
     false,
     true,
@@ -596,7 +622,9 @@
     true,
     false,
     true,
+    true,
+    false,
     true
   ],
-  "passes": 301
+  "passes": 305
 }

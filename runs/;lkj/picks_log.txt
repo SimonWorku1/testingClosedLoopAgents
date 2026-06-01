@@ -454,3 +454,11 @@
   [pass] Marina Mabrey          Assists      line 5.0 (conf 2)
   [OK] Sabrina Ionescu        Assists      line 7.0 | under → actual 4.0
   [pass] Caitlin Clark          Assists      line 10.2 (conf 2)
+
+=== Batch 58 ===
+  [pass] Allisha Gray           Assists      line 3.4 (conf 2)
+  [pass] A'ja Wilson            Assists      line 3.2 (conf 2)
+  [pass] Kelsey Plum            Assists      line 4.0 (conf 2)
+  [pass] Kelsey Mitchell        Assists      line 2.1 (conf 2)
+  [XX] Skylar Diggins         Assists      line 6.7 | under → actual 12.0 | committed UNDER on Assists line 6.7, actual 12.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [OK] Jewell Loyd            Assists      line 3.6 | over  → actual 5.0
