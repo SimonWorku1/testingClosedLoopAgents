@@ -942,3 +942,11 @@
   [pass] Chennedy Carter        Rebounds     line 2.2 (conf 1)
   [pass] Chennedy Carter        Assists      line 2.1 (conf 1)
   [pass] Chennedy Carter        Pts+Reb+Ast  line 16.8 (conf 2)
+
+=== Batch 119 ===
+  [pass] Betnijah Laney-Hamilton Points       line 13.2 (conf 2)
+  [pass] Betnijah Laney-Hamilton Rebounds     line 2.4 (conf 2)
+  [pass] Betnijah Laney-Hamilton Assists      line 3.2 (conf 1)
+  [pass] Betnijah Laney-Hamilton Pts+Reb+Ast  line 17.7 (conf 2)
+  [pass] Jordan Horston         Points       line 5.6 (conf 1)
+  [pass] Jordan Horston         Rebounds     line 5.5 (conf 2)
