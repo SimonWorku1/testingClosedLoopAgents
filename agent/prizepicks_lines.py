@@ -21,9 +21,9 @@ import json
 
 PRIZEPICKS_URL = (
     "https://api.prizepicks.com/projections"
-    "?league_id=7"           # 7 = WNBA
+    "?league_id=3"           # 3 = WNBA (not 7 which is NBA)
     "&per_page=250"
-    "&single_stat=true"      # one line per row
+    "&single_stat=true"
 )
 
 STAT_MAP = {
