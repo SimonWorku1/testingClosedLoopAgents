@@ -694,3 +694,11 @@
   [pass] Kayla McBride          Pts+Reb+Ast  line 21.2 (conf 2)
   [pass] Aliyah Boston          Points       line 11.4 (conf 2)
   [pass] Aliyah Boston          Rebounds     line 7.4 (conf 2)
+
+=== Batch 88 ===
+  [pass] Aliyah Boston          Assists      line 2.8 (conf 2)
+  [pass] Aliyah Boston          Pts+Reb+Ast  line 20.6 (conf 3)
+  [pass] Sabrina Ionescu        Points       line 17.9 (conf 2)
+  [pass] Sabrina Ionescu        Rebounds     line 3.2 (conf 1)
+  [pass] Sabrina Ionescu        Assists      line 4.9 (conf 2)
+  [pass] Sabrina Ionescu        Pts+Reb+Ast  line 26.0 (conf 3)
