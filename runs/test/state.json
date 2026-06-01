@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 666,
+  "next_question_idx": 672,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -630,10 +630,23 @@
       "last_3_avg": 17.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1629496_PRA_20240604",
+      "player_name": "Ezi Magbegor",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 23.6,
+      "actual": 32.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.17) is a reliable anchor, overs_last3 = 3/3 with last_3_avg +1.7 above line signals mean reversion to under, and small sample slightly tempers but cv is strong enough to commit.",
+      "committed": true,
+      "last_3_avg": 25.3,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    true,
     false,
     false,
     true,
@@ -652,7 +665,8 @@
     false,
     false,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 621
+  "passes": 626
 }
