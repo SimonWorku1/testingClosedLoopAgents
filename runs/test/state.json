@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 528,
+  "next_question_idx": 534,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -490,11 +490,24 @@
       "last_3_avg": 3.0,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1629483_REB_20240602",
+      "player_name": "Napheesa Collier",
+      "stat_name": "Rebounds",
+      "line": 11.4,
+      "actual": 14.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Very low volatility (cv=0.16) with rolling avg (10.9) and last-3 avg (10.7) both below the line (11.4), overs_last3=1/3, and last-5 avg (11.0) also below the line \u2014 stable, low-variance stat consistently underperforming the set line.",
+      "committed": true,
+      "last_3_avg": 10.7,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     false,
-    false,
     true,
     true,
     false,
@@ -512,7 +525,8 @@
     true,
     true,
     false,
-    true
+    true,
+    false
   ],
-  "passes": 493
+  "passes": 498
 }

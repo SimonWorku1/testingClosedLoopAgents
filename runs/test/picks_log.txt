@@ -702,3 +702,11 @@
   [pass] Sabrina Ionescu        Rebounds     line 3.2 (conf 1)
   [pass] Sabrina Ionescu        Assists      line 4.9 (conf 2)
   [pass] Sabrina Ionescu        Pts+Reb+Ast  line 26.0 (conf 3)
+
+=== Batch 89 ===
+  [pass] Kahleah Copper         Points       line 23.8 (conf 2)
+  [pass] Kahleah Copper         Rebounds     line 3.9 (conf 1)
+  [pass] Kahleah Copper         Assists      line 2.9 (conf 2)
+  [pass] Kahleah Copper         Pts+Reb+Ast  line 31.5 (conf 3)
+  [pass] Napheesa Collier       Points       line 20.5 (conf 3)
+  [XX] Napheesa Collier       Rebounds     line 11.4 | under → actual 14.0 | committed UNDER on Rebounds line 11.4, actual 14.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
