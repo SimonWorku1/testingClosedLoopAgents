@@ -198,3 +198,11 @@
   [pass] Tyasha Harris          Pts+Reb+Ast  line 16.5 (conf 2)
   [pass] Sophie Cunningham      Points       line 9.3 (conf 2)
   [pass] Sophie Cunningham      Rebounds     line 4.1 (conf 1)
+
+=== Batch 26 ===
+  [pass] Sophie Cunningham      Assists      line 0.7 (conf 2)
+  [pass] Sophie Cunningham      Pts+Reb+Ast  line 15.1 (conf 2)
+  [pass] Brionna Jones          Points       line 11.1 (conf 2)
+  [pass] Brionna Jones          Rebounds     line 4.7 (conf 2)
+  [pass] Brionna Jones          Assists      line 0.7 (conf 1)
+  [pass] Brionna Jones          Pts+Reb+Ast  line 18.5 (conf 2)
