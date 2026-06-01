@@ -222,3 +222,11 @@
   [pass] Kia Nurse              Rebounds     line 0.9 (conf 2)
   [pass] Kia Nurse              Assists      line 2.9 (conf 2)
   [pass] Kia Nurse              Pts+Reb+Ast  line 13.9 (conf 1)
+
+=== Batch 29 ===
+  [pass] Natasha Cloud          Points       line 10.2 (conf 2)
+  [pass] Natasha Cloud          Rebounds     line 5.5 (conf 2)
+  [pass] Natasha Cloud          Assists      line 7.3 (conf 2)
+  [pass] Natasha Cloud          Pts+Reb+Ast  line 23.0 (conf 2)
+  [pass] Breanna Stewart        Points       line 19.0 (conf 2)
+  [pass] Breanna Stewart        Rebounds     line 9.7 (conf 3)
