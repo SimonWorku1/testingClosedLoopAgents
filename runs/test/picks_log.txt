@@ -414,3 +414,11 @@
   [pass] Arike Ogunbowale       Rebounds     line 5.1 (conf 2)
   [pass] Arike Ogunbowale       Assists      line 3.7 (conf 2)
   [pass] Arike Ogunbowale       Pts+Reb+Ast  line 38.1 (conf 2)
+
+=== Batch 53 ===
+  [pass] Allisha Gray           Points       line 16.7 (conf 2)
+  [pass] Allisha Gray           Rebounds     line 2.3 (conf 2)
+  [pass] Allisha Gray           Assists      line 1.7 (conf 2)
+  [pass] Allisha Gray           Pts+Reb+Ast  line 21.7 (conf 2)
+  [pass] A'ja Wilson            Points       line 26.7 (conf 3)
+  [pass] A'ja Wilson            Rebounds     line 13.7 (conf 3)
