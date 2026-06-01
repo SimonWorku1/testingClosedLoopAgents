@@ -622,3 +622,11 @@
   [pass] Marina Mabrey          Rebounds     line 6.0 (conf 2)
   [pass] Marina Mabrey          Assists      line 5.7 (conf 2)
   [pass] Marina Mabrey          Pts+Reb+Ast  line 28.5 (conf 2)
+
+=== Batch 79 ===
+  [pass] Angel Reese            Points       line 11.5 (conf 2)
+  [pass] Angel Reese            Rebounds     line 7.7 (conf 2)
+  [pass] Angel Reese            Assists      line 2.5 (conf 1)
+  [XX] Angel Reese            Pts+Reb+Ast  line 20.7 | under → actual 22.0 | committed UNDER on Pts+Reb+Ast line 20.7, actual 22.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] NaLyssa Smith          Points       line 11.3 (conf 1)
+  [XX] NaLyssa Smith          Rebounds     line 7.3 | under → actual 9.0 | committed UNDER on Rebounds line 7.3, actual 9.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
