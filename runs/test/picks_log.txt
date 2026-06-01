@@ -1014,3 +1014,11 @@
   [pass] Jackie Young           Pts+Reb+Ast  line 33.3 (conf 2)
   [pass] Napheesa Collier       Points       line 20.9 (conf 2)
   [OK] Napheesa Collier       Rebounds     line 10.8 | under → actual 9.0
+
+=== Batch 128 ===
+  [pass] Napheesa Collier       Assists      line 3.9 (conf 2)
+  [pass] Napheesa Collier       Pts+Reb+Ast  line 35.5 (conf 3)
+  [pass] Bridget Carleton       Points       line 5.0 (conf 2)
+  [pass] Bridget Carleton       Rebounds     line 2.9 (conf 2)
+  [OK] Bridget Carleton       Assists      line 2.5 | under → actual 2.0
+  [pass] Bridget Carleton       Pts+Reb+Ast  line 11.4 (conf 2)

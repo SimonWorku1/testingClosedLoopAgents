@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 762,
+  "next_question_idx": 768,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -700,10 +700,23 @@
       "last_3_avg": 12.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1629524_AST_20240605",
+      "player_name": "Bridget Carleton",
+      "stat_name": "Assists",
+      "line": 2.5,
+      "actual": 2.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Rolling avg (2.0) and season avg (2.0) are both below the line (2.5), last-3 avg (1.7) and last-5 avg (2.0) consistently confirm the under, providing a reliable trend signal despite moderate volatility.",
+      "committed": true,
+      "last_3_avg": 1.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    false,
     true,
     true,
     false,
@@ -722,7 +735,8 @@
     true,
     true,
     false,
+    true,
     true
   ],
-  "passes": 712
+  "passes": 717
 }
