@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 312,
+  "next_question_idx": 318,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -518,11 +518,24 @@
       "last_3_avg": 6.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "204333_AST_20240707",
+      "player_name": "Natasha Cloud",
+      "stat_name": "Assists",
+      "line": 6.9,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Cloud hit over in all 3 last games with last_3_avg of 9.0 well above the 6.9 line; strong mean reversion signal with moderate volatility (cv=0.29) supports regression back toward the rolling average.",
+      "committed": true,
+      "last_3_avg": 9.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
-    true,
     false,
     true,
     true,
@@ -540,7 +553,8 @@
     false,
     false,
     false,
+    true,
     true
   ],
-  "passes": 275
+  "passes": 280
 }
