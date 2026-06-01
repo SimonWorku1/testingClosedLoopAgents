@@ -62,3 +62,11 @@
   [pass] Ariel Atkins           Rebounds     line 3.3 (conf 2)
   [pass] Ariel Atkins           Assists      line 4.3 (conf 2)
   [pass] Ariel Atkins           Pts+Reb+Ast  line 21.5 (conf 2)
+
+=== Batch 9 ===
+  [pass] Jonquel Jones          Points       line 15.9 (conf 2)
+  [pass] Jonquel Jones          Rebounds     line 8.9 (conf 2)
+  [pass] Jonquel Jones          Assists      line 2.9 (conf 1)
+  [pass] Jonquel Jones          Pts+Reb+Ast  line 25.7 (conf 2)
+  [pass] Ezi Magbegor           Points       line 13.5 (conf 2)
+  [pass] Ezi Magbegor           Rebounds     line 9.1 (conf 2)
