@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 642,
+  "next_question_idx": 648,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -588,13 +588,26 @@
       "last_3_avg": 27.0,
       "correct_pick": "under",
       "correct": false
+    },
+    {
+      "question_id": "1629477_PRA_20240604",
+      "player_name": "Sabrina Ionescu",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 27.2,
+      "actual": 35.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Ionescu has gone OVER all 3 recent games with last-3 avg +4.3 above the line, low volatility (cv 0.23) makes this a strong mean-reversion candidate for UNDER.",
+      "committed": true,
+      "last_3_avg": 31.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     true,
     true,
     true,
-    true,
     false,
     false,
     true,
@@ -608,9 +621,10 @@
     false,
     true,
     true,
+    false,
     false,
     false,
     false
   ],
-  "passes": 600
+  "passes": 605
 }

@@ -854,3 +854,11 @@
   [pass] Breanna Stewart        Pts+Reb+Ast  line 31.2 (conf 2)
   [pass] Marina Mabrey          Points       line 16.5 (conf 2)
   [pass] Marina Mabrey          Rebounds     line 6.4 (conf 2)
+
+=== Batch 108 ===
+  [pass] Marina Mabrey          Assists      line 5.2 (conf 2)
+  [pass] Marina Mabrey          Pts+Reb+Ast  line 29.1 (conf 2)
+  [pass] Sabrina Ionescu        Points       line 16.7 (conf 3)
+  [pass] Sabrina Ionescu        Rebounds     line 4.5 (conf 1)
+  [pass] Sabrina Ionescu        Assists      line 5.9 (conf 2)
+  [XX] Sabrina Ionescu        Pts+Reb+Ast  line 27.2 | under → actual 35.0 | committed UNDER on Pts+Reb+Ast line 27.2, actual 35.0 → OVER was right; last-3 (31.0) was 4.3 above rolling avg — form signal misfired
