@@ -406,3 +406,11 @@
   [pass] Jordan Horston         Pts+Reb+Ast  line 12.5 (conf 2)
   [pass] Kia Nurse              Points       line 12.0 (conf 1)
   [pass] Kia Nurse              Rebounds     line 1.0 (conf 2)
+
+=== Batch 52 ===
+  [pass] Kia Nurse              Assists      line 1.7 (conf 2)
+  [pass] Kia Nurse              Pts+Reb+Ast  line 15.7 (conf 2)
+  [pass] Arike Ogunbowale       Points       line 28.3 (conf 2)
+  [pass] Arike Ogunbowale       Rebounds     line 5.1 (conf 2)
+  [pass] Arike Ogunbowale       Assists      line 3.7 (conf 2)
+  [pass] Arike Ogunbowale       Pts+Reb+Ast  line 38.1 (conf 2)
