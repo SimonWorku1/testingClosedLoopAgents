@@ -1,5 +1,19 @@
 {
-  "next_question_idx": 480,
+  "success": true,
+  "train": {
+    "committed_total": 59,
+    "correct_total": 37,
+    "passes": 421,
+    "best_window": 16
+  },
+  "holdout": {
+    "committed": 10,
+    "correct": 8,
+    "passes": 125,
+    "accuracy": 80.0,
+    "best_window": 8,
+    "generalizes": false
+  },
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -827,28 +841,5 @@
       "correct_pick": "under",
       "correct": true
     }
-  ],
-  "window": [
-    true,
-    true,
-    false,
-    true,
-    true,
-    true,
-    true,
-    false,
-    false,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    false,
-    true,
-    true,
-    true,
-    true
-  ],
-  "passes": 421
+  ]
 }

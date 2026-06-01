@@ -630,3 +630,11 @@
   [pass] Arike Ogunbowale       Assists      line 6.0 (conf 2)
   [pass] Dearica Hamby          Assists      line 2.3 (conf 2)
   [pass] A'ja Wilson            Assists      line 2.3 (conf 1)
+
+=== Batch 80 ===
+  [pass] Kelsey Plum            Assists      line 3.7 (conf 3)
+  [OK] Jackie Young           Assists      line 4.4 | under → actual 1.0
+  [OK] Caitlin Clark          Assists      line 10.9 | under → actual 7.0
+  [pass] Allisha Gray           Assists      line 2.7 (conf 2)
+  [pass] Kelsey Mitchell        Assists      line 2.4 (conf 2)
+  [pass] Natasha Cloud          Assists      line 6.4 (conf 3)

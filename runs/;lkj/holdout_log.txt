@@ -1,0 +1,10 @@
+[OK] Kayla McBride        Assists      line 3.3 | under → actual 2.0
+[XX] Kayla McBride        Assists      line 3.2 | under → actual 4.0
+[OK] Kayla McBride        Assists      line 3.5 | under → actual 1.0
+[OK] Arike Ogunbowale     Assists      line 4.9 | under → actual 4.0
+[OK] Caitlin Clark        Assists      line 9.4 | under → actual 9.0
+[OK] Kelsey Plum          Assists      line 4.2 | under → actual 4.0
+[OK] Alyssa Thomas        Assists      line 8.5 | under → actual 7.0
+[OK] Alyssa Thomas        Assists      line 9.4 | over → actual 10.0
+[OK] Dearica Hamby        Assists      line 4.3 | under → actual 3.0
+[XX] Marina Mabrey        Assists      line 3.8 | under → actual 6.0
