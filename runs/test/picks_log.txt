@@ -806,3 +806,11 @@
   [pass] Monique Billings       Pts+Reb+Ast  line 22.9 (conf 2)
   [pass] Kia Nurse              Points       line 13.6 (conf 2)
   [pass] Kia Nurse              Rebounds     line 0.9 (conf 2)
+
+=== Batch 102 ===
+  [pass] Kia Nurse              Assists      line 1.6 (conf 2)
+  [pass] Kia Nurse              Pts+Reb+Ast  line 17.2 (conf 2)
+  [pass] Kayla Thornton         Points       line 6.7 (conf 1)
+  [pass] Kayla Thornton         Rebounds     line 2.3 (conf 1)
+  [pass] Kayla Thornton         Assists      line 1.3 (conf 1)
+  [pass] Kayla Thornton         Pts+Reb+Ast  line 10.3 (conf 1)
