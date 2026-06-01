@@ -1070,3 +1070,11 @@
   [pass] Allisha Gray           Rebounds     line 3.6 (conf 3)
   [pass] Allisha Gray           Assists      line 1.6 (conf 2)
   [pass] Allisha Gray           Pts+Reb+Ast  line 21.1 (conf 2)
+
+=== Batch 135 ===
+  [pass] Breanna Stewart        Points       line 18.9 (conf 2)
+  [pass] Breanna Stewart        Rebounds     line 10.3 (conf 2)
+  [pass] Breanna Stewart        Assists      line 2.9 (conf 2)
+  [pass] Breanna Stewart        Pts+Reb+Ast  line 32.1 (conf 2)
+  [pass] Marina Mabrey          Points       line 17.2 (conf 2)
+  [pass] Marina Mabrey          Rebounds     line 7.2 (conf 2)
