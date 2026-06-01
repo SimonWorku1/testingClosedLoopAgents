@@ -430,3 +430,11 @@
   [pass] Kelsey Plum            Rebounds     line 1.1 (conf 1)
   [pass] Kelsey Plum            Assists      line 5.1 (conf 3)
   [pass] Kelsey Plum            Pts+Reb+Ast  line 26.3 (conf 2)
+
+=== Batch 55 ===
+  [pass] Alyssa Thomas          Points       line 15.0 (conf 2)
+  [pass] Alyssa Thomas          Rebounds     line 8.5 (conf 2)
+  [pass] Alyssa Thomas          Assists      line 7.3 (conf 2)
+  [pass] Alyssa Thomas          Pts+Reb+Ast  line 30.8 (conf 2)
+  [pass] DeWanna Bonner         Points       line 20.8 (conf 3)
+  [pass] DeWanna Bonner         Rebounds     line 4.3 (conf 1)
