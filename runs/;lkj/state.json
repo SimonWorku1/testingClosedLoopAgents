@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 30,
+  "next_question_idx": 36,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -56,13 +56,28 @@
       "last_3_avg": 5.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1641648_AST_20240530",
+      "player_name": "Aliyah Boston",
+      "stat_name": "Assists",
+      "line": 1.5,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "3/3 overs in last 3 with last_3_avg 1.2 above the line signals mean reversion; prior win on this same player/stat combo confirms the pattern is reliable.",
+      "committed": true,
+      "last_3_avg": 2.7,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     true,
     true,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 26
+  "passes": 31
 }

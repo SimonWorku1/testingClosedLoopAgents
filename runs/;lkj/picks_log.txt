@@ -38,3 +38,11 @@
   [pass] Caitlin Clark          Assists      line 6.8 (conf 3)
   [OK] Dearica Hamby          Assists      line 3.5 | under → actual 3.0
   [pass] Kelsey Mitchell        Assists      line 1.4 (conf 1)
+
+=== Batch 6 ===
+  [pass] Skylar Diggins         Assists      line 5.2 (conf 2)
+  [pass] Jewell Loyd            Assists      line 2.8 (conf 1)
+  [XX] Aliyah Boston          Assists      line 1.5 | under → actual 5.0 | committed UNDER on Assists line 1.5, actual 5.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Marina Mabrey          Assists      line 5.3 (conf 2)
+  [pass] Arike Ogunbowale       Assists      line 3.7 (conf 2)
+  [pass] Allisha Gray           Assists      line 1.7 (conf 2)
