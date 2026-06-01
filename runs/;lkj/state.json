@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 150,
+  "next_question_idx": 156,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -280,13 +280,39 @@
       "last_3_avg": 5.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "203826_AST_20240615",
+      "player_name": "Alyssa Thomas",
+      "stat_name": "Assists",
+      "line": 7.3,
+      "actual": 9.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Alyssa Thomas went UNDER all 3 recent games (overs_last3 = 0/3) with last 3 avg of 6.0 vs line 7.3, but season avg 8.1 and rolling avg 7.8 both support mean reversion upward; volatility is moderate (cv 0.38) and sample is mature enough to trust the bounce-back signal.",
+      "committed": true,
+      "last_3_avg": 6.0,
+      "correct_pick": "over",
+      "correct": true
+    },
+    {
+      "question_id": "201886_AST_20240615",
+      "player_name": "DeWanna Bonner",
+      "stat_name": "Assists",
+      "line": 2.7,
+      "actual": 1.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "DeWanna Bonner's last 3 and last 5 averages both sit at 2.0, well below the line of 2.7, with consistent recent form pointing under; rolling avg of 2.2 also supports the under despite slightly elevated volatility.",
+      "committed": true,
+      "last_3_avg": 2.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
     true,
-    true,
-    true,
     false,
     false,
     true,
@@ -302,7 +328,9 @@
     true,
     true,
     true,
-    false
+    false,
+    true,
+    true
   ],
-  "passes": 130
+  "passes": 134
 }
