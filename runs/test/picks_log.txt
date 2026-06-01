@@ -294,3 +294,11 @@
   [pass] Alanna Smith           Pts+Reb+Ast  line 23.9 (conf 2)
   [XX] Stefanie Dolson        Points       line 8.7 | under → actual 10.0 | committed UNDER on Points line 8.7, actual 10.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
   [pass] Stefanie Dolson        Rebounds     line 4.3 (conf 2)
+
+=== Batch 38 ===
+  [pass] Stefanie Dolson        Assists      line 1.2 (conf 2)
+  [pass] Stefanie Dolson        Pts+Reb+Ast  line 13.2 (conf 2)
+  [pass] Julie Vanloo           Points       line 9.3 (conf 2)
+  [pass] Julie Vanloo           Rebounds     line 2.5 (conf 1)
+  [pass] Julie Vanloo           Assists      line 5.0 (conf 2)
+  [pass] Julie Vanloo           Pts+Reb+Ast  line 18.8 (conf 2)
