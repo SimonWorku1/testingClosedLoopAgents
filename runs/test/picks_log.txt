@@ -542,3 +542,11 @@
   [pass] Rhyne Howard           Rebounds     line 6.7 (conf 2)
   [OK] Rhyne Howard           Assists      line 3.1 | under → actual 2.0
   [pass] Rhyne Howard           Pts+Reb+Ast  line 28.3 (conf 2)
+
+=== Batch 69 ===
+  [pass] Stefanie Dolson        Points       line 8.9 (conf 2)
+  [pass] Stefanie Dolson        Rebounds     line 2.9 (conf 2)
+  [pass] Stefanie Dolson        Assists      line 2.2 (conf 2)
+  [OK] Stefanie Dolson        Pts+Reb+Ast  line 14.1 | under → actual 6.0
+  [pass] Teaira McCowan         Points       line 14.1 (conf 2)
+  [pass] Teaira McCowan         Rebounds     line 9.3 (conf 2)
