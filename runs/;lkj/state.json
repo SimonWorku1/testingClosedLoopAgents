@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 240,
+  "next_question_idx": 246,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -392,12 +392,38 @@
       "last_3_avg": 5.3,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1628276_AST_20240629",
+      "player_name": "Kelsey Plum",
+      "stat_name": "Assists",
+      "line": 4.0,
+      "actual": 8.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Last 3 avg 5.7 and last 5 avg 5.0 both well above the 4.0 line with low-moderate volatility (cv 0.38), showing a consistent upward trend.",
+      "committed": true,
+      "last_3_avg": 5.7,
+      "correct_pick": "over",
+      "correct": true
+    },
+    {
+      "question_id": "203400_AST_20240629",
+      "player_name": "Skylar Diggins",
+      "stat_name": "Assists",
+      "line": 7.1,
+      "actual": 5.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Last 3 avg 7.7 and last 5 avg 7.4 both above the 7.1 line with low volatility (cv 0.3), and prior mistake history confirms Diggins trends over rather than reverts.",
+      "committed": true,
+      "last_3_avg": 7.7,
+      "correct_pick": "under",
+      "correct": false
     }
   ],
   "window": [
     true,
-    false,
-    true,
     true,
     false,
     true,
@@ -413,8 +439,10 @@
     false,
     false,
     true,
+    true,
+    false,
     true,
     false
   ],
-  "passes": 212
+  "passes": 216
 }

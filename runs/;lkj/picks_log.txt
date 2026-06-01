@@ -318,3 +318,11 @@
   [pass] Allisha Gray           Assists      line 1.8 (conf 2)
   [XX] Alyssa Thomas          Assists      line 7.3 | under → actual 8.0 | committed UNDER on Assists line 7.3, actual 8.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
   [pass] DeWanna Bonner         Assists      line 2.2 (conf 2)
+
+=== Batch 41 ===
+  [pass] Natasha Cloud          Assists      line 7.2 (conf 2)
+  [pass] Kahleah Copper         Assists      line 2.7 (conf 1)
+  [pass] Arike Ogunbowale       Assists      line 5.8 (conf 2)
+  [pass] A'ja Wilson            Assists      line 3.0 (conf 2)
+  [OK] Kelsey Plum            Assists      line 4.0 | over  → actual 8.0
+  [XX] Skylar Diggins         Assists      line 7.1 | over  → actual 5.0 | committed OVER on Assists line 7.1, actual 5.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
