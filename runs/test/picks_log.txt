@@ -46,3 +46,11 @@
   [pass] Breanna Stewart        Rebounds     line 9.3 (conf 3)
   [pass] Breanna Stewart        Assists      line 2.3 (conf 1)
   [pass] Breanna Stewart        Pts+Reb+Ast  line 31.5 (conf 2)
+
+=== Batch 7 ===
+  [pass] Aliyah Boston          Points       line 10.3 (conf 2)
+  [pass] Aliyah Boston          Rebounds     line 6.7 (conf 2)
+  [OK] Aliyah Boston          Assists      line 1.2 | over  → actual 4.0
+  [pass] Aliyah Boston          Pts+Reb+Ast  line 18.2 (conf 2)
+  [XX] Sabrina Ionescu        Points       line 15.5 | over  → actual 13.0 | committed OVER on Points line 15.5, actual 13.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Sabrina Ionescu        Rebounds     line 3.5 (conf 1)

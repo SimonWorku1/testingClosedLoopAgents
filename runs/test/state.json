@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 36,
+  "next_question_idx": 42,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -14,10 +14,40 @@
       "last_3_avg": 17.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1641648_AST_20240525",
+      "player_name": "Aliyah Boston",
+      "stat_name": "Assists",
+      "line": 1.2,
+      "actual": 4.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Rolling avg (1.7) is consistently above the line (1.2) with low-moderate volatility (cv 0.31), and last 3 and last 5 averages both sit above the line, providing a reliable trend signal.",
+      "committed": true,
+      "last_3_avg": 1.7,
+      "correct_pick": "over",
+      "correct": true
+    },
+    {
+      "question_id": "1629477_PTS_20240525",
+      "player_name": "Sabrina Ionescu",
+      "stat_name": "Points",
+      "line": 15.5,
+      "actual": 13.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.21), rolling avg above the line, and last 3 avg of 17.0 vs line of 15.5 provides a consistent upward signal with low variance for a star player.",
+      "committed": true,
+      "last_3_avg": 17.0,
+      "correct_pick": "under",
+      "correct": false
     }
   ],
   "window": [
+    false,
+    true,
     false
   ],
-  "passes": 35
+  "passes": 39
 }
