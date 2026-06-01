@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 456,
+  "next_question_idx": 462,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -756,11 +756,37 @@
       "last_3_avg": 4.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "204333_AST_20240823",
+      "player_name": "Natasha Cloud",
+      "stat_name": "Assists",
+      "line": 5.7,
+      "actual": 7.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Natasha Cloud has gone under in all 3 recent games with last-3 avg of 3.0 vs line of 5.7 (-2.7), strong downward signal consistent with my recent winning pattern on Cloud unders, though high cv (0.47) is a slight concern.",
+      "committed": true,
+      "last_3_avg": 3.0,
+      "correct_pick": "over",
+      "correct": false
+    },
+    {
+      "question_id": "1629497_AST_20240823",
+      "player_name": "Marina Mabrey",
+      "stat_name": "Assists",
+      "line": 5.4,
+      "actual": 1.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Marina Mabrey has gone under all 3 recent games with last-3 avg of 3.3 vs line of 5.4 (-2.1), and last-5 avg of 4.2 also below line; cv of 0.33 is moderate-low, consistent with my recent winning Mabrey under.",
+      "committed": true,
+      "last_3_avg": 3.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    false,
-    false,
     true,
     true,
     false,
@@ -778,7 +804,9 @@
     true,
     true,
     true,
+    true,
+    false,
     true
   ],
-  "passes": 402
+  "passes": 406
 }

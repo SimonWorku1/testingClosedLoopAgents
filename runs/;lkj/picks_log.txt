@@ -606,3 +606,11 @@
   [pass] Kelsey Plum            Assists      line 2.7 (conf 3)
   [pass] Alyssa Thomas          Assists      line 7.6 (conf 2)
   [pass] DeWanna Bonner         Assists      line 2.8 (conf 2)
+
+=== Batch 77 ===
+  [XX] Natasha Cloud          Assists      line 5.7 | under → actual 7.0 | committed UNDER on Assists line 5.7, actual 7.0 → OVER was right; last-3 (3.0) was 3.2 below rolling avg — form signal misfired
+  [pass] Kayla McBride          Assists      line 3.3 (conf 2)
+  [OK] Marina Mabrey          Assists      line 5.4 | under → actual 1.0
+  [pass] Jackie Young           Assists      line 5.1 (conf 2)
+  [pass] Kahleah Copper         Assists      line 2.2 (conf 1)
+  [pass] Ariel Atkins           Assists      line 3.9 (conf 2)
