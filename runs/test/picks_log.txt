@@ -366,3 +366,11 @@
   [pass] Marina Mabrey          Rebounds     line 5.9 (conf 2)
   [pass] Marina Mabrey          Assists      line 5.3 (conf 2)
   [pass] Marina Mabrey          Pts+Reb+Ast  line 28.5 (conf 2)
+
+=== Batch 47 ===
+  [pass] Nneka Ogwumike         Points       line 19.5 (conf 2)
+  [pass] Nneka Ogwumike         Rebounds     line 7.1 (conf 2)
+  [pass] Nneka Ogwumike         Assists      line 1.5 (conf 2)
+  [pass] Nneka Ogwumike         Pts+Reb+Ast  line 29.1 (conf 2)
+  [pass] Rickea Jackson         Points       line 9.7 (conf 2)
+  [pass] Rickea Jackson         Rebounds     line 2.7 (conf 2)
