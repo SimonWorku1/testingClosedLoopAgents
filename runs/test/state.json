@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 138,
+  "next_question_idx": 144,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -154,6 +154,34 @@
       "last_3_avg": 35.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1642288_AST_20240528",
+      "player_name": "Rickea Jackson",
+      "stat_name": "Assists",
+      "line": 0.7,
+      "actual": 1.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Line is 0.7 but rolling avg is only 0.2 and last 3/5 averages confirm consistent near-zero assist production; despite very high CV the signal is clear that she almost never reaches 0.7 assists, though small sample warrants slight caution.",
+      "committed": true,
+      "last_3_avg": 0.3,
+      "correct_pick": "over",
+      "correct": false
+    },
+    {
+      "question_id": "1629496_REB_20240528",
+      "player_name": "Ezi Magbegor",
+      "stat_name": "Rebounds",
+      "line": 8.7,
+      "actual": 12.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last 3 avg of 6.7 is 2.0 below the line of 8.7, last 5 avg of 8.0 also trails the line, and overs_last3 = 1/3 all pointing toward under; moderate cv of 0.41 is acceptable given the consistent directional signal.",
+      "committed": true,
+      "last_3_avg": 6.7,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
@@ -167,7 +195,9 @@
     true,
     false,
     false,
-    true
+    true,
+    false,
+    false
   ],
-  "passes": 127
+  "passes": 131
 }

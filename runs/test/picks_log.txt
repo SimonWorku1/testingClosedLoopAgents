@@ -182,3 +182,11 @@
   [pass] DiJonai Carrington     Pts+Reb+Ast  line 21.7 (conf 2)
   [pass] Rickea Jackson         Points       line 10.3 (conf 1)
   [pass] Rickea Jackson         Rebounds     line 2.9 (conf 2)
+
+=== Batch 24 ===
+  [XX] Rickea Jackson         Assists      line 0.7 | under → actual 1.0 | committed UNDER on Assists line 0.7, actual 1.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Rickea Jackson         Pts+Reb+Ast  line 11.9 (conf 2)
+  [pass] Ezi Magbegor           Points       line 13.0 (conf 2)
+  [XX] Ezi Magbegor           Rebounds     line 8.7 | under → actual 12.0 | committed UNDER on Rebounds line 8.7, actual 12.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Ezi Magbegor           Assists      line 1.3 (conf 2)
+  [pass] Ezi Magbegor           Pts+Reb+Ast  line 23.0 (conf 2)
