@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 612,
+  "next_question_idx": 618,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -532,10 +532,23 @@
       "last_3_avg": 5.0,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "203826_PTS_20240604",
+      "player_name": "Alyssa Thomas",
+      "stat_name": "Points",
+      "line": 14.2,
+      "actual": 7.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last-3 avg of 11.0 is 3.2 below the line, last-5 avg of 12.0 also well below, consistent cold trend with moderate volatility (cv 0.38) supports committing under.",
+      "committed": true,
+      "last_3_avg": 11.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    true,
     false,
     true,
     false,
@@ -554,7 +567,8 @@
     true,
     false,
     false,
+    true,
     true
   ],
-  "passes": 574
+  "passes": 579
 }

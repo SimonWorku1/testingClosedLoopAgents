@@ -814,3 +814,11 @@
   [pass] Kayla Thornton         Rebounds     line 2.3 (conf 1)
   [pass] Kayla Thornton         Assists      line 1.3 (conf 1)
   [pass] Kayla Thornton         Pts+Reb+Ast  line 10.3 (conf 1)
+
+=== Batch 103 ===
+  [pass] Sevgi Uzun             Points       line 6.7 (conf 2)
+  [pass] Sevgi Uzun             Rebounds     line 2.0 (conf 2)
+  [pass] Sevgi Uzun             Assists      line 5.8 (conf 2)
+  [pass] Sevgi Uzun             Pts+Reb+Ast  line 13.5 (conf 2)
+  [OK] Alyssa Thomas          Points       line 14.2 | under → actual 7.0
+  [pass] Alyssa Thomas          Rebounds     line 9.1 (conf 2)
