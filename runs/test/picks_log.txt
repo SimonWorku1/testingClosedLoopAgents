@@ -174,3 +174,11 @@
   [pass] Kahleah Copper         Rebounds     line 3.5 (conf 2)
   [XX] Kahleah Copper         Assists      line 2.9 | under → actual 4.0 | committed UNDER on Assists line 2.9, actual 4.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
   [OK] Kahleah Copper         Pts+Reb+Ast  line 36.1 | under → actual 16.0
+
+=== Batch 23 ===
+  [pass] DiJonai Carrington     Points       line 14.5 (conf 2)
+  [pass] DiJonai Carrington     Rebounds     line 5.3 (conf 2)
+  [pass] DiJonai Carrington     Assists      line 0.9 (conf 1)
+  [pass] DiJonai Carrington     Pts+Reb+Ast  line 21.7 (conf 2)
+  [pass] Rickea Jackson         Points       line 10.3 (conf 1)
+  [pass] Rickea Jackson         Rebounds     line 2.9 (conf 2)
