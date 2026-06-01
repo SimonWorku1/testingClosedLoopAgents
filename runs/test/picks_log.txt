@@ -150,3 +150,11 @@
   [OK] DeWanna Bonner         Pts+Reb+Ast  line 28.1 | under → actual 25.0
   [pass] Natasha Cloud          Points       line 11.5 (conf 2)
   [pass] Natasha Cloud          Rebounds     line 5.7 (conf 2)
+
+=== Batch 20 ===
+  [pass] Natasha Cloud          Assists      line 9.3 (conf 3)
+  [pass] Natasha Cloud          Pts+Reb+Ast  line 25.5 (conf 2)
+  [pass] Skylar Diggins         Points       line 13.2 (conf 2)
+  [pass] Skylar Diggins         Rebounds     line 2.7 (conf 1)
+  [pass] Skylar Diggins         Assists      line 5.7 (conf 2)
+  [pass] Skylar Diggins         Pts+Reb+Ast  line 20.5 (conf 2)
