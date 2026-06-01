@@ -334,3 +334,11 @@
   [pass] Caitlin Clark          Assists      line 6.2 (conf 3)
   [pass] Allisha Gray           Assists      line 1.6 (conf 1)
   [pass] Kelsey Mitchell        Assists      line 1.2 (conf 1)
+
+=== Batch 43 ===
+  [pass] Natasha Cloud          Assists      line 7.6 (conf 2)
+  [pass] Breanna Stewart        Assists      line 4.1 (conf 2)
+  [pass] Kayla McBride          Assists      line 3.1 (conf 1)
+  [pass] Aliyah Boston          Assists      line 3.5 (conf 2)
+  [pass] Marina Mabrey          Assists      line 4.0 (conf 2)
+  [pass] Sabrina Ionescu        Assists      line 8.2 (conf 2)
