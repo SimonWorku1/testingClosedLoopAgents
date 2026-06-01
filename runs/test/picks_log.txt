@@ -398,3 +398,11 @@
   [pass] Chennedy Carter        Rebounds     line 2.3 (conf 1)
   [pass] Chennedy Carter        Assists      line 2.1 (conf 1)
   [pass] Chennedy Carter        Pts+Reb+Ast  line 14.1 (conf 2)
+
+=== Batch 51 ===
+  [pass] Jordan Horston         Points       line 4.7 (conf 2)
+  [pass] Jordan Horston         Rebounds     line 5.0 (conf 2)
+  [pass] Jordan Horston         Assists      line 0.8 (conf 1)
+  [pass] Jordan Horston         Pts+Reb+Ast  line 12.5 (conf 2)
+  [pass] Kia Nurse              Points       line 12.0 (conf 1)
+  [pass] Kia Nurse              Rebounds     line 1.0 (conf 2)
