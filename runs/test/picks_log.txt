@@ -894,3 +894,11 @@
   [pass] Tyasha Harris          Rebounds     line 2.4 (conf 1)
   [pass] Tyasha Harris          Assists      line 3.8 (conf 2)
   [pass] Tyasha Harris          Pts+Reb+Ast  line 14.9 (conf 2)
+
+=== Batch 113 ===
+  [pass] Sophie Cunningham      Points       line 9.2 (conf 2)
+  [pass] Sophie Cunningham      Rebounds     line 4.8 (conf 2)
+  [pass] Sophie Cunningham      Assists      line 2.1 (conf 3)
+  [pass] Sophie Cunningham      Pts+Reb+Ast  line 17.1 (conf 2)
+  [pass] Angel Reese            Points       line 10.1 (conf 2)
+  [pass] Angel Reese            Rebounds     line 9.4 (conf 2)
