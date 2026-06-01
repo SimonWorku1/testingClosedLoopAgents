@@ -262,3 +262,11 @@
   [pass] Napheesa Collier       Pts+Reb+Ast  line 37.9 (conf 2)
   [pass] Bridget Carleton       Points       line 7.1 (conf 1)
   [pass] Bridget Carleton       Rebounds     line 2.9 (conf 2)
+
+=== Batch 34 ===
+  [pass] Bridget Carleton       Assists      line 2.7 (conf 2)
+  [pass] Bridget Carleton       Pts+Reb+Ast  line 11.7 (conf 2)
+  [pass] Jonquel Jones          Points       line 13.0 (conf 2)
+  [pass] Jonquel Jones          Rebounds     line 7.5 (conf 2)
+  [pass] Jonquel Jones          Assists      line 3.0 (conf 1)
+  [pass] Jonquel Jones          Pts+Reb+Ast  line 24.5 (conf 2)
