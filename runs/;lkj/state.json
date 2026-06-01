@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 144,
+  "next_question_idx": 150,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -266,6 +266,20 @@
       "last_3_avg": 3.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1628878_AST_20240614",
+      "player_name": "Ariel Atkins",
+      "stat_name": "Assists",
+      "line": 2.9,
+      "actual": 3.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Strong mean reversion signal: overs_last3=3/3 with last-3 avg of 5.0 (+2.1 above line), and moderate volatility supports regression back toward the 2.9 line.",
+      "committed": true,
+      "last_3_avg": 5.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
@@ -287,7 +301,8 @@
     true,
     true,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 125
+  "passes": 130
 }
