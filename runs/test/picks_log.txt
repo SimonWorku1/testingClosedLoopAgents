@@ -606,3 +606,11 @@
   [pass] Caitlin Clark          Rebounds     line 4.6 (conf 2)
   [XX] Caitlin Clark          Assists      line 6.1 | over  → actual 6.0 | committed OVER on Assists line 6.1, actual 6.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
   [XX] Caitlin Clark          Pts+Reb+Ast  line 29.7 | over  → actual 25.0 | committed OVER on Pts+Reb+Ast line 29.7, actual 25.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 77 ===
+  [pass] Kelsey Mitchell        Points       line 14.6 (conf 2)
+  [pass] Kelsey Mitchell        Rebounds     line 1.9 (conf 1)
+  [pass] Kelsey Mitchell        Assists      line 1.6 (conf 2)
+  [pass] Kelsey Mitchell        Pts+Reb+Ast  line 17.2 (conf 2)
+  [pass] Aliyah Boston          Points       line 10.5 (conf 2)
+  [pass] Aliyah Boston          Rebounds     line 7.3 (conf 2)
