@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 114,
+  "next_question_idx": 120,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -182,6 +182,20 @@
       "last_3_avg": 3.3,
       "correct_pick": "under",
       "correct": false
+    },
+    {
+      "question_id": "1642286_AST_20240610",
+      "player_name": "Caitlin Clark",
+      "stat_name": "Assists",
+      "line": 7.2,
+      "actual": 2.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Clark is 0/3 in last 3 with last-3 avg 1.5 below line and cv=0.20 (low volatility), making this a high-conviction under \u2014 prior loss on Clark assists was committing OVER, not under, so this aligns with recent wins pattern.",
+      "committed": true,
+      "last_3_avg": 5.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -197,7 +211,8 @@
     false,
     true,
     true,
-    false
+    false,
+    true
   ],
-  "passes": 101
+  "passes": 106
 }

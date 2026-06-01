@@ -150,3 +150,11 @@
   [pass] Jewell Loyd            Assists      line 3.2 (conf 2)
   [pass] Breanna Stewart        Assists      line 4.3 (conf 2)
   [XX] Kayla McBride          Assists      line 4.2 | over  → actual 1.0 | committed OVER on Assists line 4.2, actual 1.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 20 ===
+  [pass] Sabrina Ionescu        Assists      line 5.7 (conf 3)
+  [pass] Kahleah Copper         Assists      line 2.3 (conf 2)
+  [pass] Ariel Atkins           Assists      line 3.7 (conf 2)
+  [OK] Caitlin Clark          Assists      line 7.2 | under → actual 2.0
+  [pass] Alyssa Thomas          Assists      line 9.1 (conf 2)
+  [pass] Kelsey Mitchell        Assists      line 1.9 (conf 2)
