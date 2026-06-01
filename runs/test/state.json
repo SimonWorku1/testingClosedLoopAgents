@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 402,
+  "next_question_idx": 408,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -322,12 +322,25 @@
       "last_3_avg": 5.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1631009_AST_20240531",
+      "player_name": "Rhyne Howard",
+      "stat_name": "Assists",
+      "line": 3.1,
+      "actual": 2.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "overs_last3 = 3/3 with last-3 avg of 4.3 well above the 3.1 line, low-moderate volatility (cv 0.32) supports mean reversion back under the line.",
+      "committed": true,
+      "last_3_avg": 4.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
     true,
-    true,
     false,
     true,
     false,
@@ -344,7 +357,8 @@
     false,
     true,
     false,
+    true,
     true
   ],
-  "passes": 379
+  "passes": 384
 }

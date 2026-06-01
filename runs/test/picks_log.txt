@@ -534,3 +534,11 @@
   [pass] Diana Taurasi          Pts+Reb+Ast  line 22.1 (conf 2)
   [pass] Alanna Smith           Points       line 15.0 (conf 2)
   [pass] Alanna Smith           Rebounds     line 4.7 (conf 2)
+
+=== Batch 68 ===
+  [pass] Alanna Smith           Assists      line 3.0 (conf 2)
+  [pass] Alanna Smith           Pts+Reb+Ast  line 22.7 (conf 2)
+  [pass] Rhyne Howard           Points       line 18.5 (conf 2)
+  [pass] Rhyne Howard           Rebounds     line 6.7 (conf 2)
+  [OK] Rhyne Howard           Assists      line 3.1 | under → actual 2.0
+  [pass] Rhyne Howard           Pts+Reb+Ast  line 28.3 (conf 2)
