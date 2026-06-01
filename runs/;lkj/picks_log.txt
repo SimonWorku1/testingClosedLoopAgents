@@ -614,3 +614,11 @@
   [pass] Jackie Young           Assists      line 5.1 (conf 2)
   [pass] Kahleah Copper         Assists      line 2.2 (conf 1)
   [pass] Ariel Atkins           Assists      line 3.9 (conf 2)
+
+=== Batch 78 ===
+  [pass] Caitlin Clark          Assists      line 10.8 (conf 2)
+  [pass] Alyssa Thomas          Assists      line 8.9 (conf 2)
+  [pass] Kelsey Mitchell        Assists      line 1.1 (conf 1)
+  [pass] DeWanna Bonner         Assists      line 2.8 (conf 2)
+  [pass] Breanna Stewart        Assists      line 4.3 (conf 3)
+  [pass] Kayla McBride          Assists      line 3.3 (conf 2)
