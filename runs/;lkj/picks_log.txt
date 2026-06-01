@@ -22,3 +22,11 @@
   [pass] DeWanna Bonner         Assists      line 1.3 (conf 2)
   [OK] Natasha Cloud          Assists      line 9.3 | under → actual 3.0
   [pass] Skylar Diggins         Assists      line 5.7 (conf 3)
+
+=== Batch 4 ===
+  [pass] Jewell Loyd            Assists      line 3.3 (conf 2)
+  [OK] Aliyah Boston          Assists      line 1.5 | over  → actual 2.0
+  [pass] Kahleah Copper         Assists      line 2.9 (conf 3)
+  [pass] Natasha Cloud          Assists      line 7.3 (conf 2)
+  [pass] Breanna Stewart        Assists      line 3.7 (conf 2)
+  [pass] Kayla McBride          Assists      line 3.3 (conf 2)
