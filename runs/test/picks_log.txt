@@ -238,3 +238,11 @@
   [pass] Kayla McBride          Rebounds     line 3.7 (conf 2)
   [pass] Kayla McBride          Assists      line 3.3 (conf 2)
   [pass] Kayla McBride          Pts+Reb+Ast  line 24.7 (conf 2)
+
+=== Batch 31 ===
+  [pass] Sabrina Ionescu        Points       line 16.0 (conf 2)
+  [pass] Sabrina Ionescu        Rebounds     line 4.3 (conf 2)
+  [pass] Sabrina Ionescu        Assists      line 5.7 (conf 2)
+  [pass] Sabrina Ionescu        Pts+Reb+Ast  line 25.0 (conf 2)
+  [pass] Kahleah Copper         Points       line 26.0 (conf 2)
+  [pass] Kahleah Copper         Rebounds     line 3.7 (conf 2)
