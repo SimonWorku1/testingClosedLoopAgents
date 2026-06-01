@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 258,
+  "next_question_idx": 264,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -420,11 +420,24 @@
       "last_3_avg": 7.7,
       "correct_pick": "under",
       "correct": false
+    },
+    {
+      "question_id": "204333_AST_20240701",
+      "player_name": "Natasha Cloud",
+      "stat_name": "Assists",
+      "line": 7.6,
+      "actual": 10.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Cold streak (0/3 overs), last-3 avg 6.3 and last-5 avg 6.2 both consistently below line 7.6, with moderate CV 0.34 supporting a reliable under signal.",
+      "committed": true,
+      "last_3_avg": 6.3,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     true,
-    true,
     false,
     true,
     true,
@@ -442,7 +455,8 @@
     true,
     false,
     true,
+    false,
     false
   ],
-  "passes": 228
+  "passes": 233
 }
