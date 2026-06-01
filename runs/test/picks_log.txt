@@ -934,3 +934,11 @@
   [pass] Julie Vanloo           Pts+Reb+Ast  line 16.2 (conf 3)
   [pass] Shatori Walker-Kimbrough Points       line 5.1 (conf 2)
   [pass] Shatori Walker-Kimbrough Rebounds     line 0.4 (conf 1)
+
+=== Batch 118 ===
+  [pass] Shatori Walker-Kimbrough Assists      line 0.4 (conf 1)
+  [pass] Shatori Walker-Kimbrough Pts+Reb+Ast  line 6.9 (conf 2)
+  [pass] Chennedy Carter        Points       line 12.5 (conf 2)
+  [pass] Chennedy Carter        Rebounds     line 2.2 (conf 1)
+  [pass] Chennedy Carter        Assists      line 2.1 (conf 1)
+  [pass] Chennedy Carter        Pts+Reb+Ast  line 16.8 (conf 2)
