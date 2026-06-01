@@ -254,3 +254,11 @@
   [pass] Ariel Atkins           Rebounds     line 3.7 (conf 2)
   [pass] Ariel Atkins           Assists      line 4.0 (conf 2)
   [pass] Ariel Atkins           Pts+Reb+Ast  line 18.5 (conf 3)
+
+=== Batch 33 ===
+  [pass] Napheesa Collier       Points       line 22.5 (conf 2)
+  [OK] Napheesa Collier       Rebounds     line 9.9 | over  → actual 13.0
+  [pass] Napheesa Collier       Assists      line 3.5 (conf 2)
+  [pass] Napheesa Collier       Pts+Reb+Ast  line 37.9 (conf 2)
+  [pass] Bridget Carleton       Points       line 7.1 (conf 1)
+  [pass] Bridget Carleton       Rebounds     line 2.9 (conf 2)
