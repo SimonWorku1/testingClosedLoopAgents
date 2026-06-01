@@ -20,7 +20,7 @@ import pandas as pd
 LEAGUE_ID = "10"          # WNBA in nba_api
 # All five seasons used for reliability analysis; the picks loop uses only the
 # most-recent cached season so the training set stays temporally coherent.
-SEASONS = ["2024", "2023", "2022", "2021", "2020"]
+SEASONS = ["2026", "2025", "2024", "2023", "2022"]
 TOP_N_PLAYERS = 60        # most-active players by total minutes
 ROLLING_WINDOW = 10       # games averaged for the line
 MIN_PRIOR_GAMES = 5       # minimum prior games before generating a line
