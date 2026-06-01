@@ -6,3 +6,11 @@
   [pass] Caitlin Clark          Pts+Reb+Ast  line 27.7 (conf 2)
   [XX] Kelsey Mitchell        Points       line 12.3 | under → actual 18.0 | committed UNDER on Points line 12.3, actual 18.0 → OVER was right; last-3 (17.0) was 4.2 above rolling avg — form signal misfired
   [pass] Kelsey Mitchell        Rebounds     line 1.9 (conf 1)
+
+=== Batch 2 ===
+  [pass] Kelsey Mitchell        Assists      line 2.3 (conf 2)
+  [pass] Kelsey Mitchell        Pts+Reb+Ast  line 15.5 (conf 2)
+  [pass] Aliyah Boston          Points       line 8.9 (conf 2)
+  [pass] Aliyah Boston          Rebounds     line 6.7 (conf 3)
+  [pass] Aliyah Boston          Assists      line 2.1 (conf 3)
+  [pass] Aliyah Boston          Pts+Reb+Ast  line 16.7 (conf 2)
