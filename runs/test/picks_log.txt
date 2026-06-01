@@ -1030,3 +1030,11 @@
   [pass] Rickea Jackson         Pts+Reb+Ast  line 13.0 (conf 2)
   [OK] Courtney Williams      Points       line 12.0 | under → actual 9.0
   [XX] Courtney Williams      Rebounds     line 5.8 | under → actual 6.0 | committed UNDER on Rebounds line 5.8, actual 6.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 130 ===
+  [pass] Courtney Williams      Assists      line 5.2 (conf 2)
+  [OK] Courtney Williams      Pts+Reb+Ast  line 22.0 | under → actual 19.0
+  [pass] Alanna Smith           Points       line 12.4 (conf 2)
+  [pass] Alanna Smith           Rebounds     line 5.0 (conf 1)
+  [pass] Alanna Smith           Assists      line 2.9 (conf 1)
+  [OK] Alanna Smith           Pts+Reb+Ast  line 19.2 | under → actual 19.0

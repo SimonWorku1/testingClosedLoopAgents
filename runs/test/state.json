@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 774,
+  "next_question_idx": 780,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -742,12 +742,38 @@
       "last_3_avg": 4.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1627675_PRA_20240605",
+      "player_name": "Courtney Williams",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 22.0,
+      "actual": 19.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last-3 avg (21.3) and last-5 avg (20.0) both trending below the 22.0 line with low volatility (cv 0.23), consistent under signal with overs_last3 at 1/3.",
+      "committed": true,
+      "last_3_avg": 21.3,
+      "correct_pick": "under",
+      "correct": true
+    },
+    {
+      "question_id": "1629501_PRA_20240605",
+      "player_name": "Alanna Smith",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 19.2,
+      "actual": 19.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last-3 avg (13.7) is 5.5 below the 19.2 line and last-5 avg (16.8) also confirms the downtrend, with moderate volatility (cv 0.35) and 0/3 overs in last 3 \u2014 strong under signal.",
+      "committed": true,
+      "last_3_avg": 13.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     false,
-    true,
-    false,
     false,
     true,
     true,
@@ -764,7 +790,9 @@
     true,
     true,
     true,
-    false
+    false,
+    true,
+    true
   ],
-  "passes": 721
+  "passes": 725
 }
