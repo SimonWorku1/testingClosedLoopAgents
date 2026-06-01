@@ -390,3 +390,11 @@
   [pass] Angel Reese            Pts+Reb+Ast  line 22.9 (conf 2)
   [pass] NaLyssa Smith          Points       line 9.8 (conf 2)
   [pass] NaLyssa Smith          Rebounds     line 6.9 (conf 2)
+
+=== Batch 50 ===
+  [pass] NaLyssa Smith          Assists      line 0.2 (conf 2)
+  [pass] NaLyssa Smith          Pts+Reb+Ast  line 16.9 (conf 2)
+  [pass] Chennedy Carter        Points       line 10.7 (conf 2)
+  [pass] Chennedy Carter        Rebounds     line 2.3 (conf 1)
+  [pass] Chennedy Carter        Assists      line 2.1 (conf 1)
+  [pass] Chennedy Carter        Pts+Reb+Ast  line 14.1 (conf 2)
