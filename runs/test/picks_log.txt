@@ -70,3 +70,11 @@
   [pass] Jonquel Jones          Pts+Reb+Ast  line 25.7 (conf 2)
   [pass] Ezi Magbegor           Points       line 13.5 (conf 2)
   [pass] Ezi Magbegor           Rebounds     line 9.1 (conf 2)
+
+=== Batch 10 ===
+  [pass] Ezi Magbegor           Assists      line 1.3 (conf 2)
+  [pass] Ezi Magbegor           Pts+Reb+Ast  line 23.9 (conf 2)
+  [pass] Stefanie Dolson        Points       line 7.7 (conf 2)
+  [pass] Stefanie Dolson        Rebounds     line 4.9 (conf 2)
+  [pass] Stefanie Dolson        Assists      line 1.3 (conf 1)
+  [OK] Stefanie Dolson        Pts+Reb+Ast  line 14.9 | under → actual 10.0
