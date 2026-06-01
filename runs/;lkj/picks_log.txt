@@ -174,3 +174,11 @@
   [OK] Jackie Young           Assists      line 7.5 | under → actual 4.0
   [pass] Ariel Atkins           Assists      line 2.5 (conf 2)
   [pass] Alyssa Thomas          Assists      line 7.5 (conf 2)
+
+=== Batch 23 ===
+  [pass] DeWanna Bonner         Assists      line 2.5 (conf 2)
+  [pass] Marina Mabrey          Assists      line 3.7 (conf 2)
+  [pass] Arike Ogunbowale       Assists      line 5.0 (conf 2)
+  [OK] Caitlin Clark          Assists      line 6.6 | under → actual 6.0
+  [pass] Allisha Gray           Assists      line 1.5 (conf 1)
+  [pass] A'ja Wilson            Assists      line 2.1 (conf 2)

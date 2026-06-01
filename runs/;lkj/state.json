@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 132,
+  "next_question_idx": 138,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -224,6 +224,20 @@
       "last_3_avg": 5.0,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1642286_AST_20240613",
+      "player_name": "Caitlin Clark",
+      "stat_name": "Assists",
+      "line": 6.6,
+      "actual": 6.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Clark has gone under in all 3 recent games (0/3), last-3 avg is 2.3 below the line, last-5 avg also below the line, and moderate volatility (cv 0.31) supports this clear downward trend \u2014 similar setup to my previous winning Clark UNDER.",
+      "committed": true,
+      "last_3_avg": 4.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -242,7 +256,8 @@
     false,
     true,
     true,
+    true,
     true
   ],
-  "passes": 116
+  "passes": 121
 }
