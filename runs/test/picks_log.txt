@@ -830,3 +830,11 @@
   [pass] DeWanna Bonner         Rebounds     line 4.9 (conf 2)
   [pass] DeWanna Bonner         Assists      line 1.4 (conf 2)
   [XX] DeWanna Bonner         Pts+Reb+Ast  line 26.8 | under → actual 31.0 | committed UNDER on Pts+Reb+Ast line 26.8, actual 31.0 → OVER was right; last-3 (24.0) was 2.2 below rolling avg — form signal misfired
+
+=== Batch 105 ===
+  [pass] Natasha Cloud          Points       line 11.8 (conf 2)
+  [pass] Natasha Cloud          Rebounds     line 4.1 (conf 2)
+  [pass] Natasha Cloud          Assists      line 7.2 (conf 2)
+  [pass] Natasha Cloud          Pts+Reb+Ast  line 24.1 (conf 2)
+  [pass] Skylar Diggins         Points       line 14.9 (conf 2)
+  [pass] Skylar Diggins         Rebounds     line 1.6 (conf 1)
