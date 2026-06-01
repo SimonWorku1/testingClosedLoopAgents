@@ -302,3 +302,11 @@
   [pass] Julie Vanloo           Rebounds     line 2.5 (conf 1)
   [pass] Julie Vanloo           Assists      line 5.0 (conf 2)
   [pass] Julie Vanloo           Pts+Reb+Ast  line 18.8 (conf 2)
+
+=== Batch 39 ===
+  [pass] Shatori Walker-Kimbrough Points       line 7.0 (conf 2)
+  [pass] Shatori Walker-Kimbrough Rebounds     line 1.5 (conf 1)
+  [pass] Shatori Walker-Kimbrough Assists      line 1.2 (conf 1)
+  [pass] Shatori Walker-Kimbrough Pts+Reb+Ast  line 7.7 (conf 2)
+  [pass] Betnijah Laney-Hamilton Points       line 12.3 (conf 2)
+  [XX] Betnijah Laney-Hamilton Rebounds     line 3.5 | under → actual 4.0 | committed UNDER on Rebounds line 3.5, actual 4.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
