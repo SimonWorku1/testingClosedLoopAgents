@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 246,
+  "next_question_idx": 252,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -238,6 +238,20 @@
       "last_3_avg": 3.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1642286_PRA_20240530",
+      "player_name": "Caitlin Clark",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 28.4,
+      "actual": 32.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.27) with last-3 and last-5 both at 30.0, meaningfully above the 28.4 line, and 2/3 overs in last 3 confirms sustained form \u2014 strong signal to commit over.",
+      "committed": true,
+      "last_3_avg": 30.0,
+      "correct_pick": "over",
+      "correct": true
     }
   ],
   "window": [
@@ -257,7 +271,8 @@
     true,
     true,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 229
+  "passes": 234
 }

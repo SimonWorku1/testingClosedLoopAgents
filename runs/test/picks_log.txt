@@ -326,3 +326,11 @@
   [pass] Aaliyah Edwards        Pts+Reb+Ast  line 12.2 (conf 2)
   [pass] Karlie Samuelson       Points       line 11.5 (conf 2)
   [pass] Karlie Samuelson       Rebounds     line 2.0 (conf 2)
+
+=== Batch 42 ===
+  [pass] Karlie Samuelson       Assists      line 2.5 (conf 2)
+  [pass] Karlie Samuelson       Pts+Reb+Ast  line 15.0 (conf 2)
+  [pass] Caitlin Clark          Points       line 16.8 (conf 2)
+  [pass] Caitlin Clark          Rebounds     line 5.9 (conf 2)
+  [pass] Caitlin Clark          Assists      line 6.8 (conf 3)
+  [OK] Caitlin Clark          Pts+Reb+Ast  line 28.4 | over  → actual 32.0
