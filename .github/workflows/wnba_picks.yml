@@ -102,12 +102,12 @@ jobs:
         id: optimizer
         working-directory: agent
         env:
+          # Provider-agnostic: OpenAI wins if both keys are set.
+          # Override with LLM_PROVIDER / LLM_MODEL repo variables.
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}
           LLM_MODEL: ${{ vars.LLM_MODEL }}
-          STATS: ${{ github.event.inputs.stats }}
-          TOP_PLAYERS: ${{ github.event.inputs.top_players }}
         run: |
           RUN_DIR="${{ github.workspace }}/state-data/runs/${{ github.event.inputs.run_name }}"
           python main.py "$RUN_DIR" \
@@ -117,6 +117,9 @@ jobs:
             --players "${{ github.event.inputs.players }}" \
             ${STATS:+--stats "$STATS"} \
             ${TOP_PLAYERS:+--top-players "$TOP_PLAYERS"}
+        env:
+          STATS: ${{ github.event.inputs.stats }}
+          TOP_PLAYERS: ${{ github.event.inputs.top_players }}
 
       - name: Upload results artifact
         uses: actions/upload-artifact@v4
