@@ -478,3 +478,11 @@
   [pass] Allisha Gray           Assists      line 2.6 (conf 1)
   [pass] A'ja Wilson            Assists      line 3.0 (conf 2)
   [pass] Kelsey Plum            Assists      line 5.4 (conf 2)
+
+=== Batch 61 ===
+  [pass] Alyssa Thomas          Assists      line 8.2 (conf 2)
+  [pass] Kelsey Mitchell        Assists      line 0.9 (conf 2)
+  [pass] DeWanna Bonner         Assists      line 1.1 (conf 2)
+  [pass] Natasha Cloud          Assists      line 6.3 (conf 2)
+  [pass] Skylar Diggins         Assists      line 8.3 (conf 2)
+  [OK] Jewell Loyd            Assists      line 3.5 | over  → actual 7.0

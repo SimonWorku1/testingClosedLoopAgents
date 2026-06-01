@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 360,
+  "next_question_idx": 366,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -616,10 +616,23 @@
       "last_3_avg": 4.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "204319_AST_20240714",
+      "player_name": "Jewell Loyd",
+      "stat_name": "Assists",
+      "line": 3.5,
+      "actual": 7.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Jewell Loyd's last-3, last-5, and rolling avg all sit at exactly 4.0 vs a 3.5 line with low volatility (cv 0.26), mirroring my recent winning pick on her assists.",
+      "committed": true,
+      "last_3_avg": 4.0,
+      "correct_pick": "over",
+      "correct": true
     }
   ],
   "window": [
-    false,
     true,
     true,
     false,
@@ -637,8 +650,9 @@
     true,
     true,
     false,
+    true,
     true,
     true
   ],
-  "passes": 316
+  "passes": 321
 }
