@@ -550,3 +550,11 @@
   [OK] Stefanie Dolson        Pts+Reb+Ast  line 14.1 | under → actual 6.0
   [pass] Teaira McCowan         Points       line 14.1 (conf 2)
   [pass] Teaira McCowan         Rebounds     line 9.3 (conf 2)
+
+=== Batch 70 ===
+  [pass] Teaira McCowan         Assists      line 0.9 (conf 2)
+  [pass] Teaira McCowan         Pts+Reb+Ast  line 23.3 (conf 2)
+  [pass] Alysha Clark           Points       line 8.9 (conf 2)
+  [pass] Alysha Clark           Rebounds     line 5.9 (conf 2)
+  [pass] Alysha Clark           Assists      line 2.5 (conf 1)
+  [pass] Alysha Clark           Pts+Reb+Ast  line 15.3 (conf 2)
