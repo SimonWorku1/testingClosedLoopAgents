@@ -126,3 +126,11 @@
   [pass] Jewell Loyd            Assists      line 3.4 (conf 2)
   [pass] Kayla McBride          Assists      line 3.3 (conf 2)
   [pass] Aliyah Boston          Assists      line 2.9 (conf 2)
+
+=== Batch 17 ===
+  [pass] Jackie Young           Assists      line 7.1 (conf 2)
+  [pass] Kahleah Copper         Assists      line 1.5 (conf 2)
+  [pass] Ariel Atkins           Assists      line 2.5 (conf 2)
+  [pass] Allisha Gray           Assists      line 2.4 (conf 1)
+  [pass] Alyssa Thomas          Assists      line 9.3 (conf 2)
+  [pass] DeWanna Bonner         Assists      line 1.5 (conf 2)
