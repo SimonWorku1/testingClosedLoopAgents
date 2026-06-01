@@ -246,3 +246,11 @@
   [pass] Sabrina Ionescu        Pts+Reb+Ast  line 25.0 (conf 2)
   [pass] Kahleah Copper         Points       line 26.0 (conf 2)
   [pass] Kahleah Copper         Rebounds     line 3.7 (conf 2)
+
+=== Batch 32 ===
+  [pass] Kahleah Copper         Assists      line 3.2 (conf 2)
+  [pass] Kahleah Copper         Pts+Reb+Ast  line 31.8 (conf 2)
+  [pass] Ariel Atkins           Points       line 12.8 (conf 2)
+  [pass] Ariel Atkins           Rebounds     line 3.7 (conf 2)
+  [pass] Ariel Atkins           Assists      line 4.0 (conf 2)
+  [pass] Ariel Atkins           Pts+Reb+Ast  line 18.5 (conf 3)
