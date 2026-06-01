@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 450,
+  "next_question_idx": 456,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -364,12 +364,38 @@
       "last_3_avg": 3.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1642286_AST_20240601",
+      "player_name": "Caitlin Clark",
+      "stat_name": "Assists",
+      "line": 6.1,
+      "actual": 6.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.28), last-3 avg of 7.3 and last-5 avg of 7.4 are both well above the 6.1 line, indicating a sustained upward trend rather than noise.",
+      "committed": true,
+      "last_3_avg": 7.3,
+      "correct_pick": "under",
+      "correct": false
+    },
+    {
+      "question_id": "1642286_PRA_20240601",
+      "player_name": "Caitlin Clark",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 29.7,
+      "actual": 25.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "PRA reduces variance, cv is right at the low-volatility threshold (0.25), and both last-3 (31.0) and last-5 (31.4) consistently exceed the 29.7 line, suggesting a genuine trend over in a combined stat.",
+      "committed": true,
+      "last_3_avg": 31.0,
+      "correct_pick": "under",
+      "correct": false
     }
   ],
   "window": [
     false,
-    true,
-    false,
     false,
     true,
     false,
@@ -386,7 +412,9 @@
     true,
     true,
     true,
-    true
+    true,
+    false,
+    false
   ],
-  "passes": 424
+  "passes": 428
 }
