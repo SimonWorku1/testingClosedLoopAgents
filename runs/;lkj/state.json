@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 72,
+  "next_question_idx": 78,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -112,6 +112,20 @@
       "last_3_avg": 7.3,
       "correct_pick": "under",
       "correct": false
+    },
+    {
+      "question_id": "1628276_AST_20240605",
+      "player_name": "Kelsey Plum",
+      "stat_name": "Assists",
+      "line": 5.2,
+      "actual": 3.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Extremely low volatility (cv 0.14) combined with 3/3 overs and last_3_avg well above line is a textbook mean reversion setup.",
+      "committed": true,
+      "last_3_avg": 6.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -122,7 +136,8 @@
     false,
     false,
     true,
-    false
+    false,
+    true
   ],
-  "passes": 64
+  "passes": 69
 }
