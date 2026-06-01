@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 654,
+  "next_question_idx": 660,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -602,12 +602,25 @@
       "last_3_avg": 31.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1627673_PRA_20240604",
+      "player_name": "Jonquel Jones",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 25.7,
+      "actual": 21.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "3/3 overs last 3 with last-3 avg +5.0 above line and last-5 avg 23.6 well below the line suggests an unsustainable hot streak; low-moderate cv 0.31 makes reversion a reliable signal here.",
+      "committed": true,
+      "last_3_avg": 30.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
     true,
-    true,
     false,
     false,
     true,
@@ -624,7 +637,8 @@
     false,
     false,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 611
+  "passes": 616
 }

@@ -870,3 +870,11 @@
   [pass] Kahleah Copper         Pts+Reb+Ast  line 29.7 (conf 2)
   [pass] Ariel Atkins           Points       line 14.2 (conf 1)
   [pass] Ariel Atkins           Rebounds     line 3.8 (conf 2)
+
+=== Batch 110 ===
+  [pass] Ariel Atkins           Assists      line 2.9 (conf 2)
+  [pass] Ariel Atkins           Pts+Reb+Ast  line 21.9 (conf 2)
+  [pass] Jonquel Jones          Points       line 14.5 (conf 3)
+  [pass] Jonquel Jones          Rebounds     line 8.2 (conf 2)
+  [pass] Jonquel Jones          Assists      line 2.1 (conf 1)
+  [OK] Jonquel Jones          Pts+Reb+Ast  line 25.7 | under → actual 21.0
