@@ -1038,3 +1038,11 @@
   [pass] Alanna Smith           Rebounds     line 5.0 (conf 1)
   [pass] Alanna Smith           Assists      line 2.9 (conf 1)
   [OK] Alanna Smith           Pts+Reb+Ast  line 19.2 | under → actual 19.0
+
+=== Batch 131 ===
+  [pass] Teaira McCowan         Points       line 11.8 (conf 2)
+  [pass] Teaira McCowan         Rebounds     line 8.6 (conf 2)
+  [pass] Teaira McCowan         Assists      line 1.2 (conf 1)
+  [pass] Teaira McCowan         Pts+Reb+Ast  line 22.6 (conf 2)
+  [pass] Alysha Clark           Points       line 8.7 (conf 2)
+  [OK] Alysha Clark           Rebounds     line 5.3 | under → actual 1.0

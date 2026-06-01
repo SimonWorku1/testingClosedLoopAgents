@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 780,
+  "next_question_idx": 786,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -770,11 +770,24 @@
       "last_3_avg": 13.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "202252_REB_20240605",
+      "player_name": "Alysha Clark",
+      "stat_name": "Rebounds",
+      "line": 5.3,
+      "actual": 1.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "overs_last3 = 3/3 with last-3 avg of 6.7 well above the 5.3 line, low volatility (cv 0.27) makes the line a reliable anchor, and mean reversion signal is strong with consistent hot streak due to cool.",
+      "committed": true,
+      "last_3_avg": 6.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     false,
-    false,
     true,
     true,
     false,
@@ -791,8 +804,9 @@
     true,
     true,
     false,
+    true,
     true,
     true
   ],
-  "passes": 725
+  "passes": 730
 }
