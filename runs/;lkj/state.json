@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 108,
+  "next_question_idx": 114,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -168,6 +168,20 @@
       "last_3_avg": 6.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "203825_AST_20240609",
+      "player_name": "Kayla McBride",
+      "stat_name": "Assists",
+      "line": 4.2,
+      "actual": 1.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "McBride has gone under all 3 recent games with last-3 avg of 3.3 well below the 4.2 line, low volatility (cv 0.31) makes this a clean mean-reversion OVER signal.",
+      "committed": true,
+      "last_3_avg": 3.3,
+      "correct_pick": "under",
+      "correct": false
     }
   ],
   "window": [
@@ -182,7 +196,8 @@
     true,
     false,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 96
+  "passes": 101
 }

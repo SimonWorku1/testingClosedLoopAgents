@@ -142,3 +142,11 @@
   [pass] Arike Ogunbowale       Assists      line 4.5 (conf 2)
   [pass] Dearica Hamby          Assists      line 3.0 (conf 2)
   [pass] A'ja Wilson            Assists      line 2.8 (conf 1)
+
+=== Batch 19 ===
+  [pass] Kelsey Plum            Assists      line 5.4 (conf 3)
+  [pass] Natasha Cloud          Assists      line 7.2 (conf 2)
+  [pass] Skylar Diggins         Assists      line 5.5 (conf 2)
+  [pass] Jewell Loyd            Assists      line 3.2 (conf 2)
+  [pass] Breanna Stewart        Assists      line 4.3 (conf 2)
+  [XX] Kayla McBride          Assists      line 4.2 | over  → actual 1.0 | committed OVER on Assists line 4.2, actual 1.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
