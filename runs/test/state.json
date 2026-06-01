@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 252,
+  "next_question_idx": 258,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -252,6 +252,20 @@
       "last_3_avg": 30.0,
       "correct_pick": "over",
       "correct": true
+    },
+    {
+      "question_id": "204324_AST_20240530",
+      "player_name": "Dearica Hamby",
+      "stat_name": "Assists",
+      "line": 3.5,
+      "actual": 3.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Overs_last3 = 3/3 with last-3 avg of 5.3 well above the 3.5 line (+1.8), and cv = 0.5 is high volatility \u2014 but the mean reversion signal here is strong (all 3 recent games over, well above line), making a regression to under likely; however, the high volatility tempers confidence.",
+      "committed": true,
+      "last_3_avg": 5.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -272,7 +286,8 @@
     true,
     false,
     false,
+    true,
     true
   ],
-  "passes": 234
+  "passes": 239
 }

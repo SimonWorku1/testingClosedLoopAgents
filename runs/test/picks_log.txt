@@ -334,3 +334,11 @@
   [pass] Caitlin Clark          Rebounds     line 5.9 (conf 2)
   [pass] Caitlin Clark          Assists      line 6.8 (conf 3)
   [OK] Caitlin Clark          Pts+Reb+Ast  line 28.4 | over  → actual 32.0
+
+=== Batch 43 ===
+  [pass] Dearica Hamby          Points       line 20.5 (conf 2)
+  [pass] Dearica Hamby          Rebounds     line 12.2 (conf 2)
+  [OK] Dearica Hamby          Assists      line 3.5 | under → actual 3.0
+  [pass] Dearica Hamby          Pts+Reb+Ast  line 37.2 (conf 2)
+  [pass] Kelsey Mitchell        Points       line 14.6 (conf 2)
+  [pass] Kelsey Mitchell        Rebounds     line 1.9 (conf 1)
