@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 354,
+  "next_question_idx": 360,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -602,11 +602,24 @@
       "last_3_avg": 4.0,
       "correct_pick": "over",
       "correct": true
+    },
+    {
+      "question_id": "1629477_AST_20240713",
+      "player_name": "Sabrina Ionescu",
+      "stat_name": "Assists",
+      "line": 6.6,
+      "actual": 6.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Ionescu is 0/3 in last 3 with last-3 avg 4.3 vs line 6.6 (-2.3), nearly identical setup to a recent committed WIN on this exact player/stat.",
+      "committed": true,
+      "last_3_avg": 4.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     false,
-    false,
     true,
     true,
     false,
@@ -624,7 +637,8 @@
     true,
     true,
     false,
+    true,
     true
   ],
-  "passes": 311
+  "passes": 316
 }

@@ -470,3 +470,11 @@
   [pass] Kahleah Copper         Assists      line 3.4 (conf 1)
   [pass] Arike Ogunbowale       Assists      line 5.4 (conf 1)
   [pass] Dearica Hamby          Assists      line 2.7 (conf 2)
+
+=== Batch 60 ===
+  [pass] Marina Mabrey          Assists      line 5.3 (conf 2)
+  [OK] Sabrina Ionescu        Assists      line 6.6 | under → actual 6.0
+  [pass] Caitlin Clark          Assists      line 10.9 (conf 2)
+  [pass] Allisha Gray           Assists      line 2.6 (conf 1)
+  [pass] A'ja Wilson            Assists      line 3.0 (conf 2)
+  [pass] Kelsey Plum            Assists      line 5.4 (conf 2)
