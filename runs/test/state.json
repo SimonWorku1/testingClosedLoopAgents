@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 876,
+  "next_question_idx": 882,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -882,11 +882,24 @@
       "last_3_avg": 2.3,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1628317_REB_20240606",
+      "player_name": "Karlie Samuelson",
+      "stat_name": "Rebounds",
+      "line": 3.1,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv=0.35), rolling avg and season avg both below the line at 2.6 vs 3.1, last-3 and last-5 both below the line (0/3 overs), consistent signal pointing under.",
+      "committed": true,
+      "last_3_avg": 2.7,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     true,
-    true,
     false,
     true,
     true,
@@ -901,10 +914,11 @@
     true,
     true,
     true,
+    false,
     false,
     false,
     false,
     false
   ],
-  "passes": 813
+  "passes": 818
 }
