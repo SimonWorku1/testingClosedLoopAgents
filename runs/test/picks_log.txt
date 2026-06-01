@@ -926,3 +926,11 @@
   [pass] Lindsay Allen          Rebounds     line 0.7 (conf 2)
   [pass] Lindsay Allen          Assists      line 2.7 (conf 2)
   [pass] Lindsay Allen          Pts+Reb+Ast  line 7.7 (conf 2)
+
+=== Batch 117 ===
+  [pass] Julie Vanloo           Points       line 8.2 (conf 2)
+  [pass] Julie Vanloo           Rebounds     line 1.9 (conf 2)
+  [pass] Julie Vanloo           Assists      line 5.1 (conf 2)
+  [pass] Julie Vanloo           Pts+Reb+Ast  line 16.2 (conf 3)
+  [pass] Shatori Walker-Kimbrough Points       line 5.1 (conf 2)
+  [pass] Shatori Walker-Kimbrough Rebounds     line 0.4 (conf 1)
