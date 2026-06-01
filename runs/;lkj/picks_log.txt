@@ -406,3 +406,11 @@
   [OK] Sabrina Ionescu        Assists      line 8.1 | under → actual 4.0
   [pass] Ariel Atkins           Assists      line 3.6 (conf 1)
   [pass] Arike Ogunbowale       Assists      line 3.7 (conf 2)
+
+=== Batch 52 ===
+  [pass] Dearica Hamby          Assists      line 4.4 (conf 2)
+  [pass] Allisha Gray           Assists      line 3.7 (conf 1)
+  [pass] A'ja Wilson            Assists      line 2.3 (conf 2)
+  [pass] Kelsey Plum            Assists      line 5.2 (conf 2)
+  [pass] Alyssa Thomas          Assists      line 6.6 (conf 2)
+  [pass] DeWanna Bonner         Assists      line 2.0 (conf 2)
