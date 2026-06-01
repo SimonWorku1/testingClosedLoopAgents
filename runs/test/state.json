@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 822,
+  "next_question_idx": 828,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -812,10 +812,23 @@
       "last_3_avg": 11.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "202250_PTS_20240606",
+      "player_name": "Tina Charles",
+      "stat_name": "Points",
+      "line": 13.2,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Tina Charles's last-3 avg (12.0) and last-5 avg (12.4) are both below the line of 13.2, overs_last3=1/3 confirms cold form, and volatility is manageable (cv 0.42) \u2014 consistent downward pressure on this line.",
+      "committed": true,
+      "last_3_avg": 12.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    true,
     false,
     false,
     false,
@@ -830,11 +843,12 @@
     true,
     true,
     false,
+    true,
     true,
     true,
     true,
     true,
     true
   ],
-  "passes": 764
+  "passes": 769
 }

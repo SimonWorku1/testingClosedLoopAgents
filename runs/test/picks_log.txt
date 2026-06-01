@@ -1094,3 +1094,11 @@
   [pass] Ariel Atkins           Pts+Reb+Ast  line 21.1 (conf 2)
   [pass] Jonquel Jones          Points       line 13.5 (conf 2)
   [OK] Jonquel Jones          Rebounds     line 9.5 | under → actual 8.0
+
+=== Batch 138 ===
+  [pass] Jonquel Jones          Assists      line 2.2 (conf 2)
+  [pass] Jonquel Jones          Pts+Reb+Ast  line 25.2 (conf 2)
+  [OK] Tina Charles           Points       line 13.2 | under → actual 5.0
+  [pass] Tina Charles           Rebounds     line 9.1 (conf 2)
+  [pass] Tina Charles           Assists      line 2.6 (conf 1)
+  [pass] Tina Charles           Pts+Reb+Ast  line 23.9 (conf 2)
