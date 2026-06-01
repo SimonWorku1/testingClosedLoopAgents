@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 570,
+  "next_question_idx": 576,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -556,5 +556,5 @@
     false,
     true
   ],
-  "passes": 532
+  "passes": 538
 }
