@@ -1,0 +1,23 @@
+{
+  "next_question_idx": 6,
+  "committed_history": [
+    {
+      "question_id": "1628909_PTS_20240524",
+      "player_name": "Kelsey Mitchell",
+      "stat_name": "Points",
+      "line": 12.3,
+      "actual": 18.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Strong mean reversion signal: overs_last3=3/3 with last_3_avg of 17.0 well above the 12.3 line, but high volatility (cv 0.46) tempers this slightly \u2014 reversion still justified given the magnitude of divergence.",
+      "committed": true,
+      "last_3_avg": 17.0,
+      "correct_pick": "over",
+      "correct": false
+    }
+  ],
+  "window": [
+    false
+  ],
+  "passes": 5
+}
