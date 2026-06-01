@@ -726,3 +726,11 @@
   [pass] Jonquel Jones          Pts+Reb+Ast  line 25.6 (conf 2)
   [pass] Tina Charles           Points       line 13.3 (conf 2)
   [pass] Tina Charles           Rebounds     line 8.7 (conf 2)
+
+=== Batch 92 ===
+  [pass] Tina Charles           Assists      line 1.8 (conf 2)
+  [pass] Tina Charles           Pts+Reb+Ast  line 23.8 (conf 2)
+  [pass] DiJonai Carrington     Points       line 12.1 (conf 2)
+  [pass] DiJonai Carrington     Rebounds     line 4.8 (conf 2)
+  [pass] DiJonai Carrington     Assists      line 2.1 (conf 1)
+  [XX] DiJonai Carrington     Pts+Reb+Ast  line 18.9 | under → actual 22.0 | committed UNDER on Pts+Reb+Ast line 18.9, actual 22.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed

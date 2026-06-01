@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 546,
+  "next_question_idx": 552,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -504,10 +504,23 @@
       "last_3_avg": 10.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1630096_PRA_20240602",
+      "player_name": "DiJonai Carrington",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 18.9,
+      "actual": 22.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last-3 avg (17.7) and last-5 avg (17.2) are both consistently below the line (18.9), showing a clear downward trend with moderate volatility (cv 0.31) and the combined stat reduces noise \u2014 both recent averages agree on under.",
+      "committed": true,
+      "last_3_avg": 17.7,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    false,
     true,
     true,
     false,
@@ -526,7 +539,8 @@
     true,
     false,
     true,
+    false,
     false
   ],
-  "passes": 510
+  "passes": 515
 }
