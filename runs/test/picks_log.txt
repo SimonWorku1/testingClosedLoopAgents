@@ -422,3 +422,11 @@
   [pass] Allisha Gray           Pts+Reb+Ast  line 21.7 (conf 2)
   [pass] A'ja Wilson            Points       line 26.7 (conf 3)
   [pass] A'ja Wilson            Rebounds     line 13.7 (conf 3)
+
+=== Batch 54 ===
+  [pass] A'ja Wilson            Assists      line 2.1 (conf 2)
+  [pass] A'ja Wilson            Pts+Reb+Ast  line 41.5 (conf 3)
+  [pass] Kelsey Plum            Points       line 18.1 (conf 2)
+  [pass] Kelsey Plum            Rebounds     line 1.1 (conf 1)
+  [pass] Kelsey Plum            Assists      line 5.1 (conf 3)
+  [pass] Kelsey Plum            Pts+Reb+Ast  line 26.3 (conf 2)
