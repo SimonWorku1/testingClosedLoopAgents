@@ -270,3 +270,11 @@
   [pass] Jonquel Jones          Rebounds     line 7.5 (conf 2)
   [pass] Jonquel Jones          Assists      line 3.0 (conf 1)
   [pass] Jonquel Jones          Pts+Reb+Ast  line 24.5 (conf 2)
+
+=== Batch 35 ===
+  [pass] Sophie Cunningham      Points       line 8.7 (conf 2)
+  [pass] Sophie Cunningham      Rebounds     line 5.8 (conf 1)
+  [pass] Sophie Cunningham      Assists      line 2.0 (conf 1)
+  [OK] Sophie Cunningham      Pts+Reb+Ast  line 16.5 | under → actual 16.0
+  [pass] Courtney Williams      Points       line 12.3 (conf 2)
+  [pass] Courtney Williams      Rebounds     line 6.1 (conf 2)

@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 204,
+  "next_question_idx": 210,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -196,6 +196,20 @@
       "last_3_avg": 10.3,
       "correct_pick": "over",
       "correct": true
+    },
+    {
+      "question_id": "1629482_PRA_20240529",
+      "player_name": "Sophie Cunningham",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 16.5,
+      "actual": 16.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.17) with rolling avg 0.5 below the line, last-3 avg also slightly below the line, and only 1/3 overs in last 3 games \u2014 consistent signal pointing under with stable stat.",
+      "committed": true,
+      "last_3_avg": 16.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -212,7 +226,8 @@
     true,
     false,
     false,
+    true,
     true
   ],
-  "passes": 190
+  "passes": 195
 }
