@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 318,
+  "next_question_idx": 324,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -532,10 +532,23 @@
       "last_3_avg": 9.0,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1642286_AST_20240710",
+      "player_name": "Caitlin Clark",
+      "stat_name": "Assists",
+      "line": 9.1,
+      "actual": 13.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "overs_last3=3 with last-3 avg of 12.0 vs line of 9.1 (+2.9) and last-5 avg of 11.2 both well above line, but moderate volatility (cv 0.42) and a +3.9 gap above the line signal strong mean reversion back under.",
+      "committed": true,
+      "last_3_avg": 12.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    true,
     false,
     true,
     true,
@@ -554,7 +567,8 @@
     false,
     false,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 280
+  "passes": 285
 }
