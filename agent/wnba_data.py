@@ -18,7 +18,9 @@ from pathlib import Path
 import pandas as pd
 
 LEAGUE_ID = "10"          # WNBA in nba_api
-SEASONS = ["2024", "2023"]  # tried in order; 2025 starts mid-May each year
+# All five seasons used for reliability analysis; the picks loop uses only the
+# most-recent cached season so the training set stays temporally coherent.
+SEASONS = ["2024", "2023", "2022", "2021", "2020"]
 TOP_N_PLAYERS = 60        # most-active players by total minutes
 ROLLING_WINDOW = 10       # games averaged for the line
 MIN_PRIOR_GAMES = 5       # minimum prior games before generating a line
@@ -97,6 +99,45 @@ def fetch_gamelogs(cache_dir: Path) -> pd.DataFrame:
         "Could not fetch WNBA game logs for any season. "
         "Check network access or place wnba_gamelogs_YYYY.json in the data cache dir."
     )
+
+
+def fetch_all_seasons(cache_dir: Path) -> pd.DataFrame:
+    """
+    Fetch and concatenate all SEASONS into one DataFrame for multi-year analysis
+    (reliability scoring, player discovery). Each season is cached individually.
+    Seasons that fail to fetch are skipped with a warning.
+    """
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    frames = []
+    for season in SEASONS:
+        cache_file = cache_dir / f"wnba_gamelogs_{season}.json"
+        if cache_file.exists():
+            print(f"  [data] Loading cached {season} logs")
+            df = pd.read_json(cache_file, orient="records")
+            df["GAME_DATE"] = pd.to_datetime(df["GAME_DATE"])
+            frames.append(df)
+            continue
+        print(f"  [data] Fetching WNBA {season} game logs from stats.nba.com...")
+        try:
+            df = _fetch_season(season)
+        except Exception as exc:
+            print(f"  [data] {season} fetch failed: {exc} — skipping")
+            continue
+        print(f"  [data] {len(df)} records, {df['PLAYER_NAME'].nunique()} players")
+        df.to_json(cache_file, orient="records", date_format="iso")
+        frames.append(df)
+
+    if not frames:
+        raise RuntimeError(
+            "Could not fetch WNBA game logs for any season. "
+            "Check network access or place wnba_gamelogs_YYYY.json in the cache dir."
+        )
+    combined = pd.concat(frames, ignore_index=True).sort_values(
+        ["PLAYER_ID", "GAME_DATE"]
+    ).reset_index(drop=True)
+    print(f"  [data] Multi-season dataset: {len(combined)} records across "
+          f"{combined['PLAYER_NAME'].nunique()} players")
+    return combined
 
 
 # ---------------------------------------------------------------------------
