@@ -1150,3 +1150,11 @@
   [XX] Betnijah Laney-Hamilton Rebounds     line 3.4 | under → actual 5.0 | committed UNDER on Rebounds line 3.4, actual 5.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
   [pass] Betnijah Laney-Hamilton Assists      line 3.4 (conf 2)
   [pass] Betnijah Laney-Hamilton Pts+Reb+Ast  line 19.1 (conf 2)
+
+=== Batch 145 ===
+  [pass] Leonie Fiebich         Points       line 5.3 (conf 2)
+  [pass] Leonie Fiebich         Rebounds     line 2.0 (conf 2)
+  [pass] Leonie Fiebich         Assists      line 0.0 (conf 1)
+  [pass] Leonie Fiebich         Pts+Reb+Ast  line 7.3 (conf 2)
+  [pass] Kayla Thornton         Points       line 5.8 (conf 1)
+  [pass] Kayla Thornton         Rebounds     line 0.9 (conf 1)
