@@ -918,3 +918,11 @@
   [pass] Diana Taurasi          Pts+Reb+Ast  line 23.7 (conf 2)
   [pass] Stefanie Dolson        Points       line 8.1 (conf 2)
   [pass] Stefanie Dolson        Rebounds     line 3.9 (conf 2)
+
+=== Batch 116 ===
+  [pass] Stefanie Dolson        Assists      line 1.1 (conf 2)
+  [pass] Stefanie Dolson        Pts+Reb+Ast  line 13.1 (conf 3)
+  [pass] Lindsay Allen          Points       line 5.3 (conf 2)
+  [pass] Lindsay Allen          Rebounds     line 0.7 (conf 2)
+  [pass] Lindsay Allen          Assists      line 2.7 (conf 2)
+  [pass] Lindsay Allen          Pts+Reb+Ast  line 7.7 (conf 2)
