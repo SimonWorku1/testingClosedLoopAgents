@@ -110,3 +110,11 @@
   [pass] Myisha Hines-Allen     Rebounds     line 3.5 (conf 3)
   [pass] Myisha Hines-Allen     Assists      line 2.9 (conf 1)
   [pass] Myisha Hines-Allen     Pts+Reb+Ast  line 10.9 (conf 2)
+
+=== Batch 15 ===
+  [pass] Aaliyah Edwards        Points       line 7.5 (conf 2)
+  [pass] Aaliyah Edwards        Rebounds     line 4.5 (conf 1)
+  [pass] Aaliyah Edwards        Assists      line 0.5 (conf 2)
+  [pass] Aaliyah Edwards        Pts+Reb+Ast  line 11.5 (conf 2)
+  [pass] Karlie Samuelson       Points       line 9.5 (conf 2)
+  [pass] Karlie Samuelson       Rebounds     line 2.9 (conf 2)
