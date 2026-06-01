@@ -158,3 +158,11 @@
   [OK] Caitlin Clark          Assists      line 7.2 | under → actual 2.0
   [pass] Alyssa Thomas          Assists      line 9.1 (conf 2)
   [pass] Kelsey Mitchell        Assists      line 1.9 (conf 2)
+
+=== Batch 21 ===
+  [pass] DeWanna Bonner         Assists      line 2.6 (conf 2)
+  [pass] Aliyah Boston          Assists      line 2.0 (conf 2)
+  [pass] Dearica Hamby          Assists      line 4.2 (conf 2)
+  [pass] Allisha Gray           Assists      line 1.2 (conf 2)
+  [pass] A'ja Wilson            Assists      line 2.1 (conf 2)
+  [OK] Kelsey Plum            Assists      line 5.4 | under → actual 4.0
