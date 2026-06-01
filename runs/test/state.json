@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 660,
+  "next_question_idx": 666,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -616,11 +616,24 @@
       "last_3_avg": 30.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1630096_PRA_20240604",
+      "player_name": "DiJonai Carrington",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 19.2,
+      "actual": 14.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "PRA is a lower-variance combined stat; last-3 (17.3) and last-5 (17.2) both consistently ~2 below the line with only 1/3 overs recently, cv 0.29 is acceptably low, and the signal is clear and aligned.",
+      "committed": true,
+      "last_3_avg": 17.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
-    true,
     false,
     false,
     true,
@@ -638,7 +651,8 @@
     false,
     false,
     false,
+    true,
     true
   ],
-  "passes": 616
+  "passes": 621
 }
