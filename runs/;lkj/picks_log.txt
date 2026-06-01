@@ -438,3 +438,11 @@
   [pass] DeWanna Bonner         Assists      line 2.1 (conf 2)
   [pass] Natasha Cloud          Assists      line 6.4 (conf 2)
   [OK] Skylar Diggins         Assists      line 6.5 | over  → actual 8.0
+
+=== Batch 56 ===
+  [pass] Jewell Loyd            Assists      line 3.5 (conf 2)
+  [pass] Breanna Stewart        Assists      line 5.0 (conf 2)
+  [pass] Aliyah Boston          Assists      line 3.5 (conf 2)
+  [pass] Marina Mabrey          Assists      line 4.0 (conf 2)
+  [pass] Sabrina Ionescu        Assists      line 8.0 (conf 2)
+  [pass] Jackie Young           Assists      line 4.4 (conf 1)
