@@ -46,3 +46,11 @@
   [pass] Marina Mabrey          Assists      line 5.3 (conf 2)
   [pass] Arike Ogunbowale       Assists      line 3.7 (conf 2)
   [pass] Allisha Gray           Assists      line 1.7 (conf 2)
+
+=== Batch 7 ===
+  [pass] A'ja Wilson            Assists      line 2.1 (conf 2)
+  [pass] Kelsey Plum            Assists      line 5.1 (conf 3)
+  [XX] Alyssa Thomas          Assists      line 7.3 | under → actual 14.0 | committed UNDER on Assists line 7.3, actual 14.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] DeWanna Bonner         Assists      line 1.5 (conf 2)
+  [pass] Natasha Cloud          Assists      line 7.6 (conf 2)
+  [pass] Breanna Stewart        Assists      line 2.5 (conf 2)

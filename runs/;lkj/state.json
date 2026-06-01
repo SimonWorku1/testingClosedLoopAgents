@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 36,
+  "next_question_idx": 42,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -70,6 +70,20 @@
       "last_3_avg": 2.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "203826_AST_20240531",
+      "player_name": "Alyssa Thomas",
+      "stat_name": "Assists",
+      "line": 7.3,
+      "actual": 14.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last-3 avg (6.3) is 1.0 below the line and last-5 avg (6.8) also sits below the line, showing consistent recent underperformance vs. the rolling average anchor with moderate volatility.",
+      "committed": true,
+      "last_3_avg": 6.3,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
@@ -77,7 +91,8 @@
     true,
     true,
     true,
+    false,
     false
   ],
-  "passes": 31
+  "passes": 36
 }
