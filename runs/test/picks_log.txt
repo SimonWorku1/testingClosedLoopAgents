@@ -574,3 +574,11 @@
   [pass] Naz Hillmon            Rebounds     line 2.5 (conf 2)
   [pass] Naz Hillmon            Assists      line 2.7 (conf 2)
   [pass] Naz Hillmon            Pts+Reb+Ast  line 8.5 (conf 2)
+
+=== Batch 73 ===
+  [pass] Betnijah Laney-Hamilton Points       line 12.8 (conf 2)
+  [OK] Betnijah Laney-Hamilton Rebounds     line 3.6 | under → actual 2.0
+  [pass] Betnijah Laney-Hamilton Assists      line 1.9 (conf 2)
+  [pass] Betnijah Laney-Hamilton Pts+Reb+Ast  line 17.4 (conf 2)
+  [pass] Sevgi Uzun             Points       line 6.5 (conf 1)
+  [pass] Sevgi Uzun             Rebounds     line 1.9 (conf 1)
