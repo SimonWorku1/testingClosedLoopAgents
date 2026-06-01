@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 882,
+  "next_question_idx": 888,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -896,10 +896,23 @@
       "last_3_avg": 2.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1629481_AST_20240607",
+      "player_name": "Arike Ogunbowale",
+      "stat_name": "Assists",
+      "line": 4.6,
+      "actual": 4.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Overs_last3=3/3 with last_3_avg of 6.7 well above the 4.6 line (+2.1), moderate volatility (cv 0.38), and mean reversion signal is strong; away game adds slight downward pressure.",
+      "committed": true,
+      "last_3_avg": 6.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    true,
     false,
     true,
     true,
@@ -918,7 +931,8 @@
     false,
     false,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 818
+  "passes": 823
 }

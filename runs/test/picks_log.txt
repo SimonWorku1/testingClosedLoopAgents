@@ -1174,3 +1174,11 @@
   [pass] Aaliyah Edwards        Pts+Reb+Ast  line 13.4 (conf 2)
   [pass] Karlie Samuelson       Points       line 9.2 (conf 2)
   [XX] Karlie Samuelson       Rebounds     line 3.1 | under → actual 5.0 | committed UNDER on Rebounds line 3.1, actual 5.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 148 ===
+  [pass] Karlie Samuelson       Assists      line 1.5 (conf 2)
+  [pass] Karlie Samuelson       Pts+Reb+Ast  line 14.7 (conf 2)
+  [pass] Arike Ogunbowale       Points       line 26.6 (conf 3)
+  [pass] Arike Ogunbowale       Rebounds     line 4.1 (conf 2)
+  [OK] Arike Ogunbowale       Assists      line 4.6 | under → actual 4.0
+  [pass] Arike Ogunbowale       Pts+Reb+Ast  line 36.4 (conf 2)
