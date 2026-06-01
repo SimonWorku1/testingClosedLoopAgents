@@ -302,3 +302,11 @@
   [pass] Kelsey Plum            Assists      line 5.1 (conf 2)
   [pass] Alyssa Thomas          Assists      line 7.1 (conf 3)
   [pass] Kelsey Mitchell        Assists      line 1.6 (conf 1)
+
+=== Batch 39 ===
+  [pass] DeWanna Bonner         Assists      line 1.2 (conf 2)
+  [pass] Skylar Diggins         Assists      line 5.5 (conf 2)
+  [pass] Jewell Loyd            Assists      line 3.9 (conf 2)
+  [pass] Kayla McBride          Assists      line 4.1 (conf 2)
+  [pass] Aliyah Boston          Assists      line 3.8 (conf 2)
+  [pass] Marina Mabrey          Assists      line 4.3 (conf 2)
