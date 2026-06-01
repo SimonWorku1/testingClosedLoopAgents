@@ -6,3 +6,11 @@
   [pass] Caitlin Clark          Assists      line 6.7 (conf 2)
   [pass] Kelsey Mitchell        Assists      line 2.3 (conf 1)
   [OK] Skylar Diggins         Assists      line 5.1 | over  → actual 9.0
+
+=== Batch 2 ===
+  [pass] Jewell Loyd            Assists      line 3.7 (conf 2)
+  [pass] Breanna Stewart        Assists      line 2.3 (conf 2)
+  [pass] Aliyah Boston          Assists      line 1.2 (conf 3)
+  [pass] Sabrina Ionescu        Assists      line 6.5 (conf 2)
+  [pass] Ariel Atkins           Assists      line 4.3 (conf 2)
+  [pass] Caitlin Clark          Assists      line 6.8 (conf 3)
