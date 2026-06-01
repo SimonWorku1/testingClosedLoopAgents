@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 426,
+  "next_question_idx": 432,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -714,6 +714,20 @@
       "last_3_avg": 6.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "203400_AST_20240818",
+      "player_name": "Skylar Diggins",
+      "stat_name": "Assists",
+      "line": 6.5,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Diggins is 0/3 in last 3 games with last_3_avg of 4.7, well below the 6.5 line, moderate volatility (cv=0.37), and this mirrors the setup where I recently won an UNDER on her assists.",
+      "committed": true,
+      "last_3_avg": 4.7,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -721,7 +735,6 @@
     false,
     false,
     false,
-    false,
     true,
     true,
     false,
@@ -734,9 +747,10 @@
     true,
     false,
     false,
+    true,
     true,
     true,
     true
   ],
-  "passes": 375
+  "passes": 380
 }
