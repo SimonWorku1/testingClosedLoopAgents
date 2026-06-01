@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 768,
+  "next_question_idx": 774,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -714,11 +714,37 @@
       "last_3_avg": 1.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1627675_PTS_20240605",
+      "player_name": "Courtney Williams",
+      "stat_name": "Points",
+      "line": 12.0,
+      "actual": 9.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Courtney Williams is 0/3 in last 3 with last-3 avg of 11.0 and last-5 avg of 9.8, both below the 12.0 line, low-moderate volatility (cv 0.32) \u2014 consistent cold signal supports under.",
+      "committed": true,
+      "last_3_avg": 11.0,
+      "correct_pick": "under",
+      "correct": true
+    },
+    {
+      "question_id": "1627675_REB_20240605",
+      "player_name": "Courtney Williams",
+      "stat_name": "Rebounds",
+      "line": 5.8,
+      "actual": 6.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv 0.24), rolling avg 5.2 below line of 5.8, last-3 avg 4.7 and last-5 avg 4.8 both well below line \u2014 clear and consistent under signal.",
+      "committed": true,
+      "last_3_avg": 4.7,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    true,
-    true,
     false,
     true,
     false,
@@ -736,7 +762,9 @@
     true,
     false,
     true,
-    true
+    true,
+    true,
+    false
   ],
-  "passes": 717
+  "passes": 721
 }
