@@ -358,3 +358,11 @@
   [pass] Jewell Loyd            Pts+Reb+Ast  line 29.1 (conf 2)
   [pass] Aliyah Boston          Points       line 11.5 (conf 2)
   [pass] Aliyah Boston          Rebounds     line 5.6 (conf 2)
+
+=== Batch 46 ===
+  [pass] Aliyah Boston          Assists      line 1.5 (conf 2)
+  [pass] Aliyah Boston          Pts+Reb+Ast  line 18.6 (conf 2)
+  [pass] Marina Mabrey          Points       line 16.3 (conf 2)
+  [pass] Marina Mabrey          Rebounds     line 5.9 (conf 2)
+  [pass] Marina Mabrey          Assists      line 5.3 (conf 2)
+  [pass] Marina Mabrey          Pts+Reb+Ast  line 28.5 (conf 2)
