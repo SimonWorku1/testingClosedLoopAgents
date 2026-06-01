@@ -230,3 +230,11 @@
   [pass] Natasha Cloud          Pts+Reb+Ast  line 23.0 (conf 2)
   [pass] Breanna Stewart        Points       line 19.0 (conf 2)
   [pass] Breanna Stewart        Rebounds     line 9.7 (conf 3)
+
+=== Batch 30 ===
+  [pass] Breanna Stewart        Assists      line 3.7 (conf 2)
+  [pass] Breanna Stewart        Pts+Reb+Ast  line 31.3 (conf 2)
+  [pass] Kayla McBride          Points       line 17.7 (conf 2)
+  [pass] Kayla McBride          Rebounds     line 3.7 (conf 2)
+  [pass] Kayla McBride          Assists      line 3.3 (conf 2)
+  [pass] Kayla McBride          Pts+Reb+Ast  line 24.7 (conf 2)
