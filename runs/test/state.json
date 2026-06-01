@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 486,
+  "next_question_idx": 492,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -434,11 +434,24 @@
       "last_3_avg": 6.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "204324_REB_20240602",
+      "player_name": "Dearica Hamby",
+      "stat_name": "Rebounds",
+      "line": 13.2,
+      "actual": 4.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Rolling avg (12.7) and last-3 avg (12.0) both sit below the 13.2 line with 0/3 overs recently and low volatility (cv=0.23), pointing clearly under.",
+      "committed": true,
+      "last_3_avg": 12.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     false,
-    false,
     true,
     true,
     false,
@@ -456,7 +469,8 @@
     false,
     true,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 455
+  "passes": 460
 }
