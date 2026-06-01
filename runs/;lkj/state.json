@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 234,
+  "next_question_idx": 240,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -378,10 +378,23 @@
       "last_3_avg": 6.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "203826_AST_20240628",
+      "player_name": "Alyssa Thomas",
+      "stat_name": "Assists",
+      "line": 7.3,
+      "actual": 8.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Alyssa Thomas is 0/3 in last 3 with last 3 avg of 5.3 (\u22122.0 vs line), last 5 avg 6.4 also below line, and CV 0.33 is moderate \u2014 consistent cold streak on a stable stat.",
+      "committed": true,
+      "last_3_avg": 5.3,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    false,
     true,
     false,
     true,
@@ -400,7 +413,8 @@
     false,
     false,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 207
+  "passes": 212
 }

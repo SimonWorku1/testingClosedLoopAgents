@@ -310,3 +310,11 @@
   [pass] Kayla McBride          Assists      line 4.1 (conf 2)
   [pass] Aliyah Boston          Assists      line 3.8 (conf 2)
   [pass] Marina Mabrey          Assists      line 4.3 (conf 2)
+
+=== Batch 40 ===
+  [pass] Jackie Young           Assists      line 4.7 (conf 2)
+  [pass] Ariel Atkins           Assists      line 4.1 (conf 2)
+  [pass] Dearica Hamby          Assists      line 2.8 (conf 2)
+  [pass] Allisha Gray           Assists      line 1.8 (conf 2)
+  [XX] Alyssa Thomas          Assists      line 7.3 | under → actual 8.0 | committed UNDER on Assists line 7.3, actual 8.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] DeWanna Bonner         Assists      line 2.2 (conf 2)
