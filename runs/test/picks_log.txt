@@ -974,3 +974,11 @@
   [pass] Aaliyah Edwards        Rebounds     line 4.8 (conf 1)
   [pass] Aaliyah Edwards        Assists      line 1.4 (conf 2)
   [pass] Aaliyah Edwards        Pts+Reb+Ast  line 11.1 (conf 2)
+
+=== Batch 123 ===
+  [pass] Karlie Samuelson       Points       line 9.2 (conf 2)
+  [pass] Karlie Samuelson       Rebounds     line 2.0 (conf 2)
+  [pass] Karlie Samuelson       Assists      line 1.6 (conf 1)
+  [pass] Karlie Samuelson       Pts+Reb+Ast  line 14.9 (conf 2)
+  [OK] Arike Ogunbowale       Points       line 26.1 | over  → actual 31.0
+  [pass] Arike Ogunbowale       Rebounds     line 5.2 (conf 2)

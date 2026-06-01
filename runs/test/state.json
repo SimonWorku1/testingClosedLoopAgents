@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 732,
+  "next_question_idx": 738,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -644,11 +644,24 @@
       "last_3_avg": 25.3,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1629481_PTS_20240605",
+      "player_name": "Arike Ogunbowale",
+      "stat_name": "Points",
+      "line": 26.1,
+      "actual": 31.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Ogunbowale went 0/3 in last 3 with last-3 avg ~5.4 below the line, moderate volatility (cv 0.29) is manageable, and this is a strong mean-reversion signal for a high-usage star at home.",
+      "committed": true,
+      "last_3_avg": 20.7,
+      "correct_pick": "over",
+      "correct": true
     }
   ],
   "window": [
     false,
-    false,
     true,
     false,
     false,
@@ -666,7 +679,8 @@
     false,
     true,
     true,
-    false
+    false,
+    true
   ],
-  "passes": 686
+  "passes": 691
 }
