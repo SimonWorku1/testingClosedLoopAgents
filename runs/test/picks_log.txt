@@ -566,3 +566,11 @@
   [pass] Julie Vanloo           Pts+Reb+Ast  line 16.5 (conf 2)
   [pass] Shatori Walker-Kimbrough Points       line 6.1 (conf 1)
   [pass] Shatori Walker-Kimbrough Rebounds     line 1.5 (conf 1)
+
+=== Batch 72 ===
+  [pass] Shatori Walker-Kimbrough Assists      line 1.4 (conf 2)
+  [pass] Shatori Walker-Kimbrough Pts+Reb+Ast  line 6.9 (conf 2)
+  [pass] Naz Hillmon            Points       line 4.3 (conf 2)
+  [pass] Naz Hillmon            Rebounds     line 2.5 (conf 2)
+  [pass] Naz Hillmon            Assists      line 2.7 (conf 2)
+  [pass] Naz Hillmon            Pts+Reb+Ast  line 8.5 (conf 2)
