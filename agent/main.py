@@ -185,10 +185,10 @@ def run(output_dir: Path, data_dir: Path, state_file: Path,
     # --- Reliability scan: uses full 5-season history to find the best targets.
     # Runs before the picks loop so the report informs roster choice.
     from wnba_data import fetch_all_seasons
-    from player_reliability import find_reliable_players, print_reliability_report
+    from player_reliability import find_reliable_props, print_reliability_report
     try:
         full_df = fetch_all_seasons(data_dir)
-        top_reliable = find_reliable_players(full_df, top_n=3)
+        top_reliable = find_reliable_props(full_df, top_n=3)
         print_reliability_report(top_reliable)
     except Exception as exc:
         print(f"  [reliability scan skipped: {exc}]")

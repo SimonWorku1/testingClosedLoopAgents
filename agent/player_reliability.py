@@ -41,13 +41,14 @@ def _lag1_autocorr(series: list[float]) -> float | None:
     return num / denom if denom > 0 else None
 
 
-def _score_player_stat(values: list[float], rolling_window: int = 10) -> dict | None:
+def _score_player_stat(values: list[float], rolling_window: int = 10,
+                       min_games: int = MIN_GAMES) -> dict | None:
     """
     Compute reliability metrics for a single (player, stat) time series.
     `values` must be in chronological order.
     Returns None if there are too few games.
     """
-    if len(values) < MIN_GAMES:
+    if len(values) < min_games:
         return None
 
     mean = statistics.mean(values)
@@ -157,11 +158,27 @@ def _stat_values(rows: list[dict], stat_key: str) -> list[float]:
     return [float(r.get(stat_key, 0) or 0) for r in rows]
 
 
+MIN_VS_TEAM_GAMES = 8   # minimum matchups to score a player vs a specific opponent
+
+
+def _opponent_from_matchup(matchup: str) -> str:
+    """Extract opponent abbreviation from 'SEA @ LAS' or 'SEA vs. LAS'."""
+    parts = str(matchup).split()
+    return parts[-1] if parts else "UNK"
+
+
 def score_all_players(df, stat_keys=("PTS", "REB", "AST", "PRA")) -> list[dict]:
     """
-    Score every (player, stat) pair in the DataFrame.
-    Returns a flat list of result dicts sorted descending by reliability_score.
-    Each dict includes player_id, player_name, stat_key, and all metric fields.
+    Score every (player, stat, context) triple in the DataFrame, where context
+    is either "all" (career-wide) or a specific opponent abbreviation.
+
+    For each player-stat pair we produce:
+      - one "all" entry using the full chronological series
+      - one entry per opponent where the player has MIN_VS_TEAM_GAMES+ matchups,
+        using only that subset (chronological within the subset)
+
+    Returns a flat list sorted descending by reliability_score. The best version
+    of a player-stat (whether overall or vs. a specific team) rises to the top.
     """
     results = []
     for pid, group in df.groupby("PLAYER_ID"):
@@ -170,71 +187,89 @@ def score_all_players(df, stat_keys=("PTS", "REB", "AST", "PRA")) -> list[dict]:
         name = rows[0]["PLAYER_NAME"]
 
         for stat_key in stat_keys:
-            values = _stat_values(rows, stat_key)
-            metrics = _score_player_stat(values)
-            if metrics is None:
-                continue
-            results.append({
-                "player_id": pid,
-                "player_name": name,
-                "stat_key": stat_key,
-                **metrics,
-            })
+            # --- career-wide entry ---
+            all_values = _stat_values(rows, stat_key)
+            metrics = _score_player_stat(all_values)
+            if metrics is not None:
+                results.append({
+                    "player_id": pid,
+                    "player_name": name,
+                    "stat_key": stat_key,
+                    "vs_team": "all",
+                    **metrics,
+                })
+
+            # --- per-opponent entries ---
+            # Group rows by opponent, preserving date order within each group.
+            opp_rows: dict[str, list] = {}
+            for r in rows:
+                opp = _opponent_from_matchup(r.get("MATCHUP", ""))
+                opp_rows.setdefault(opp, []).append(r)
+
+            for opp, orows in opp_rows.items():
+                if len(orows) < MIN_VS_TEAM_GAMES:
+                    continue
+                opp_values = _stat_values(orows, stat_key)
+                opp_metrics = _score_player_stat(opp_values,
+                                                  min_games=MIN_VS_TEAM_GAMES)
+                if opp_metrics is None:
+                    continue
+                results.append({
+                    "player_id": pid,
+                    "player_name": name,
+                    "stat_key": stat_key,
+                    "vs_team": opp,
+                    **opp_metrics,
+                })
 
     results.sort(key=lambda r: r["reliability_score"], reverse=True)
     return results
 
 
-def find_reliable_players(df, top_n: int = 3,
-                           active_season: str = "2024") -> list[dict]:
+def find_reliable_props(df, top_n: int = 3,
+                        active_season: str = "2024") -> list[dict]:
     """
-    Return the `top_n` most-reliable active WNBA players.
+    Return the top_n most-bettable (player, stat[, vs_team]) props.
 
-    "Active" = played at least one game in `active_season`.
-    For each player the best-scoring stat is used as the representative entry.
-    The returned list is sorted by reliability_score descending.
+    Ranking is purely by reliability_score regardless of whether the best version
+    of that prop is career-wide ("all") or vs. a specific opponent. A player
+    whose PTS is clockwork only against a particular team still tops the list for
+    that context.
 
-    Each entry:
-        player_id, player_name, best_stat, reliability_score,
-        cv, hit_rate, reversion_rate, autocorr, player_type, n_games
+    "Active" = played at least one game in active_season.
+
+    Each entry includes: player_id, player_name, stat_key, vs_team,
+    reliability_score, cv, hit_rate, reversion_rate, autocorr, player_type,
+    n_games.
     """
-    # Players active in the requested season
     active_ids = set(
         df[df["GAME_DATE"].dt.year.astype(str) == active_season]["PLAYER_ID"].unique()
     )
     if not active_ids:
-        # fallback: treat any player with a game in the last 12 months as active
         cutoff = df["GAME_DATE"].max() - __import__("pandas").Timedelta(days=365)
         active_ids = set(df[df["GAME_DATE"] >= cutoff]["PLAYER_ID"].unique())
 
     all_scores = score_all_players(df)
-
-    # Best stat per active player
-    best_by_player: dict[int, dict] = {}
-    for entry in all_scores:
-        pid = entry["player_id"]
-        if pid not in active_ids:
-            continue
-        if pid not in best_by_player:
-            best_by_player[pid] = {**entry, "best_stat": entry["stat_key"]}
-        # (already sorted descending, so first occurrence is best)
-
-    ranked = sorted(best_by_player.values(),
-                    key=lambda r: r["reliability_score"], reverse=True)
-    return ranked[:top_n]
+    active_scores = [e for e in all_scores if e["player_id"] in active_ids]
+    return active_scores[:top_n]
 
 
-def print_reliability_report(top_players: list[dict]) -> None:
+# Keep old name as alias so existing callers don't break
+find_reliable_players = find_reliable_props
+
+
+def print_reliability_report(top_props: list[dict]) -> None:
     """Pretty-print the reliability report to stdout."""
     print(f"\n{'='*72}")
-    print("  PLAYER RELIABILITY REPORT — top predictable props targets")
+    print("  MOST BETTABLE PROPS — top (player, stat[, vs team]) by predictability")
     print(f"{'='*72}")
-    for rank, p in enumerate(top_players, 1):
+    for rank, p in enumerate(top_props, 1):
         rev = (f"{p['reversion_rate']:.0%}" if p["reversion_rate"] is not None
                else "n/a")
         ac = f"{p['autocorr']:+.2f}" if p["autocorr"] is not None else "n/a"
+        context = f"vs {p['vs_team']}" if p.get("vs_team", "all") != "all" else "overall"
         print(
-            f"\n  #{rank}  {p['player_name']:<26}  best stat: {p['best_stat']}"
+            f"\n  #{rank}  {p['player_name']:<26}  {p['stat_key']}  ({context})"
         )
         print(
             f"       Reliability score : {p['reliability_score']:.3f}"
@@ -247,6 +282,7 @@ def print_reliability_report(top_players: list[dict]) -> None:
         print(
             f"       Autocorr (lag-1)  : {ac}   "
             f"Type: {p['player_type']}   "
-            f"Games in dataset: {p['n_games']}"
+            f"Games in sample: {p['n_games']}"
         )
     print(f"\n{'='*72}")
+
