@@ -782,3 +782,11 @@
   [pass] NaLyssa Smith          Rebounds     line 6.5 (conf 2)
   [pass] NaLyssa Smith          Assists      line 1.6 (conf 1)
   [pass] NaLyssa Smith          Pts+Reb+Ast  line 20.0 (conf 2)
+
+=== Batch 99 ===
+  [pass] Teaira McCowan         Points       line 13.5 (conf 2)
+  [pass] Teaira McCowan         Rebounds     line 9.0 (conf 2)
+  [pass] Teaira McCowan         Assists      line 1.0 (conf 1)
+  [pass] Teaira McCowan         Pts+Reb+Ast  line 22.5 (conf 2)
+  [pass] Naz Hillmon            Points       line 2.7 (conf 1)
+  [pass] Naz Hillmon            Rebounds     line 3.5 (conf 2)
