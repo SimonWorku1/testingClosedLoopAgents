@@ -1118,3 +1118,11 @@
   [pass] Stefanie Dolson        Rebounds     line 3.3 (conf 1)
   [pass] Stefanie Dolson        Assists      line 1.2 (conf 1)
   [XX] Stefanie Dolson        Pts+Reb+Ast  line 12.3 | under → actual 13.0 | committed UNDER on Pts+Reb+Ast line 12.3, actual 13.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 141 ===
+  [pass] Lindsay Allen          Points       line 5.5 (conf 2)
+  [pass] Lindsay Allen          Rebounds     line 1.7 (conf 1)
+  [pass] Lindsay Allen          Assists      line 2.8 (conf 2)
+  [pass] Lindsay Allen          Pts+Reb+Ast  line 8.0 (conf 2)
+  [pass] Julie Vanloo           Points       line 8.8 (conf 2)
+  [pass] Julie Vanloo           Rebounds     line 1.9 (conf 1)
