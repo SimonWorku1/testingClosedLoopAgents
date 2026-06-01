@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 384,
+  "next_question_idx": 390,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -280,13 +280,39 @@
       "last_3_avg": 18.0,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1629482_PRA_20240531",
+      "player_name": "Sophie Cunningham",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 15.5,
+      "actual": 18.0,
+      "pick": "over",
+      "confidence": 4,
+      "reasoning": "Very low volatility (cv 0.16) with rolling avg, last-3, and last-5 all above the line, providing a stable and consistent over signal.",
+      "committed": true,
+      "last_3_avg": 16.3,
+      "correct_pick": "over",
+      "correct": true
+    },
+    {
+      "question_id": "1628280_PTS_20240531",
+      "player_name": "Brionna Jones",
+      "stat_name": "Points",
+      "line": 12.8,
+      "actual": 22.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "overs_last3 = 3/3 with last-3 avg of 17.0 well above the 12.8 line signals strong mean reversion, and cv of 0.42 is just within acceptable range.",
+      "committed": true,
+      "last_3_avg": 17.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     false,
     true,
-    false,
-    true,
     true,
     true,
     false,
@@ -301,8 +327,10 @@
     false,
     false,
     true,
+    true,
+    false,
     true,
     false
   ],
-  "passes": 364
+  "passes": 368
 }

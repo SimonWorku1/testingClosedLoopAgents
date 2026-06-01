@@ -510,3 +510,11 @@
   [pass] Tyasha Harris          Rebounds     line 2.0 (conf 1)
   [pass] Tyasha Harris          Assists      line 3.7 (conf 2)
   [pass] Tyasha Harris          Pts+Reb+Ast  line 14.5 (conf 2)
+
+=== Batch 65 ===
+  [pass] Sophie Cunningham      Points       line 8.6 (conf 2)
+  [pass] Sophie Cunningham      Rebounds     line 5.9 (conf 2)
+  [pass] Sophie Cunningham      Assists      line 1.9 (conf 1)
+  [OK] Sophie Cunningham      Pts+Reb+Ast  line 15.5 | over  → actual 18.0
+  [XX] Brionna Jones          Points       line 12.8 | under → actual 22.0 | committed UNDER on Points line 12.8, actual 22.0 → OVER was right; last-3 (17.0) was 4.7 above rolling avg — form signal misfired
+  [pass] Brionna Jones          Rebounds     line 5.7 (conf 2)
