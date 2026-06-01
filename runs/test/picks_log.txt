@@ -310,3 +310,11 @@
   [pass] Shatori Walker-Kimbrough Pts+Reb+Ast  line 7.7 (conf 2)
   [pass] Betnijah Laney-Hamilton Points       line 12.3 (conf 2)
   [XX] Betnijah Laney-Hamilton Rebounds     line 3.5 | under → actual 4.0 | committed UNDER on Rebounds line 3.5, actual 4.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 40 ===
+  [pass] Betnijah Laney-Hamilton Assists      line 2.8 (conf 2)
+  [pass] Betnijah Laney-Hamilton Pts+Reb+Ast  line 17.7 (conf 2)
+  [pass] Myisha Hines-Allen     Points       line 4.7 (conf 2)
+  [pass] Myisha Hines-Allen     Rebounds     line 3.8 (conf 2)
+  [pass] Myisha Hines-Allen     Assists      line 2.8 (conf 2)
+  [pass] Myisha Hines-Allen     Pts+Reb+Ast  line 10.3 (conf 2)
