@@ -526,3 +526,11 @@
   [OK] Courtney Williams      Rebounds     line 6.2 | under → actual 3.0
   [pass] Courtney Williams      Assists      line 5.7 (conf 2)
   [pass] Courtney Williams      Pts+Reb+Ast  line 24.2 (conf 2)
+
+=== Batch 67 ===
+  [pass] Diana Taurasi          Points       line 16.9 (conf 2)
+  [pass] Diana Taurasi          Rebounds     line 5.5 (conf 2)
+  [pass] Diana Taurasi          Assists      line 0.6 (conf 2)
+  [pass] Diana Taurasi          Pts+Reb+Ast  line 22.1 (conf 2)
+  [pass] Alanna Smith           Points       line 15.0 (conf 2)
+  [pass] Alanna Smith           Rebounds     line 4.7 (conf 2)
