@@ -390,3 +390,11 @@
   [pass] Allisha Gray           Assists      line 1.9 (conf 1)
   [pass] A'ja Wilson            Assists      line 3.5 (conf 2)
   [pass] Kelsey Plum            Assists      line 4.5 (conf 3)
+
+=== Batch 50 ===
+  [pass] Skylar Diggins         Assists      line 5.8 (conf 2)
+  [pass] Jewell Loyd            Assists      line 3.1 (conf 2)
+  [XX] Marina Mabrey          Assists      line 4.1 | under → actual 7.0 | committed UNDER on Assists line 4.1, actual 7.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Jackie Young           Assists      line 5.3 (conf 2)
+  [pass] Caitlin Clark          Assists      line 8.4 (conf 3)
+  [pass] Kelsey Mitchell        Assists      line 1.2 (conf 2)

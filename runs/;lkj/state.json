@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 294,
+  "next_question_idx": 300,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -490,13 +490,26 @@
       "last_3_avg": 6.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1629497_AST_20240705",
+      "player_name": "Marina Mabrey",
+      "stat_name": "Assists",
+      "line": 4.1,
+      "actual": 7.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Marina Mabrey's rolling avg is 0.5 below the line, last-3 and last-5 both at 4.0 vs line 4.1, went under all 3 recent games, low volatility (cv=0.27) \u2014 consistent below-line performance is a reliable under signal.",
+      "committed": true,
+      "last_3_avg": 4.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     true,
     true,
     true,
-    true,
     false,
     true,
     true,
@@ -507,6 +520,7 @@
     true,
     false,
     true,
+    false,
     false,
     false,
     false,
@@ -514,5 +528,5 @@
     false,
     false
   ],
-  "passes": 259
+  "passes": 264
 }
