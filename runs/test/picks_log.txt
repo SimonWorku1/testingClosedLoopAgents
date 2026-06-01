@@ -22,3 +22,11 @@
   [pass] NaLyssa Smith          Pts+Reb+Ast  line 20.5 (conf 2)
   [pass] Caitlin Clark          Points       line 16.2 (conf 2)
   [pass] Caitlin Clark          Rebounds     line 5.0 (conf 2)
+
+=== Batch 4 ===
+  [pass] Caitlin Clark          Assists      line 6.7 (conf 2)
+  [pass] Caitlin Clark          Pts+Reb+Ast  line 27.8 (conf 3)
+  [pass] Kelsey Mitchell        Points       line 14.2 (conf 3)
+  [pass] Kelsey Mitchell        Rebounds     line 1.0 (conf 1)
+  [pass] Kelsey Mitchell        Assists      line 2.3 (conf 1)
+  [pass] Kelsey Mitchell        Pts+Reb+Ast  line 17.5 (conf 3)
