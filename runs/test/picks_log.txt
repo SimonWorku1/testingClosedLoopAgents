@@ -1046,3 +1046,11 @@
   [pass] Teaira McCowan         Pts+Reb+Ast  line 22.6 (conf 2)
   [pass] Alysha Clark           Points       line 8.7 (conf 2)
   [OK] Alysha Clark           Rebounds     line 5.3 | under → actual 1.0
+
+=== Batch 132 ===
+  [pass] Alysha Clark           Assists      line 2.2 (conf 2)
+  [pass] Alysha Clark           Pts+Reb+Ast  line 16.2 (conf 2)
+  [pass] Monique Billings       Points       line 13.5 (conf 2)
+  [pass] Monique Billings       Rebounds     line 8.3 (conf 2)
+  [pass] Monique Billings       Assists      line 3.3 (conf 2)
+  [pass] Monique Billings       Pts+Reb+Ast  line 26.2 (conf 2)
