@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 894,
+  "next_question_idx": 900,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -924,11 +924,24 @@
       "last_3_avg": 6.7,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "204324_PRA_20240607",
+      "player_name": "Dearica Hamby",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 35.9,
+      "actual": 38.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Extremely low volatility (cv 0.12) makes this a reliable anchor, and last 3 avg (33.0) and last 5 avg (33.4) are both well below the line of 35.9, suggesting a consistent downward trend rather than noise.",
+      "committed": true,
+      "last_3_avg": 33.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
     true,
-    true,
     false,
     true,
     true,
@@ -946,7 +959,8 @@
     false,
     false,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 828
+  "passes": 833
 }
