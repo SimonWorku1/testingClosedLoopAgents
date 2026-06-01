@@ -86,3 +86,11 @@
   [pass] NaLyssa Smith          Pts+Reb+Ast  line 17.7 (conf 2)
   [pass] Julie Vanloo           Points       line 8.9 (conf 1)
   [pass] Julie Vanloo           Rebounds     line 2.9 (conf 1)
+
+=== Batch 12 ===
+  [pass] Julie Vanloo           Assists      line 6.5 (conf 2)
+  [pass] Julie Vanloo           Pts+Reb+Ast  line 19.3 (conf 2)
+  [pass] Shatori Walker-Kimbrough Points       line 7.3 (conf 1)
+  [pass] Shatori Walker-Kimbrough Rebounds     line 1.5 (conf 1)
+  [pass] Shatori Walker-Kimbrough Assists      line 0.3 (conf 1)
+  [pass] Shatori Walker-Kimbrough Pts+Reb+Ast  line 9.1 (conf 1)
