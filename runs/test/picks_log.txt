@@ -662,3 +662,11 @@
   [pass] Allisha Gray           Pts+Reb+Ast  line 23.3 (conf 2)
   [pass] Alyssa Thomas          Points       line 14.1 (conf 2)
   [pass] Alyssa Thomas          Rebounds     line 8.5 (conf 3)
+
+=== Batch 84 ===
+  [pass] Alyssa Thomas          Assists      line 9.2 (conf 2)
+  [XX] Alyssa Thomas          Pts+Reb+Ast  line 32.8 | under → actual 33.0 | committed UNDER on Pts+Reb+Ast line 32.8, actual 33.0 → OVER was right; last-3 (27.7) was 4.6 below rolling avg — form signal misfired
+  [pass] Kelsey Mitchell        Points       line 15.0 (conf 2)
+  [pass] Kelsey Mitchell        Rebounds     line 1.0 (conf 1)
+  [pass] Kelsey Mitchell        Assists      line 2.6 (conf 1)
+  [pass] Kelsey Mitchell        Pts+Reb+Ast  line 17.6 (conf 3)
