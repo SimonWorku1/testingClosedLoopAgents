@@ -742,3 +742,11 @@
   [pass] Rickea Jackson         Pts+Reb+Ast  line 12.5 (conf 2)
   [pass] Tyasha Harris          Points       line 9.4 (conf 2)
   [pass] Tyasha Harris          Rebounds     line 2.1 (conf 1)
+
+=== Batch 94 ===
+  [pass] Tyasha Harris          Assists      line 3.8 (conf 2)
+  [pass] Tyasha Harris          Pts+Reb+Ast  line 15.2 (conf 2)
+  [pass] Sophie Cunningham      Points       line 10.1 (conf 2)
+  [pass] Sophie Cunningham      Rebounds     line 5.9 (conf 2)
+  [pass] Sophie Cunningham      Assists      line 1.8 (conf 1)
+  [pass] Sophie Cunningham      Pts+Reb+Ast  line 16.8 (conf 2)
