@@ -750,3 +750,11 @@
   [pass] Sophie Cunningham      Rebounds     line 5.9 (conf 2)
   [pass] Sophie Cunningham      Assists      line 1.8 (conf 1)
   [pass] Sophie Cunningham      Pts+Reb+Ast  line 16.8 (conf 2)
+
+=== Batch 95 ===
+  [pass] Brionna Jones          Points       line 14.2 (conf 2)
+  [OK] Brionna Jones          Rebounds     line 5.5 | under → actual 5.0
+  [pass] Brionna Jones          Assists      line 1.6 (conf 1)
+  [pass] Brionna Jones          Pts+Reb+Ast  line 19.4 (conf 2)
+  [pass] Courtney Williams      Points       line 12.2 (conf 2)
+  [pass] Courtney Williams      Rebounds     line 4.8 (conf 2)

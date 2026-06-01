@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 564,
+  "next_question_idx": 570,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -518,11 +518,24 @@
       "last_3_avg": 17.7,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "1628280_REB_20240602",
+      "player_name": "Brionna Jones",
+      "stat_name": "Rebounds",
+      "line": 5.5,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Line sits above rolling avg (5.5 vs 5.0 season/10-game avg), last 3 avg is exactly 5.0, low-moderate volatility (cv 0.28), and overs_last3 is 1/3 \u2014 consistent signal pointing under with a reliable anchor.",
+      "committed": true,
+      "last_3_avg": 5.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
-    true,
     false,
     true,
     false,
@@ -540,7 +553,8 @@
     false,
     true,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 527
+  "passes": 532
 }
