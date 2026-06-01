@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 366,
+  "next_question_idx": 372,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -266,6 +266,20 @@
       "last_3_avg": 5.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1627673_PRA_20240531",
+      "player_name": "Jonquel Jones",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 25.1,
+      "actual": 29.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Strong cold streak signal: last-3 avg of 18.0 is 7.1 below the 25.1 line, last-5 avg of 21.8 also well below, overs_last3 = 1/3, and cv of 0.35 is moderate \u2014 the sustained multi-game slump across all three component stats with moderate volatility justifies committing under.",
+      "committed": true,
+      "last_3_avg": 18.0,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
@@ -287,7 +301,8 @@
     false,
     false,
     true,
-    true
+    true,
+    false
   ],
-  "passes": 347
+  "passes": 352
 }

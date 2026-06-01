@@ -486,3 +486,11 @@
   [pass] Napheesa Collier       Pts+Reb+Ast  line 36.0 (conf 3)
   [pass] Bridget Carleton       Points       line 6.3 (conf 1)
   [pass] Bridget Carleton       Rebounds     line 4.0 (conf 2)
+
+=== Batch 62 ===
+  [pass] Bridget Carleton       Assists      line 2.3 (conf 2)
+  [pass] Bridget Carleton       Pts+Reb+Ast  line 11.7 (conf 2)
+  [pass] Jonquel Jones          Points       line 13.9 (conf 2)
+  [pass] Jonquel Jones          Rebounds     line 7.4 (conf 3)
+  [pass] Jonquel Jones          Assists      line 1.8 (conf 1)
+  [XX] Jonquel Jones          Pts+Reb+Ast  line 25.1 | under → actual 29.0 | committed UNDER on Pts+Reb+Ast line 25.1, actual 29.0 → OVER was right; last-3 (18.0) was 6.6 below rolling avg — form signal misfired
