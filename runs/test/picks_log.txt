@@ -718,3 +718,11 @@
   [pass] Bridget Carleton       Rebounds     line 3.1 (conf 3)
   [pass] Bridget Carleton       Assists      line 1.5 (conf 2)
   [pass] Bridget Carleton       Pts+Reb+Ast  line 10.9 (conf 2)
+
+=== Batch 91 ===
+  [pass] Jonquel Jones          Points       line 14.1 (conf 2)
+  [pass] Jonquel Jones          Rebounds     line 8.6 (conf 3)
+  [pass] Jonquel Jones          Assists      line 1.9 (conf 1)
+  [pass] Jonquel Jones          Pts+Reb+Ast  line 25.6 (conf 2)
+  [pass] Tina Charles           Points       line 13.3 (conf 2)
+  [pass] Tina Charles           Rebounds     line 8.7 (conf 2)
