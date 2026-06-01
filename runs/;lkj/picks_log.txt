@@ -358,3 +358,11 @@
   [pass] Dearica Hamby          Assists      line 3.9 (conf 2)
   [pass] Allisha Gray           Assists      line 2.5 (conf 1)
   [pass] A'ja Wilson            Assists      line 2.2 (conf 2)
+
+=== Batch 46 ===
+  [pass] Kelsey Plum            Assists      line 5.2 (conf 2)
+  [pass] Kelsey Mitchell        Assists      line 2.1 (conf 2)
+  [XX] Breanna Stewart        Assists      line 3.9 | over  → actual 3.0 | committed OVER on Assists line 3.9, actual 3.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Kayla McBride          Assists      line 3.2 (conf 2)
+  [pass] Aliyah Boston          Assists      line 2.7 (conf 2)
+  [XX] Marina Mabrey          Assists      line 3.2 | under → actual 4.0 | committed UNDER on Assists line 3.2, actual 4.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
