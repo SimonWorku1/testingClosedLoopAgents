@@ -630,3 +630,11 @@
   [XX] Angel Reese            Pts+Reb+Ast  line 20.7 | under → actual 22.0 | committed UNDER on Pts+Reb+Ast line 20.7, actual 22.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
   [pass] NaLyssa Smith          Points       line 11.3 (conf 1)
   [XX] NaLyssa Smith          Rebounds     line 7.3 | under → actual 9.0 | committed UNDER on Rebounds line 7.3, actual 9.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 80 ===
+  [pass] NaLyssa Smith          Assists      line 0.4 (conf 2)
+  [pass] NaLyssa Smith          Pts+Reb+Ast  line 17.9 (conf 2)
+  [pass] Chennedy Carter        Points       line 11.3 (conf 2)
+  [pass] Chennedy Carter        Rebounds     line 2.0 (conf 2)
+  [pass] Chennedy Carter        Assists      line 2.5 (conf 2)
+  [pass] Chennedy Carter        Pts+Reb+Ast  line 14.8 (conf 3)
