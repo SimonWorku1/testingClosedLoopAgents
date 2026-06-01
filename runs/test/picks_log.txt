@@ -990,3 +990,11 @@
   [pass] Dearica Hamby          Rebounds     line 11.1 (conf 2)
   [pass] Dearica Hamby          Assists      line 4.1 (conf 1)
   [OK] Dearica Hamby          Pts+Reb+Ast  line 35.6 | under → actual 30.0
+
+=== Batch 125 ===
+  [XX] A'ja Wilson            Points       line 26.0 | under → actual 36.0 | committed UNDER on Points line 26.0, actual 36.0 → OVER was right; last-3 (28.7) was 2.2 above rolling avg — form signal misfired
+  [pass] A'ja Wilson            Rebounds     line 12.0 (conf 2)
+  [pass] A'ja Wilson            Assists      line 2.2 (conf 1)
+  [pass] A'ja Wilson            Pts+Reb+Ast  line 41.2 (conf 2)
+  [pass] Kelsey Plum            Points       line 19.2 (conf 2)
+  [pass] Kelsey Plum            Rebounds     line 2.0 (conf 1)
