@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 408,
+  "next_question_idx": 414,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -686,6 +686,20 @@
       "last_3_avg": 7.0,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "203825_AST_20240817",
+      "player_name": "Kayla McBride",
+      "stat_name": "Assists",
+      "line": 3.5,
+      "actual": 3.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "McBride's last-3 (2.3) and last-5 (2.4) both well below the 3.5 line with 0/3 overs recently and moderate cv=0.44 \u2014 consistent downtrend signal.",
+      "committed": true,
+      "last_3_avg": 2.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -695,7 +709,6 @@
     false,
     false,
     false,
-    false,
     true,
     true,
     false,
@@ -708,7 +721,8 @@
     true,
     false,
     false,
+    true,
     true
   ],
-  "passes": 359
+  "passes": 364
 }
