@@ -326,3 +326,11 @@
   [pass] A'ja Wilson            Assists      line 3.0 (conf 2)
   [OK] Kelsey Plum            Assists      line 4.0 | over  → actual 8.0
   [XX] Skylar Diggins         Assists      line 7.1 | over  → actual 5.0 | committed OVER on Assists line 7.1, actual 5.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
+
+=== Batch 42 ===
+  [pass] Jewell Loyd            Assists      line 3.5 (conf 2)
+  [pass] Jackie Young           Assists      line 4.4 (conf 2)
+  [pass] Ariel Atkins           Assists      line 4.3 (conf 2)
+  [pass] Caitlin Clark          Assists      line 6.2 (conf 3)
+  [pass] Allisha Gray           Assists      line 1.6 (conf 1)
+  [pass] Kelsey Mitchell        Assists      line 1.2 (conf 1)
