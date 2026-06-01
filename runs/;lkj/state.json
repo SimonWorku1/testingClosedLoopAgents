@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 126,
+  "next_question_idx": 132,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -210,6 +210,20 @@
       "last_3_avg": 3.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1629498_AST_20240611",
+      "player_name": "Jackie Young",
+      "stat_name": "Assists",
+      "line": 7.5,
+      "actual": 4.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Last 3 avg of 5.0 is 2.5 below the 7.5 line, last 5 avg of 6.2 also below, overs_last3=0/3 \u2014 consistent downward trend with moderate volatility (cv=0.37) supports committing UNDER.",
+      "committed": true,
+      "last_3_avg": 5.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
@@ -227,7 +241,8 @@
     true,
     false,
     true,
+    true,
     true
   ],
-  "passes": 111
+  "passes": 116
 }
