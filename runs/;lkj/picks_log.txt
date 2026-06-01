@@ -54,3 +54,11 @@
   [pass] DeWanna Bonner         Assists      line 1.5 (conf 2)
   [pass] Natasha Cloud          Assists      line 7.6 (conf 2)
   [pass] Breanna Stewart        Assists      line 2.5 (conf 2)
+
+=== Batch 8 ===
+  [pass] Kayla McBride          Assists      line 3.3 (conf 2)
+  [pass] Sabrina Ionescu        Assists      line 6.2 (conf 2)
+  [pass] Jackie Young           Assists      line 7.7 (conf 2)
+  [OK] Kahleah Copper         Assists      line 3.1 | under → actual 1.0
+  [pass] Ariel Atkins           Assists      line 3.9 (conf 2)
+  [XX] Caitlin Clark          Assists      line 6.1 | over  → actual 6.0 | committed OVER on Assists line 6.1, actual 6.0 → UNDER was right; weak signal (last-3 ≈ line) — should have passed
