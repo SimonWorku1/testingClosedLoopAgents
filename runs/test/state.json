@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 858,
+  "next_question_idx": 864,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -868,10 +868,23 @@
       "last_3_avg": 16.3,
       "correct_pick": "over",
       "correct": false
+    },
+    {
+      "question_id": "204335_REB_20240606",
+      "player_name": "Betnijah Laney-Hamilton",
+      "stat_name": "Rebounds",
+      "line": 3.4,
+      "actual": 5.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Low volatility (cv=0.25), rolling avg (2.9) and last-3 avg (2.3) are both well below the line (3.4), indicating a consistent structural under.",
+      "committed": true,
+      "last_3_avg": 2.3,
+      "correct_pick": "over",
+      "correct": false
     }
   ],
   "window": [
-    false,
     true,
     true,
     false,
@@ -888,9 +901,10 @@
     true,
     true,
     true,
+    false,
     false,
     false,
     false
   ],
-  "passes": 796
+  "passes": 801
 }

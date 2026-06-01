@@ -1142,3 +1142,11 @@
   [pass] Naz Hillmon            Pts+Reb+Ast  line 9.2 (conf 2)
   [XX] Chennedy Carter        Points       line 13.0 | under → actual 25.0 | committed UNDER on Points line 13.0, actual 25.0 → OVER was right; last-3 (16.3) was 3.8 above rolling avg — form signal misfired
   [pass] Chennedy Carter        Rebounds     line 3.2 (conf 2)
+
+=== Batch 144 ===
+  [pass] Chennedy Carter        Assists      line 2.0 (conf 2)
+  [pass] Chennedy Carter        Pts+Reb+Ast  line 17.2 (conf 2)
+  [pass] Betnijah Laney-Hamilton Points       line 13.3 (conf 2)
+  [XX] Betnijah Laney-Hamilton Rebounds     line 3.4 | under → actual 5.0 | committed UNDER on Rebounds line 3.4, actual 5.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Betnijah Laney-Hamilton Assists      line 3.4 (conf 2)
+  [pass] Betnijah Laney-Hamilton Pts+Reb+Ast  line 19.1 (conf 2)
