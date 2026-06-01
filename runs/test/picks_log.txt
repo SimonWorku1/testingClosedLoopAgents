@@ -1102,3 +1102,11 @@
   [pass] Tina Charles           Rebounds     line 9.1 (conf 2)
   [pass] Tina Charles           Assists      line 2.6 (conf 1)
   [pass] Tina Charles           Pts+Reb+Ast  line 23.9 (conf 2)
+
+=== Batch 139 ===
+  [pass] Angel Reese            Points       line 10.4 (conf 3)
+  [pass] Angel Reese            Rebounds     line 8.5 (conf 2)
+  [pass] Angel Reese            Assists      line 1.2 (conf 1)
+  [XX] Angel Reese            Pts+Reb+Ast  line 22.1 | under → actual 30.0 | committed UNDER on Pts+Reb+Ast line 22.1, actual 30.0 → OVER was right; weak signal (last-3 ≈ line) — should have passed
+  [pass] Rhyne Howard           Points       line 15.9 (conf 2)
+  [pass] Rhyne Howard           Rebounds     line 5.5 (conf 1)
