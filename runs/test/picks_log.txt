@@ -14,3 +14,11 @@
   [pass] Aliyah Boston          Rebounds     line 6.7 (conf 3)
   [pass] Aliyah Boston          Assists      line 2.1 (conf 3)
   [pass] Aliyah Boston          Pts+Reb+Ast  line 16.7 (conf 2)
+
+=== Batch 3 ===
+  [pass] NaLyssa Smith          Points       line 12.1 (conf 2)
+  [pass] NaLyssa Smith          Rebounds     line 7.1 (conf 2)
+  [pass] NaLyssa Smith          Assists      line 0.3 (conf 2)
+  [pass] NaLyssa Smith          Pts+Reb+Ast  line 20.5 (conf 2)
+  [pass] Caitlin Clark          Points       line 16.2 (conf 2)
+  [pass] Caitlin Clark          Rebounds     line 5.0 (conf 2)
