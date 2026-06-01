@@ -654,3 +654,11 @@
   [OK] Dearica Hamby          Rebounds     line 13.2 | under → actual 4.0
   [pass] Dearica Hamby          Assists      line 3.4 (conf 2)
   [pass] Dearica Hamby          Pts+Reb+Ast  line 36.6 (conf 3)
+
+=== Batch 83 ===
+  [pass] Allisha Gray           Points       line 18.0 (conf 2)
+  [pass] Allisha Gray           Rebounds     line 3.5 (conf 2)
+  [OK] Allisha Gray           Assists      line 2.8 | under → actual 1.0
+  [pass] Allisha Gray           Pts+Reb+Ast  line 23.3 (conf 2)
+  [pass] Alyssa Thomas          Points       line 14.1 (conf 2)
+  [pass] Alyssa Thomas          Rebounds     line 8.5 (conf 3)

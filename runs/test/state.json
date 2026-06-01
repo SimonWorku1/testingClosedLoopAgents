@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 492,
+  "next_question_idx": 498,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -448,10 +448,23 @@
       "last_3_avg": 12.0,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1628277_AST_20240602",
+      "player_name": "Allisha Gray",
+      "stat_name": "Assists",
+      "line": 2.8,
+      "actual": 1.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Overs in last 3 = 3/3 with last-3 avg exactly at the line (3.0 vs 2.8 line), suggesting mean reversion back toward season avg of 2.3 is likely, though high cv (0.52) tempers confidence slightly.",
+      "committed": true,
+      "last_3_avg": 3.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
-    false,
     true,
     true,
     false,
@@ -470,7 +483,8 @@
     true,
     false,
     false,
+    true,
     true
   ],
-  "passes": 460
+  "passes": 465
 }
