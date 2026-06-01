@@ -622,3 +622,11 @@
   [pass] DeWanna Bonner         Assists      line 2.8 (conf 2)
   [pass] Breanna Stewart        Assists      line 4.3 (conf 3)
   [pass] Kayla McBride          Assists      line 3.3 (conf 2)
+
+=== Batch 79 ===
+  [pass] Aliyah Boston          Assists      line 3.7 (conf 2)
+  [OK] Marina Mabrey          Assists      line 5.1 | under → actual 4.0
+  [pass] Sabrina Ionescu        Assists      line 5.8 (conf 2)
+  [pass] Arike Ogunbowale       Assists      line 6.0 (conf 2)
+  [pass] Dearica Hamby          Assists      line 2.3 (conf 2)
+  [pass] A'ja Wilson            Assists      line 2.3 (conf 1)

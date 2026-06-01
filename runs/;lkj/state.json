@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 468,
+  "next_question_idx": 474,
   "committed_history": [
     {
       "question_id": "203400_AST_20240525",
@@ -784,11 +784,24 @@
       "last_3_avg": 3.3,
       "correct_pick": "under",
       "correct": true
+    },
+    {
+      "question_id": "1629497_AST_20240824",
+      "player_name": "Marina Mabrey",
+      "stat_name": "Assists",
+      "line": 5.1,
+      "actual": 4.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Marina Mabrey has gone under all 3 recent games with last-3 avg of 2.3 vs line of 5.1 (-2.8 below), matching the exact pattern of my recent wins on her; cv of 0.44 is borderline but the signal is strong and consistent with prior successful commits.",
+      "committed": true,
+      "last_3_avg": 2.3,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     true,
-    true,
     false,
     true,
     true,
@@ -806,7 +819,8 @@
     true,
     true,
     false,
+    true,
     true
   ],
-  "passes": 412
+  "passes": 417
 }
