@@ -38,3 +38,11 @@
   [pass] Skylar Diggins         Pts+Reb+Ast  line 20.5 (conf 2)
   [pass] Jewell Loyd            Points       line 19.3 (conf 2)
   [pass] Jewell Loyd            Rebounds     line 7.5 (conf 2)
+
+=== Batch 6 ===
+  [pass] Jewell Loyd            Assists      line 3.7 (conf 1)
+  [pass] Jewell Loyd            Pts+Reb+Ast  line 31.5 (conf 2)
+  [pass] Breanna Stewart        Points       line 19.9 (conf 2)
+  [pass] Breanna Stewart        Rebounds     line 9.3 (conf 3)
+  [pass] Breanna Stewart        Assists      line 2.3 (conf 1)
+  [pass] Breanna Stewart        Pts+Reb+Ast  line 31.5 (conf 2)
