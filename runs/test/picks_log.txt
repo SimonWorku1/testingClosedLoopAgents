@@ -78,3 +78,11 @@
   [pass] Stefanie Dolson        Rebounds     line 4.9 (conf 2)
   [pass] Stefanie Dolson        Assists      line 1.3 (conf 1)
   [OK] Stefanie Dolson        Pts+Reb+Ast  line 14.9 | under → actual 10.0
+
+=== Batch 11 ===
+  [pass] NaLyssa Smith          Points       line 11.0 (conf 2)
+  [pass] NaLyssa Smith          Rebounds     line 6.3 (conf 2)
+  [pass] NaLyssa Smith          Assists      line 0.3 (conf 2)
+  [pass] NaLyssa Smith          Pts+Reb+Ast  line 17.7 (conf 2)
+  [pass] Julie Vanloo           Points       line 8.9 (conf 1)
+  [pass] Julie Vanloo           Rebounds     line 2.9 (conf 1)
