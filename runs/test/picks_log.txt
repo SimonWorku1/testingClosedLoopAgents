@@ -614,3 +614,11 @@
   [pass] Kelsey Mitchell        Pts+Reb+Ast  line 17.2 (conf 2)
   [pass] Aliyah Boston          Points       line 10.5 (conf 2)
   [pass] Aliyah Boston          Rebounds     line 7.3 (conf 2)
+
+=== Batch 78 ===
+  [pass] Aliyah Boston          Assists      line 1.8 (conf 3)
+  [OK] Aliyah Boston          Pts+Reb+Ast  line 20.6 | under → actual 20.0
+  [pass] Marina Mabrey          Points       line 16.8 (conf 2)
+  [pass] Marina Mabrey          Rebounds     line 6.0 (conf 2)
+  [pass] Marina Mabrey          Assists      line 5.7 (conf 2)
+  [pass] Marina Mabrey          Pts+Reb+Ast  line 28.5 (conf 2)

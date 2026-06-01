@@ -1,5 +1,5 @@
 {
-  "next_question_idx": 462,
+  "next_question_idx": 468,
   "committed_history": [
     {
       "question_id": "1628909_PTS_20240524",
@@ -392,11 +392,24 @@
       "last_3_avg": 31.0,
       "correct_pick": "under",
       "correct": false
+    },
+    {
+      "question_id": "1641648_PRA_20240601",
+      "player_name": "Aliyah Boston",
+      "stat_name": "Pts+Reb+Ast",
+      "line": 20.6,
+      "actual": 20.0,
+      "pick": "under",
+      "confidence": 4,
+      "reasoning": "Boston hit overs all 3 recent games with last-3 avg 25.0 well above line 20.6, classic mean reversion setup; cv 0.32 is moderate-acceptable and PRA combines 3 stats reducing variance, justifying a committed under.",
+      "committed": true,
+      "last_3_avg": 25.0,
+      "correct_pick": "under",
+      "correct": true
     }
   ],
   "window": [
     false,
-    false,
     true,
     false,
     false,
@@ -414,7 +427,8 @@
     true,
     true,
     false,
-    false
+    false,
+    true
   ],
-  "passes": 434
+  "passes": 439
 }
