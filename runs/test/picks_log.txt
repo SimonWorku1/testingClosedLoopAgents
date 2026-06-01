@@ -822,3 +822,11 @@
   [pass] Sevgi Uzun             Pts+Reb+Ast  line 13.5 (conf 2)
   [OK] Alyssa Thomas          Points       line 14.2 | under → actual 7.0
   [pass] Alyssa Thomas          Rebounds     line 9.1 (conf 2)
+
+=== Batch 104 ===
+  [pass] Alyssa Thomas          Assists      line 9.5 (conf 2)
+  [pass] Alyssa Thomas          Pts+Reb+Ast  line 32.9 (conf 2)
+  [XX] DeWanna Bonner         Points       line 18.5 | under → actual 20.0 | committed UNDER on Points line 18.5, actual 20.0 → OVER was right; last-3 (16.3) was 2.7 below rolling avg — form signal misfired
+  [pass] DeWanna Bonner         Rebounds     line 4.9 (conf 2)
+  [pass] DeWanna Bonner         Assists      line 1.4 (conf 2)
+  [XX] DeWanna Bonner         Pts+Reb+Ast  line 26.8 | under → actual 31.0 | committed UNDER on Pts+Reb+Ast line 26.8, actual 31.0 → OVER was right; last-3 (24.0) was 2.2 below rolling avg — form signal misfired
