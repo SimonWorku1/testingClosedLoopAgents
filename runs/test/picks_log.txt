@@ -798,3 +798,11 @@
   [pass] Betnijah Laney-Hamilton Rebounds     line 2.5 (conf 3)
   [pass] Betnijah Laney-Hamilton Assists      line 1.9 (conf 2)
   [pass] Betnijah Laney-Hamilton Pts+Reb+Ast  line 17.6 (conf 3)
+
+=== Batch 101 ===
+  [pass] Monique Billings       Points       line 12.5 (conf 2)
+  [pass] Monique Billings       Rebounds     line 7.1 (conf 2)
+  [pass] Monique Billings       Assists      line 3.3 (conf 2)
+  [pass] Monique Billings       Pts+Reb+Ast  line 22.9 (conf 2)
+  [pass] Kia Nurse              Points       line 13.6 (conf 2)
+  [pass] Kia Nurse              Rebounds     line 0.9 (conf 2)
