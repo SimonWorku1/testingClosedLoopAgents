@@ -5,6 +5,205 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Arbitrage Calculator – Selene Calculators</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Arb grid layout ── */
+    .arb-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .arb-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .arb-table td, .arb-table th {
+      padding: 0;
+      border: none;
+    }
+
+    .arb-row {
+      display: grid;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arb-row:last-child { border-bottom: none; }
+
+    .arb-row-label {
+      padding: 18px 20px;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .arb-cell {
+      padding: 10px 14px;
+      border-right: 1px solid var(--border);
+    }
+
+    .arb-cell:last-child { border-right: none; }
+
+    .arb-cell input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 12px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+
+    .arb-cell input:focus { border-color: var(--accent); }
+
+    .arb-cell input[readonly] {
+      color: var(--text-muted);
+      cursor: default;
+      border-color: transparent;
+      background: transparent;
+    }
+
+    /* money input with $ prefix */
+    .money-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+
+    .money-wrap:focus-within { border-color: var(--accent); }
+
+    .money-wrap.readonly {
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .money-wrap .prefix {
+      color: var(--text-muted);
+      padding: 10px 0 10px 12px;
+      font-size: 15px;
+      user-select: none;
+    }
+
+    .money-wrap input {
+      background: transparent;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 10px 12px 10px 6px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .money-wrap input:focus { border: none; }
+
+    /* col headers */
+    .arb-col-header {
+      padding: 12px 14px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .arb-col-header:last-child { border-right: none; }
+
+    /* Footer summary */
+    .arb-footer {
+      display: flex;
+      align-items: stretch;
+      border-top: 1px solid var(--border);
+    }
+
+    .arb-footer-item {
+      flex: 1;
+      padding: 16px 20px;
+      border-right: 1px solid var(--border);
+    }
+
+    .arb-footer-item:last-child { border-right: none; }
+
+    .arb-footer-item .f-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .arb-footer-item .f-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    /* settings bar */
+    .settings-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .settings-bar label { font-size: 13px; color: var(--text-muted); margin-right: 6px; }
+
+    /* arb status banner */
+    .arb-banner {
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .arb-banner.positive {
+      background: rgba(63,185,80,0.1);
+      border: 1px solid rgba(63,185,80,0.3);
+      color: var(--accent-green);
+    }
+
+    .arb-banner.negative {
+      background: rgba(248,81,73,0.08);
+      border: 1px solid rgba(248,81,73,0.2);
+      color: var(--text-muted);
+    }
+
+    .arb-banner .banner-icon { font-size: 18px; }
+
+    /* remove col button */
+    .col-remove {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .col-remove:hover { color: var(--accent-red); background: rgba(248,81,73,0.1); }
+
+    /* hide number spinners */
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  </style>
 </head>
 <body>
 
@@ -21,227 +220,300 @@
 <div class="page">
   <div class="page-header">
     <h1>Arbitrage Calculator</h1>
-    <p>Enter the odds for each side of a market across different books to check for a guaranteed profit opportunity and calculate optimal stakes.</p>
+    <p>Enter odds and stakes for each outcome to detect guaranteed profit opportunities and calculate optimal wager amounts.</p>
   </div>
 
-  <!-- Odds Format -->
-  <div class="card">
-    <h2>Settings</h2>
-    <div class="field-group">
-      <div class="field">
-        <label>Odds Format</label>
-        <div class="format-toggle">
-          <button class="format-btn active" onclick="setFormat('american', this)">American</button>
-          <button class="format-btn" onclick="setFormat('decimal', this)">Decimal</button>
-        </div>
-      </div>
-      <div class="field">
-        <label>Total Bankroll ($)</label>
-        <input type="number" id="bankroll" placeholder="e.g. 1000" value="1000" min="1" oninput="calculate()">
+  <!-- Settings bar -->
+  <div class="settings-bar">
+    <div>
+      <label>Odds Format</label>
+      <div class="format-toggle" style="display:inline-flex;">
+        <button class="format-btn active" onclick="setFormat('american', this)">American</button>
+        <button class="format-btn" onclick="setFormat('decimal', this)">Decimal</button>
       </div>
     </div>
-  </div>
-
-  <!-- Outcomes -->
-  <div class="card">
-    <h2>Outcomes</h2>
-    <div class="legs-container" id="legsContainer"></div>
-
-    <div style="display:flex; gap:10px; margin-top:4px;">
-      <button class="btn btn-sm btn-outline" onclick="addLeg()">+ Add Outcome</button>
+    <div>
+      <label>Stakes</label>
+      <div class="format-toggle" style="display:inline-flex;">
+        <button class="format-btn active" id="modeManual" onclick="setStakeMode('manual')">Manual</button>
+        <button class="format-btn" id="modeAuto" onclick="setStakeMode('auto')">Auto (Optimal)</button>
+      </div>
     </div>
+    <div id="bankrollWrap" style="display:none; align-items:center; gap:8px;">
+      <label style="margin:0;">Bankroll $</label>
+      <input type="number" id="bankroll" placeholder="1000" value="1000" min="1" style="width:110px;" oninput="calculate()">
+    </div>
+    <button class="btn btn-sm btn-outline" onclick="addOutcome()" style="margin-left:auto;">+ Add Outcome</button>
   </div>
 
-  <!-- Results -->
-  <div class="card hidden" id="resultsCard">
-    <h2>Results</h2>
-
-    <div id="arbBadgeRow" style="margin-bottom:16px;"></div>
-
-    <div class="result-grid" id="summaryGrid"></div>
-
-    <table class="result-table" id="resultsTable">
-      <thead>
-        <tr>
-          <th>Outcome</th>
-          <th>Odds</th>
-          <th>Implied Prob</th>
-          <th>Stake</th>
-          <th>Payout</th>
-          <th>Profit/Loss</th>
-        </tr>
-      </thead>
-      <tbody id="resultsBody"></tbody>
-    </table>
-
-    <div class="info-box" id="infoBox"></div>
+  <!-- Arb status -->
+  <div class="arb-banner negative" id="arbBanner">
+    <span class="banner-icon">—</span>
+    <span id="bannerText">Enter odds to check for arbitrage</span>
   </div>
+
+  <!-- Main grid card -->
+  <div class="arb-card" id="arbCard"></div>
+
+  <!-- Info box -->
+  <div class="info-box hidden" id="infoBox"></div>
 </div>
 
 <script>
 let oddsFormat = 'american';
-let legCount = 0;
+let stakeMode = 'manual'; // 'manual' | 'auto'
+let outcomes = [
+  { id: 1, name: 'Team A' },
+  { id: 2, name: 'Team B' },
+];
+let nextId = 3;
 
-function setFormat(fmt, btn) {
-  oddsFormat = fmt;
-  document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.odds-input').forEach(inp => {
-    inp.placeholder = fmt === 'american' ? 'e.g. -110' : 'e.g. 1.91';
-  });
-  calculate();
-}
-
-function addLeg(name = '', odds = '') {
-  legCount++;
-  const id = legCount;
-  const container = document.getElementById('legsContainer');
-  const div = document.createElement('div');
-  div.className = 'leg';
-  div.id = `leg-${id}`;
-  div.innerHTML = `
-    <div class="leg-label">Outcome ${id}</div>
-    ${id > 2 ? `<button class="remove-btn" onclick="removeLeg(${id})" title="Remove">×</button>` : ''}
-    <div class="field-group">
-      <div class="field">
-        <label>Team / Label</label>
-        <input type="text" placeholder="e.g. Team A" value="${name}" oninput="calculate()">
-      </div>
-      <div class="field">
-        <label>Odds</label>
-        <input type="number" class="odds-input" placeholder="${oddsFormat === 'american' ? 'e.g. -110' : 'e.g. 1.91'}" value="${odds}" oninput="calculate()">
-      </div>
-    </div>
-  `;
-  container.appendChild(div);
-  calculate();
-}
-
-function removeLeg(id) {
-  document.getElementById(`leg-${id}`)?.remove();
-  calculate();
-}
-
+/* ── Format helpers ── */
 function toDecimal(val) {
-  if (isNaN(val) || val === '' || val === null) return null;
-  if (oddsFormat === 'decimal') {
-    return val > 1 ? val : null;
-  }
-  // American
+  if (isNaN(val) || val === null) return null;
+  if (oddsFormat === 'decimal') return val > 1 ? val : null;
   if (val >= 100) return (val / 100) + 1;
   if (val <= -100) return (100 / Math.abs(val)) + 1;
   return null;
 }
 
-function formatAmerican(decimal) {
-  if (decimal >= 2) return '+' + Math.round((decimal - 1) * 100);
-  return Math.round(-100 / (decimal - 1)).toString();
+function fmtMoney(n) { return n.toFixed(2); }
+
+function fmtAmerican(dec) {
+  if (dec >= 2) return '+' + Math.round((dec - 1) * 100);
+  return String(Math.round(-100 / (dec - 1)));
 }
 
-function formatDecimal(d) {
-  return d.toFixed(3);
-}
-
-function formatOdds(decimal) {
-  if (oddsFormat === 'american') return formatAmerican(decimal);
-  return formatDecimal(decimal);
-}
-
-function calculate() {
-  const legs = document.querySelectorAll('.leg');
-  const bankroll = parseFloat(document.getElementById('bankroll').value);
-  const resultsCard = document.getElementById('resultsCard');
-
-  if (!bankroll || bankroll <= 0 || legs.length < 2) {
-    resultsCard.classList.add('hidden');
-    return;
-  }
-
-  const outcomes = [];
-  let valid = true;
-
-  legs.forEach((leg, i) => {
-    const inputs = leg.querySelectorAll('input');
-    const name = inputs[0].value || `Outcome ${i + 1}`;
-    const oddsRaw = parseFloat(inputs[1].value);
-    const dec = toDecimal(oddsRaw);
-    if (!dec) { valid = false; return; }
-    outcomes.push({ name, dec });
+/* ── Settings ── */
+function setFormat(fmt, btn) {
+  oddsFormat = fmt;
+  document.querySelectorAll('.format-btn').forEach(b => {
+    if (b.closest('.format-toggle') === btn.closest('.format-toggle')) b.classList.remove('active');
   });
+  btn.classList.add('active');
+  document.querySelectorAll('.odds-inp').forEach(inp => {
+    if (!inp.value) inp.placeholder = fmt === 'american' ? '+110' : '2.10';
+  });
+  calculate();
+}
 
-  if (!valid || outcomes.length < 2) {
-    resultsCard.classList.add('hidden');
+function setStakeMode(mode) {
+  stakeMode = mode;
+  document.getElementById('modeManual').classList.toggle('active', mode === 'manual');
+  document.getElementById('modeAuto').classList.toggle('active', mode === 'auto');
+  document.getElementById('bankrollWrap').style.display = mode === 'auto' ? 'flex' : 'none';
+  document.querySelectorAll('.stake-inp').forEach(inp => {
+    inp.readOnly = mode === 'auto';
+    inp.closest('.money-wrap').classList.toggle('readonly', mode === 'auto');
+  });
+  calculate();
+}
+
+function addOutcome() {
+  outcomes.push({ id: nextId++, name: `Team ${String.fromCharCode(64 + outcomes.length + 1)}` });
+  renderGrid();
+  calculate();
+}
+
+function removeOutcome(id) {
+  if (outcomes.length <= 2) return;
+  outcomes = outcomes.filter(o => o.id !== id);
+  renderGrid();
+  calculate();
+}
+
+/* ── Render grid ── */
+function renderGrid() {
+  const card = document.getElementById('arbCard');
+  const n = outcomes.length;
+
+  // Column widths: 110px for label, 1fr per outcome
+  const gridCols = `110px repeat(${n}, 1fr)`;
+
+  const colHeaders = outcomes.map((o, i) => `
+    <div class="arb-col-header" style="grid-column:${i + 2};">
+      <input type="text" value="${o.name}"
+        style="background:transparent;border:none;color:var(--text);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;width:calc(100% - ${outcomes.length > 2 ? '22px' : '0px'});outline:none;padding:0;"
+        oninput="outcomes[${i}].name=this.value">
+      ${outcomes.length > 2 ? `<button class="col-remove" onclick="removeOutcome(${o.id})" title="Remove">×</button>` : ''}
+    </div>
+  `).join('');
+
+  const oddsInputs = outcomes.map((o, i) => `
+    <div class="arb-cell" style="grid-column:${i + 2};">
+      <input type="number" class="odds-inp"
+        id="odds-${o.id}"
+        placeholder="${oddsFormat === 'american' ? '+110' : '2.10'}"
+        oninput="calculate()">
+    </div>
+  `).join('');
+
+  const stakeInputs = outcomes.map((o, i) => `
+    <div class="arb-cell" style="grid-column:${i + 2};">
+      <div class="money-wrap ${stakeMode === 'auto' ? 'readonly' : ''}">
+        <span class="prefix">$</span>
+        <input type="number" class="stake-inp"
+          id="stake-${o.id}"
+          placeholder="100"
+          value="100"
+          ${stakeMode === 'auto' ? 'readonly' : ''}
+          oninput="calculate()">
+      </div>
+    </div>
+  `).join('');
+
+  const payoutCells = outcomes.map((o, i) => `
+    <div class="arb-cell" style="grid-column:${i + 2};">
+      <div class="money-wrap readonly">
+        <span class="prefix">$</span>
+        <input type="number" class="payout-out" id="payout-${o.id}" readonly placeholder="0.00">
+      </div>
+    </div>
+  `).join('');
+
+  card.innerHTML = `
+    <!-- Col headers row -->
+    <div class="arb-row" style="display:grid;grid-template-columns:${gridCols};">
+      <div class="arb-col-header" style="background:var(--surface);border-bottom:1px solid var(--border);"></div>
+      ${colHeaders}
+    </div>
+
+    <!-- Odds row -->
+    <div class="arb-row" style="display:grid;grid-template-columns:${gridCols};">
+      <div class="arb-row-label">Odds</div>
+      ${oddsInputs}
+    </div>
+
+    <!-- Stake row -->
+    <div class="arb-row" style="display:grid;grid-template-columns:${gridCols};">
+      <div class="arb-row-label">Stake</div>
+      ${stakeInputs}
+    </div>
+
+    <!-- Payout row -->
+    <div class="arb-row" style="display:grid;grid-template-columns:${gridCols};">
+      <div class="arb-row-label">Payout</div>
+      ${payoutCells}
+    </div>
+
+    <!-- Footer -->
+    <div class="arb-footer" id="arbFooter">
+      <div class="arb-footer-item">
+        <div class="f-label">Total Stake</div>
+        <div class="f-value" id="footTotalStake">$0.00</div>
+      </div>
+      <div class="arb-footer-item">
+        <div class="f-label">Total Payout</div>
+        <div class="f-value" id="footTotalPayout">$0.00</div>
+      </div>
+      <div class="arb-footer-item">
+        <div class="f-label" id="footProfitLabel">Profit (0.00%)</div>
+        <div class="f-value" id="footProfit">$0.00</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── Calculate ── */
+function calculate() {
+  const n = outcomes.length;
+  const decimals = outcomes.map(o => toDecimal(parseFloat(document.getElementById(`odds-${o.id}`)?.value)));
+  const allOddsValid = decimals.every(d => d !== null);
+
+  if (!allOddsValid) {
+    setBanner(null);
+    clearPayouts();
     return;
   }
 
-  // Sum of implied probabilities
-  const impliedProbs = outcomes.map(o => 1 / o.dec);
+  const impliedProbs = decimals.map(d => 1 / d);
   const totalImplied = impliedProbs.reduce((a, b) => a + b, 0);
   const isArb = totalImplied < 1;
 
-  // Optimal stakes: to guarantee equal payout regardless of outcome
-  // stake_i = bankroll / (decimal_i * totalImplied)
-  // Actually: stake_i proportional to 1/decimal_i, summing to bankroll
-  // Guaranteed payout = bankroll / totalImplied
-  const guaranteedPayout = bankroll / totalImplied;
-  const stakes = outcomes.map(o => bankroll * (1 / o.dec) / totalImplied);
-  const profit = guaranteedPayout - bankroll;
-  const roiPct = (profit / bankroll) * 100;
+  let stakes;
+  if (stakeMode === 'auto') {
+    const bankroll = parseFloat(document.getElementById('bankroll').value) || 1000;
+    stakes = impliedProbs.map(p => bankroll * p / totalImplied);
+    outcomes.forEach((o, i) => {
+      const inp = document.getElementById(`stake-${o.id}`);
+      if (inp) inp.value = stakes[i].toFixed(2);
+    });
+  } else {
+    stakes = outcomes.map(o => parseFloat(document.getElementById(`stake-${o.id}`)?.value) || 0);
+  }
 
-  // Build UI
-  resultsCard.classList.remove('hidden');
+  const payouts = outcomes.map((o, i) => stakes[i] * decimals[i]);
+  const totalStake = stakes.reduce((a, b) => a + b, 0);
+  const guaranteedPayout = Math.min(...payouts);
+  const profit = guaranteedPayout - totalStake;
+  const roiPct = totalStake > 0 ? (profit / totalStake) * 100 : 0;
 
-  const badge = document.getElementById('arbBadgeRow');
-  badge.innerHTML = isArb
-    ? `<span class="badge badge-green">✓ Arbitrage Opportunity Found</span>`
-    : `<span class="badge badge-red">✗ No Arbitrage – Books Have Margin</span>`;
-
-  const grid = document.getElementById('summaryGrid');
-  grid.innerHTML = `
-    <div class="result-item">
-      <div class="label">Total Implied Prob</div>
-      <div class="value ${isArb ? 'green' : 'red'}">${(totalImplied * 100).toFixed(2)}%</div>
-    </div>
-    <div class="result-item">
-      <div class="label">Guaranteed ${isArb ? 'Profit' : 'Loss'}</div>
-      <div class="value ${isArb ? 'green' : 'red'}">${isArb ? '+' : ''}$${profit.toFixed(2)}</div>
-    </div>
-    <div class="result-item">
-      <div class="label">ROI</div>
-      <div class="value ${isArb ? 'green' : 'red'}">${profit >= 0 ? '+' : ''}${roiPct.toFixed(2)}%</div>
-    </div>
-    <div class="result-item">
-      <div class="label">Guaranteed Payout</div>
-      <div class="value blue">$${guaranteedPayout.toFixed(2)}</div>
-    </div>
-  `;
-
-  const tbody = document.getElementById('resultsBody');
-  tbody.innerHTML = '';
+  // Fill payout cells
   outcomes.forEach((o, i) => {
-    const stake = stakes[i];
-    const payout = stake * o.dec;
-    const pl = payout - bankroll;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${o.name}</td>
-      <td>${formatOdds(o.dec)}</td>
-      <td>${(impliedProbs[i] * 100).toFixed(2)}%</td>
-      <td><strong>$${stake.toFixed(2)}</strong></td>
-      <td>$${payout.toFixed(2)}</td>
-      <td class="${isArb ? 'green' : 'red'}" style="color:${isArb ? 'var(--accent-green)' : 'var(--accent-red)'}">${isArb ? '+' : ''}$${pl.toFixed(2)}</td>
-    `;
-    tbody.appendChild(tr);
+    const el = document.getElementById(`payout-${o.id}`);
+    if (el) el.value = fmtMoney(payouts[i]);
   });
 
-  document.getElementById('infoBox').innerHTML = isArb
-    ? `<strong>How to execute:</strong> Place the stakes shown above at the corresponding books simultaneously. Regardless of which outcome wins, you'll collect <strong>$${guaranteedPayout.toFixed(2)}</strong> for a guaranteed profit of <strong>+$${profit.toFixed(2)}</strong> (${roiPct.toFixed(2)}% ROI).`
-    : `<strong>No arb exists.</strong> The combined implied probability is ${(totalImplied * 100).toFixed(2)}%, meaning the books hold a ${((totalImplied - 1) * 100).toFixed(2)}% margin. Stakes shown represent optimal allocation if you wanted to guarantee the same outcome on either side.`;
+  // Footer
+  document.getElementById('footTotalStake').textContent = `$${fmtMoney(totalStake)}`;
+  document.getElementById('footTotalPayout').textContent = `$${fmtMoney(guaranteedPayout)}`;
+  document.getElementById('footProfitLabel').textContent = `${isArb ? 'Profit' : 'Loss'} (${roiPct.toFixed(2)}%)`;
+
+  const profitEl = document.getElementById('footProfit');
+  profitEl.textContent = `${profit >= 0 ? '+' : ''}$${fmtMoney(profit)}`;
+  profitEl.style.color = isArb ? 'var(--accent-green)' : 'var(--accent-red)';
+
+  // Banner
+  setBanner(isArb, profit, roiPct, totalImplied);
+
+  // Info box
+  const infoBox = document.getElementById('infoBox');
+  if (isArb) {
+    infoBox.classList.remove('hidden');
+    const stakeList = outcomes.map((o, i) => `<strong>$${fmtMoney(stakes[i])}</strong> on ${o.name || `Outcome ${i+1}`}`).join(', ');
+    infoBox.innerHTML = `<strong>How to execute:</strong> Bet ${stakeList}. Regardless of which outcome wins, your guaranteed return is <strong>$${fmtMoney(guaranteedPayout)}</strong> for a profit of <strong>+$${fmtMoney(profit)}</strong> (${roiPct.toFixed(2)}% ROI).`;
+  } else {
+    infoBox.classList.add('hidden');
+  }
 }
 
-// Init with 2 default legs
-addLeg('Team A', oddsFormat === 'american' ? '-110' : '1.91');
-addLeg('Team B', oddsFormat === 'american' ? '+100' : '2.00');
+function clearPayouts() {
+  outcomes.forEach(o => {
+    const el = document.getElementById(`payout-${o.id}`);
+    if (el) el.value = '';
+  });
+  document.getElementById('footTotalStake').textContent = '$0.00';
+  document.getElementById('footTotalPayout').textContent = '$0.00';
+  document.getElementById('footProfitLabel').textContent = 'Profit (0.00%)';
+  document.getElementById('footProfit').textContent = '$0.00';
+  document.getElementById('footProfit').style.color = '';
+}
+
+function setBanner(isArb, profit, roiPct, totalImplied) {
+  const banner = document.getElementById('arbBanner');
+  const text = document.getElementById('bannerText');
+  const icon = banner.querySelector('.banner-icon');
+
+  if (isArb === null) {
+    banner.className = 'arb-banner negative';
+    icon.textContent = '—';
+    text.textContent = 'Enter odds to check for arbitrage';
+    return;
+  }
+
+  if (isArb) {
+    banner.className = 'arb-banner positive';
+    icon.textContent = '✓';
+    text.innerHTML = `Arbitrage opportunity found &mdash; guaranteed profit of <strong>+$${fmtMoney(profit)}</strong> (${roiPct.toFixed(2)}% ROI). Combined implied probability: ${(totalImplied * 100).toFixed(2)}%.`;
+  } else {
+    banner.className = 'arb-banner negative';
+    icon.textContent = '✗';
+    text.innerHTML = `No arbitrage &mdash; books hold a <strong>${((totalImplied - 1) * 100).toFixed(2)}%</strong> margin. Combined implied probability: ${(totalImplied * 100).toFixed(2)}%.`;
+  }
+}
+
+/* ── Init ── */
+renderGrid();
 </script>
 </body>
 </html>
