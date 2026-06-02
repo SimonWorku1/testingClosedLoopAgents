@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbitrage Calculator – Selene Calculators</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">Selene<span>Calc</span></a>
+  <nav>
+    <a href="arbitrage.html" class="active">Arbitrage</a>
+    <a href="prediction-markets.html">Prediction Markets</a>
+    <a href="devigger.html">Devigger</a>
+    <a href="ev-calculator.html">Expected Value</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Arbitrage Calculator</h1>
+    <p>Enter the odds for each side of a market across different books to check for a guaranteed profit opportunity and calculate optimal stakes.</p>
+  </div>
+
+  <!-- Odds Format -->
+  <div class="card">
+    <h2>Settings</h2>
+    <div class="field-group">
+      <div class="field">
+        <label>Odds Format</label>
+        <div class="format-toggle">
+          <button class="format-btn active" onclick="setFormat('american', this)">American</button>
+          <button class="format-btn" onclick="setFormat('decimal', this)">Decimal</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Total Bankroll ($)</label>
+        <input type="number" id="bankroll" placeholder="e.g. 1000" value="1000" min="1" oninput="calculate()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Outcomes -->
+  <div class="card">
+    <h2>Outcomes</h2>
+    <div class="legs-container" id="legsContainer"></div>
+
+    <div style="display:flex; gap:10px; margin-top:4px;">
+      <button class="btn btn-sm btn-outline" onclick="addLeg()">+ Add Outcome</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="card hidden" id="resultsCard">
+    <h2>Results</h2>
+
+    <div id="arbBadgeRow" style="margin-bottom:16px;"></div>
+
+    <div class="result-grid" id="summaryGrid"></div>
+
+    <table class="result-table" id="resultsTable">
+      <thead>
+        <tr>
+          <th>Outcome</th>
+          <th>Odds</th>
+          <th>Implied Prob</th>
+          <th>Stake</th>
+          <th>Payout</th>
+          <th>Profit/Loss</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+
+    <div class="info-box" id="infoBox"></div>
+  </div>
+</div>
+
+<script>
+let oddsFormat = 'american';
+let legCount = 0;
+
+function setFormat(fmt, btn) {
+  oddsFormat = fmt;
+  document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.odds-input').forEach(inp => {
+    inp.placeholder = fmt === 'american' ? 'e.g. -110' : 'e.g. 1.91';
+  });
+  calculate();
+}
+
+function addLeg(name = '', odds = '') {
+  legCount++;
+  const id = legCount;
+  const container = document.getElementById('legsContainer');
+  const div = document.createElement('div');
+  div.className = 'leg';
+  div.id = `leg-${id}`;
+  div.innerHTML = `
+    <div class="leg-label">Outcome ${id}</div>
+    ${id > 2 ? `<button class="remove-btn" onclick="removeLeg(${id})" title="Remove">×</button>` : ''}
+    <div class="field-group">
+      <div class="field">
+        <label>Team / Label</label>
+        <input type="text" placeholder="e.g. Team A" value="${name}" oninput="calculate()">
+      </div>
+      <div class="field">
+        <label>Odds</label>
+        <input type="number" class="odds-input" placeholder="${oddsFormat === 'american' ? 'e.g. -110' : 'e.g. 1.91'}" value="${odds}" oninput="calculate()">
+      </div>
+    </div>
+  `;
+  container.appendChild(div);
+  calculate();
+}
+
+function removeLeg(id) {
+  document.getElementById(`leg-${id}`)?.remove();
+  calculate();
+}
+
+function toDecimal(val) {
+  if (isNaN(val) || val === '' || val === null) return null;
+  if (oddsFormat === 'decimal') {
+    return val > 1 ? val : null;
+  }
+  // American
+  if (val >= 100) return (val / 100) + 1;
+  if (val <= -100) return (100 / Math.abs(val)) + 1;
+  return null;
+}
+
+function formatAmerican(decimal) {
+  if (decimal >= 2) return '+' + Math.round((decimal - 1) * 100);
+  return Math.round(-100 / (decimal - 1)).toString();
+}
+
+function formatDecimal(d) {
+  return d.toFixed(3);
+}
+
+function formatOdds(decimal) {
+  if (oddsFormat === 'american') return formatAmerican(decimal);
+  return formatDecimal(decimal);
+}
+
+function calculate() {
+  const legs = document.querySelectorAll('.leg');
+  const bankroll = parseFloat(document.getElementById('bankroll').value);
+  const resultsCard = document.getElementById('resultsCard');
+
+  if (!bankroll || bankroll <= 0 || legs.length < 2) {
+    resultsCard.classList.add('hidden');
+    return;
+  }
+
+  const outcomes = [];
+  let valid = true;
+
+  legs.forEach((leg, i) => {
+    const inputs = leg.querySelectorAll('input');
+    const name = inputs[0].value || `Outcome ${i + 1}`;
+    const oddsRaw = parseFloat(inputs[1].value);
+    const dec = toDecimal(oddsRaw);
+    if (!dec) { valid = false; return; }
+    outcomes.push({ name, dec });
+  });
+
+  if (!valid || outcomes.length < 2) {
+    resultsCard.classList.add('hidden');
+    return;
+  }
+
+  // Sum of implied probabilities
+  const impliedProbs = outcomes.map(o => 1 / o.dec);
+  const totalImplied = impliedProbs.reduce((a, b) => a + b, 0);
+  const isArb = totalImplied < 1;
+
+  // Optimal stakes: to guarantee equal payout regardless of outcome
+  // stake_i = bankroll / (decimal_i * totalImplied)
+  // Actually: stake_i proportional to 1/decimal_i, summing to bankroll
+  // Guaranteed payout = bankroll / totalImplied
+  const guaranteedPayout = bankroll / totalImplied;
+  const stakes = outcomes.map(o => bankroll * (1 / o.dec) / totalImplied);
+  const profit = guaranteedPayout - bankroll;
+  const roiPct = (profit / bankroll) * 100;
+
+  // Build UI
+  resultsCard.classList.remove('hidden');
+
+  const badge = document.getElementById('arbBadgeRow');
+  badge.innerHTML = isArb
+    ? `<span class="badge badge-green">✓ Arbitrage Opportunity Found</span>`
+    : `<span class="badge badge-red">✗ No Arbitrage – Books Have Margin</span>`;
+
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = `
+    <div class="result-item">
+      <div class="label">Total Implied Prob</div>
+      <div class="value ${isArb ? 'green' : 'red'}">${(totalImplied * 100).toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Guaranteed ${isArb ? 'Profit' : 'Loss'}</div>
+      <div class="value ${isArb ? 'green' : 'red'}">${isArb ? '+' : ''}$${profit.toFixed(2)}</div>
+    </div>
+    <div class="result-item">
+      <div class="label">ROI</div>
+      <div class="value ${isArb ? 'green' : 'red'}">${profit >= 0 ? '+' : ''}${roiPct.toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Guaranteed Payout</div>
+      <div class="value blue">$${guaranteedPayout.toFixed(2)}</div>
+    </div>
+  `;
+
+  const tbody = document.getElementById('resultsBody');
+  tbody.innerHTML = '';
+  outcomes.forEach((o, i) => {
+    const stake = stakes[i];
+    const payout = stake * o.dec;
+    const pl = payout - bankroll;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${o.name}</td>
+      <td>${formatOdds(o.dec)}</td>
+      <td>${(impliedProbs[i] * 100).toFixed(2)}%</td>
+      <td><strong>$${stake.toFixed(2)}</strong></td>
+      <td>$${payout.toFixed(2)}</td>
+      <td class="${isArb ? 'green' : 'red'}" style="color:${isArb ? 'var(--accent-green)' : 'var(--accent-red)'}">${isArb ? '+' : ''}$${pl.toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('infoBox').innerHTML = isArb
+    ? `<strong>How to execute:</strong> Place the stakes shown above at the corresponding books simultaneously. Regardless of which outcome wins, you'll collect <strong>$${guaranteedPayout.toFixed(2)}</strong> for a guaranteed profit of <strong>+$${profit.toFixed(2)}</strong> (${roiPct.toFixed(2)}% ROI).`
+    : `<strong>No arb exists.</strong> The combined implied probability is ${(totalImplied * 100).toFixed(2)}%, meaning the books hold a ${((totalImplied - 1) * 100).toFixed(2)}% margin. Stakes shown represent optimal allocation if you wanted to guarantee the same outcome on either side.`;
+}
+
+// Init with 2 default legs
+addLeg('Team A', oddsFormat === 'american' ? '-110' : '1.91');
+addLeg('Team B', oddsFormat === 'american' ? '+100' : '2.00');
+</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction Markets Converter – Selene Calculators</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">Selene<span>Calc</span></a>
+  <nav>
+    <a href="arbitrage.html">Arbitrage</a>
+    <a href="prediction-markets.html" class="active">Prediction Markets</a>
+    <a href="devigger.html">Devigger</a>
+    <a href="ev-calculator.html">Expected Value</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Prediction Markets Converter</h1>
+    <p>Convert between prediction market probabilities (Polymarket, Kalshi, Manifold) and sports-book odds formats. Works in both directions.</p>
+  </div>
+
+  <!-- Mode toggle -->
+  <div class="card">
+    <h2>Conversion Direction</h2>
+    <div class="format-toggle">
+      <button class="format-btn active" id="modeProb" onclick="setMode('prob')">Probability → Odds</button>
+      <button class="format-btn" id="modeAmerican" onclick="setMode('american')">American → All</button>
+      <button class="format-btn" id="modeDecimal" onclick="setMode('decimal')">Decimal → All</button>
+    </div>
+  </div>
+
+  <!-- Input: Probability mode -->
+  <div class="card" id="inputProb">
+    <h2>Input</h2>
+    <div class="field-group">
+      <div class="field">
+        <label>Probability (%)</label>
+        <input type="number" id="probInput" placeholder="e.g. 65" min="0.01" max="99.99" step="0.01" oninput="convertFromProb()">
+      </div>
+      <div class="field">
+        <label>Contract Price (¢, optional)</label>
+        <input type="number" id="centsInput" placeholder="e.g. 65 = 65¢ = 65%" min="0.01" max="99.99" step="0.01" oninput="syncFromCents()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Input: American odds mode -->
+  <div class="card hidden" id="inputAmerican">
+    <h2>Input</h2>
+    <div class="field-group">
+      <div class="field">
+        <label>American Odds</label>
+        <input type="number" id="americanInput" placeholder="e.g. -150 or +200" oninput="convertFromAmerican()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Input: Decimal odds mode -->
+  <div class="card hidden" id="inputDecimal">
+    <h2>Input</h2>
+    <div class="field-group">
+      <div class="field">
+        <label>Decimal Odds</label>
+        <input type="number" id="decimalInput" placeholder="e.g. 1.667" min="1.001" step="0.001" oninput="convertFromDecimal()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="card hidden" id="resultsCard">
+    <h2>Converted Values</h2>
+    <table class="conv-table" id="convTable">
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Comparison table -->
+  <div class="card">
+    <h2>Quick Reference Table</h2>
+    <table class="result-table" id="refTable">
+      <thead>
+        <tr>
+          <th>Probability</th>
+          <th>Contract Price</th>
+          <th>American</th>
+          <th>Decimal</th>
+          <th>Fractional</th>
+        </tr>
+      </thead>
+      <tbody id="refBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let mode = 'prob';
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('inputProb').classList.toggle('hidden', m !== 'prob');
+  document.getElementById('inputAmerican').classList.toggle('hidden', m !== 'american');
+  document.getElementById('inputDecimal').classList.toggle('hidden', m !== 'decimal');
+  document.getElementById('resultsCard').classList.add('hidden');
+  document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`mode${m.charAt(0).toUpperCase() + m.slice(1)}`).classList.add('active');
+}
+
+function probToAmerican(p) {
+  // p is 0-1
+  if (p >= 0.5) return -(p / (1 - p)) * 100;
+  return ((1 - p) / p) * 100;
+}
+
+function americanToDecimal(a) {
+  if (a >= 100) return (a / 100) + 1;
+  return (100 / Math.abs(a)) + 1;
+}
+
+function probToDecimal(p) { return 1 / p; }
+
+function toFractional(p) {
+  // numerator/denominator approximation
+  const ratio = (1 - p) / p;
+  // find a simple fraction
+  const denom = 100;
+  const num = Math.round(ratio * denom);
+  const gcd = getGCD(num, denom);
+  return `${num / gcd}/${denom / gcd}`;
+}
+
+function getGCD(a, b) { return b === 0 ? a : getGCD(b, a % b); }
+
+function formatAmerican(a) {
+  return a >= 0 ? `+${a.toFixed(0)}` : `${a.toFixed(0)}`;
+}
+
+function showResults(prob) {
+  // prob is 0-1
+  if (prob <= 0 || prob >= 1) {
+    document.getElementById('resultsCard').classList.add('hidden');
+    return;
+  }
+  const dec = probToDecimal(prob);
+  const amer = probToAmerican(prob);
+  const frac = toFractional(prob);
+  const cents = (prob * 100).toFixed(2);
+  const impliedEdge = null;
+
+  document.getElementById('resultsCard').classList.remove('hidden');
+  const tbody = document.querySelector('#convTable tbody');
+  tbody.innerHTML = `
+    <tr>
+      <td class="conv-label">Probability</td>
+      <td><span class="conv-value blue">${(prob * 100).toFixed(2)}%</span></td>
+    </tr>
+    <tr>
+      <td class="conv-label">Contract Price</td>
+      <td><span class="conv-value">${cents}¢</span> &nbsp;<span class="badge badge-blue">Poly / Kalshi</span></td>
+    </tr>
+    <tr>
+      <td class="conv-label">American Odds</td>
+      <td><span class="conv-value">${formatAmerican(amer)}</span></td>
+    </tr>
+    <tr>
+      <td class="conv-label">Decimal Odds</td>
+      <td><span class="conv-value">${dec.toFixed(3)}</span></td>
+    </tr>
+    <tr>
+      <td class="conv-label">Fractional Odds</td>
+      <td><span class="conv-value">${frac}</span></td>
+    </tr>
+    <tr>
+      <td class="conv-label">Implied Edge vs 50/50</td>
+      <td><span class="conv-value ${prob > 0.5 ? 'red' : 'green'}">${prob > 0.5 ? '-' : '+'}${Math.abs((prob - 0.5) * 100).toFixed(2)}%</span>
+        <span class="badge ${prob > 0.5 ? 'badge-red' : 'badge-green'}">${prob > 0.5 ? 'Favorite' : 'Underdog'}</span></td>
+    </tr>
+  `;
+}
+
+function convertFromProb() {
+  const raw = parseFloat(document.getElementById('probInput').value);
+  if (isNaN(raw)) { document.getElementById('resultsCard').classList.add('hidden'); return; }
+  document.getElementById('centsInput').value = raw.toFixed(2);
+  showResults(raw / 100);
+}
+
+function syncFromCents() {
+  const val = parseFloat(document.getElementById('centsInput').value);
+  if (isNaN(val)) return;
+  document.getElementById('probInput').value = val.toFixed(2);
+  showResults(val / 100);
+}
+
+function convertFromAmerican() {
+  const a = parseFloat(document.getElementById('americanInput').value);
+  if (isNaN(a) || (a > -100 && a < 100)) { document.getElementById('resultsCard').classList.add('hidden'); return; }
+  const dec = americanToDecimal(a);
+  const prob = 1 / dec;
+  showResults(prob);
+}
+
+function convertFromDecimal() {
+  const d = parseFloat(document.getElementById('decimalInput').value);
+  if (isNaN(d) || d <= 1) { document.getElementById('resultsCard').classList.add('hidden'); return; }
+  showResults(1 / d);
+}
+
+// Build reference table
+function buildRefTable() {
+  const probs = [5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95];
+  const tbody = document.getElementById('refBody');
+  probs.forEach(pct => {
+    const p = pct / 100;
+    const dec = probToDecimal(p);
+    const amer = probToAmerican(p);
+    const frac = toFractional(p);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${pct}%</td>
+      <td>${pct}¢</td>
+      <td>${formatAmerican(amer)}</td>
+      <td>${dec.toFixed(3)}</td>
+      <td>${frac}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+buildRefTable();
+</script>
+</body>
+</html>

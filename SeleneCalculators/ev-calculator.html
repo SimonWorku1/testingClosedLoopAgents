@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expected Value Calculator – Selene Calculators</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">Selene<span>Calc</span></a>
+  <nav>
+    <a href="arbitrage.html">Arbitrage</a>
+    <a href="prediction-markets.html">Prediction Markets</a>
+    <a href="devigger.html">Devigger</a>
+    <a href="ev-calculator.html" class="active">Expected Value</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Expected Value (EV) Calculator</h1>
+    <p>Calculate the expected value of any bet given your estimated true win probability and the offered odds. Find your edge and long-run projections.</p>
+  </div>
+
+  <!-- Settings -->
+  <div class="card">
+    <h2>Odds Format</h2>
+    <div class="format-toggle">
+      <button class="format-btn active" onclick="setFormat('american', this)">American</button>
+      <button class="format-btn" onclick="setFormat('decimal', this)">Decimal</button>
+    </div>
+  </div>
+
+  <!-- Inputs -->
+  <div class="card">
+    <h2>Bet Details</h2>
+    <div class="field-group">
+      <div class="field">
+        <label>Offered Odds</label>
+        <input type="number" id="oddsInput" placeholder="e.g. -110" oninput="calculate()">
+      </div>
+      <div class="field">
+        <label>Your True Win Probability (%)</label>
+        <input type="number" id="probInput" placeholder="e.g. 55" min="0.01" max="99.99" step="0.01" oninput="calculate()">
+      </div>
+      <div class="field">
+        <label>Stake ($)</label>
+        <input type="number" id="stakeInput" placeholder="e.g. 100" min="0.01" value="100" oninput="calculate()">
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:12px;">
+      <strong>True probability</strong> is your honest estimate of how likely the outcome is, ideally sourced from sharp closing lines, no-vig models, or a devigger. The higher your edge over the book's implied probability, the greater the expected value.
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="card hidden" id="resultsCard">
+    <h2>Results</h2>
+
+    <div id="evBadge" style="margin-bottom:16px;"></div>
+
+    <div class="result-grid" id="summaryGrid"></div>
+
+    <hr>
+
+    <h2 style="margin-top:16px;">Long-Run Projection</h2>
+    <div class="field-group" style="margin-top:16px;">
+      <div class="field">
+        <label>Number of Bets</label>
+        <input type="number" id="numBets" placeholder="e.g. 100" value="100" min="1" oninput="calculate()">
+      </div>
+    </div>
+
+    <div class="result-grid" id="projectionGrid"></div>
+
+    <table class="result-table" style="margin-top:20px;">
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Description</th>
+          <th>Total P&amp;L</th>
+          <th>Win Rate</th>
+        </tr>
+      </thead>
+      <tbody id="scenarioBody"></tbody>
+    </table>
+
+    <div class="info-box" id="infoBox"></div>
+  </div>
+
+  <!-- EV explainer -->
+  <div class="card">
+    <h2>Understanding Expected Value</h2>
+    <div style="display:flex; flex-direction:column; gap:14px; font-size:14px; color:var(--text-muted);">
+      <div>
+        <strong style="color:var(--text);">EV Formula</strong><br>
+        EV = (Win Probability × Profit If Win) − (Loss Probability × Stake)<br>
+        A positive EV means the bet is profitable in the long run, even if you lose on any single bet.
+      </div>
+      <div>
+        <strong style="color:var(--text);">Kelly Criterion</strong><br>
+        The optimal fraction of your bankroll to bet is: <em>f* = (bp − q) / b</em>, where <em>b</em> = decimal odds − 1, <em>p</em> = win prob, <em>q</em> = 1 − p. This maximises long-run growth while avoiding ruin.
+      </div>
+      <div>
+        <strong style="color:var(--text);">ROI vs EV</strong><br>
+        EV% (ROI per bet) tells you edge per dollar wagered. A 5% ROI at $100/bet over 1,000 bets projects to $5,000 profit — but variance means real results will deviate from expected values, especially over small samples.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let oddsFormat = 'american';
+
+function setFormat(fmt, btn) {
+  oddsFormat = fmt;
+  document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const oddsInp = document.getElementById('oddsInput');
+  oddsInp.placeholder = fmt === 'american' ? 'e.g. -110' : 'e.g. 1.91';
+  calculate();
+}
+
+function toDecimal(val) {
+  if (isNaN(val) || val === null) return null;
+  if (oddsFormat === 'decimal') return val > 1 ? val : null;
+  if (val >= 100) return (val / 100) + 1;
+  if (val <= -100) return (100 / Math.abs(val)) + 1;
+  return null;
+}
+
+function formatAmerican(dec) {
+  if (dec >= 2) return '+' + Math.round((dec - 1) * 100);
+  return String(Math.round(-100 / (dec - 1)));
+}
+
+function calculate() {
+  const oddsRaw = parseFloat(document.getElementById('oddsInput').value);
+  const trueProbPct = parseFloat(document.getElementById('probInput').value);
+  const stake = parseFloat(document.getElementById('stakeInput').value);
+  const numBets = parseInt(document.getElementById('numBets')?.value) || 100;
+
+  const resultsCard = document.getElementById('resultsCard');
+
+  const dec = toDecimal(oddsRaw);
+  if (!dec || isNaN(trueProbPct) || trueProbPct <= 0 || trueProbPct >= 100 || isNaN(stake) || stake <= 0) {
+    resultsCard.classList.add('hidden');
+    return;
+  }
+
+  const p = trueProbPct / 100;       // true win probability
+  const q = 1 - p;                    // true loss probability
+  const b = dec - 1;                  // net profit per $1 wagered (if win)
+  const profit = b * stake;           // profit if win
+  const loss = stake;                 // loss if lose
+
+  const ev = (p * profit) - (q * loss);
+  const evPct = (ev / stake) * 100;
+
+  // Book implied prob
+  const bookProb = 1 / dec;
+  const edge = (p - bookProb) * 100; // your edge over the book (in prob %)
+
+  // Kelly criterion
+  const kelly = (b * p - q) / b;
+  const halfKelly = kelly / 2;
+
+  // Long-run projection
+  const expectedWins = p * numBets;
+  const expectedLosses = q * numBets;
+  const totalEV = ev * numBets;
+  const totalStaked = stake * numBets;
+  const totalROI = (totalEV / totalStaked) * 100;
+
+  // Variance / std dev for n bets
+  // Var(single bet) = p*(profit)^2 + q*(loss)^2 - ev^2
+  const variance = p * Math.pow(profit, 2) + q * Math.pow(loss, 2) - Math.pow(ev, 2);
+  const stdDev = Math.sqrt(variance * numBets);
+  const bestCase = totalEV + 2 * stdDev;
+  const worstCase = totalEV - 2 * stdDev;
+
+  const isPositiveEV = ev > 0;
+
+  resultsCard.classList.remove('hidden');
+
+  document.getElementById('evBadge').innerHTML = isPositiveEV
+    ? `<span class="badge badge-green">+EV Bet — Profitable Long Term</span>`
+    : `<span class="badge badge-red">-EV Bet — Unprofitable Long Term</span>`;
+
+  document.getElementById('summaryGrid').innerHTML = `
+    <div class="result-item">
+      <div class="label">Expected Value</div>
+      <div class="value ${isPositiveEV ? 'green' : 'red'}">${ev >= 0 ? '+' : ''}$${ev.toFixed(2)}</div>
+    </div>
+    <div class="result-item">
+      <div class="label">EV % (ROI)</div>
+      <div class="value ${isPositiveEV ? 'green' : 'red'}">${evPct >= 0 ? '+' : ''}${evPct.toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Your Edge</div>
+      <div class="value ${edge >= 0 ? 'green' : 'red'}">${edge >= 0 ? '+' : ''}${edge.toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Book Implied Prob</div>
+      <div class="value">${(bookProb * 100).toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">True Win Prob</div>
+      <div class="value blue">${trueProbPct.toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Kelly Bet Size</div>
+      <div class="value yellow">${(kelly * 100).toFixed(2)}% bankroll</div>
+    </div>
+  `;
+
+  document.getElementById('projectionGrid').innerHTML = `
+    <div class="result-item">
+      <div class="label">Total EV (${numBets} bets)</div>
+      <div class="value ${isPositiveEV ? 'green' : 'red'}">${totalEV >= 0 ? '+' : ''}$${totalEV.toFixed(2)}</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Total Staked</div>
+      <div class="value">$${totalStaked.toFixed(2)}</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Projected Wins</div>
+      <div class="value green">${expectedWins.toFixed(1)}</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Std Deviation</div>
+      <div class="value yellow">±$${stdDev.toFixed(2)}</div>
+    </div>
+  `;
+
+  const tbody = document.getElementById('scenarioBody');
+  tbody.innerHTML = `
+    <tr>
+      <td><span class="badge badge-green">Best Case</span></td>
+      <td>+2 standard deviations above expected</td>
+      <td style="color:var(--accent-green);font-weight:600;">+$${bestCase.toFixed(2)}</td>
+      <td>${((p + 2 * Math.sqrt(p * q / numBets)) * 100).toFixed(1)}%</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-blue">Expected</span></td>
+      <td>Long-run average at ${trueProbPct.toFixed(1)}% win rate</td>
+      <td style="color:${isPositiveEV ? 'var(--accent-green)' : 'var(--accent-red)'};font-weight:600;">${totalEV >= 0 ? '+' : ''}$${totalEV.toFixed(2)}</td>
+      <td>${(p * 100).toFixed(1)}%</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">Worst Case</span></td>
+      <td>−2 standard deviations below expected</td>
+      <td style="color:var(--accent-red);font-weight:600;">${worstCase >= 0 ? '+' : ''}$${worstCase.toFixed(2)}</td>
+      <td>${Math.max(0, (p - 2 * Math.sqrt(p * q / numBets)) * 100).toFixed(1)}%</td>
+    </tr>
+  `;
+
+  document.getElementById('infoBox').innerHTML =
+    `<strong>Kelly Criterion:</strong> With a ${edge >= 0 ? '+' : ''}${edge.toFixed(2)}% edge, the full Kelly bet is <strong>${(kelly * 100).toFixed(2)}%</strong> of your bankroll per bet. Half-Kelly (<strong>${(halfKelly * 100).toFixed(2)}%</strong>) is recommended to reduce variance while retaining ~75% of expected growth. Over ${numBets} bets at $${stake}/each, you'll total <strong>$${totalStaked.toFixed(2)}</strong> in action with a projected P&L of <strong>${totalEV >= 0 ? '+' : ''}$${totalEV.toFixed(2)}</strong>.`;
+}
+
+calculate();
+</script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devigger / No-Vig Fair Odds – Selene Calculators</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">Selene<span>Calc</span></a>
+  <nav>
+    <a href="arbitrage.html">Arbitrage</a>
+    <a href="prediction-markets.html">Prediction Markets</a>
+    <a href="devigger.html" class="active">Devigger</a>
+    <a href="ev-calculator.html">Expected Value</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Devigger / No-Vig Fair Odds Calculator</h1>
+    <p>Remove the bookmaker's margin (vig/juice) from any market to find the true implied probability and fair no-vig odds for each outcome.</p>
+  </div>
+
+  <!-- Settings -->
+  <div class="card">
+    <h2>Settings</h2>
+    <div class="field-group">
+      <div class="field">
+        <label>Odds Format</label>
+        <div class="format-toggle">
+          <button class="format-btn active" onclick="setFormat('american', this)">American</button>
+          <button class="format-btn" onclick="setFormat('decimal', this)">Decimal</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Devig Method</label>
+        <select id="devigMethod" onchange="calculate()">
+          <option value="multiplicative">Multiplicative (Standard)</option>
+          <option value="additive">Additive</option>
+          <option value="power">Power / Shin</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Market Type</label>
+        <div class="format-toggle">
+          <button class="format-btn active" id="btn2way" onclick="setMarket(2, this)">2-Way</button>
+          <button class="format-btn" id="btn3way" onclick="setMarket(3, this)">3-Way</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inputs -->
+  <div class="card">
+    <h2>Market Odds</h2>
+
+    <div id="outcomeInputs"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="card hidden" id="resultsCard">
+    <h2>Results</h2>
+
+    <div class="result-grid" id="summaryGrid"></div>
+
+    <table class="result-table" style="margin-top:20px;">
+      <thead>
+        <tr>
+          <th>Outcome</th>
+          <th>Book Odds</th>
+          <th>Implied Prob</th>
+          <th>Fair Prob (No-Vig)</th>
+          <th>Fair Odds</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+
+    <div class="info-box" id="infoBox"></div>
+  </div>
+
+  <!-- Method explainer -->
+  <div class="card">
+    <h2>About Devig Methods</h2>
+    <div style="display:flex; flex-direction:column; gap:14px; font-size:14px; color:var(--text-muted);">
+      <div>
+        <strong style="color:var(--text);">Multiplicative (Standard)</strong><br>
+        Scales each implied probability by the same factor so they sum to 100%. Most common and assumes the book distributes vig proportionally across all outcomes.
+      </div>
+      <div>
+        <strong style="color:var(--text);">Additive</strong><br>
+        Subtracts an equal share of overround from each implied probability. Best for markets where you expect the book to add flat vig across outcomes.
+      </div>
+      <div>
+        <strong style="color:var(--text);">Power / Shin</strong><br>
+        Uses a power model (Shin's method) to solve for the margin analytically. Generally considered the most accurate for heavily-vig'd markets.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let oddsFormat = 'american';
+let marketSize = 2;
+
+const outcomeNames = ['Home / Team A', 'Away / Team B', 'Draw'];
+
+function setFormat(fmt, btn) {
+  oddsFormat = fmt;
+  document.querySelectorAll('.format-btn[data-fmt]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.odds-input').forEach(inp => {
+    inp.placeholder = fmt === 'american' ? 'e.g. -110' : 'e.g. 1.91';
+  });
+  calculate();
+}
+
+// Override setFormat to tag buttons
+document.querySelectorAll('.format-btn').forEach(b => {
+  if (b.textContent === 'American' || b.textContent === 'Decimal') {
+    b.setAttribute('data-fmt', b.textContent.toLowerCase());
+  }
+});
+
+function setMarket(n, btn) {
+  marketSize = n;
+  document.getElementById('btn2way').classList.toggle('active', n === 2);
+  document.getElementById('btn3way').classList.toggle('active', n === 3);
+  buildInputs();
+}
+
+function buildInputs() {
+  const container = document.getElementById('outcomeInputs');
+  container.innerHTML = '';
+  for (let i = 0; i < marketSize; i++) {
+    const div = document.createElement('div');
+    div.className = 'field-group';
+    div.style.marginBottom = '12px';
+    div.innerHTML = `
+      <div class="field" style="max-width:200px;">
+        <label>${outcomeNames[i]}</label>
+        <input type="text" id="name-${i}" value="${outcomeNames[i]}" placeholder="Label" oninput="calculate()">
+      </div>
+      <div class="field" style="max-width:200px;">
+        <label>Odds</label>
+        <input type="number" class="odds-input" id="odds-${i}" placeholder="${oddsFormat === 'american' ? 'e.g. -110' : 'e.g. 1.91'}" oninput="calculate()">
+      </div>
+    `;
+    container.appendChild(div);
+  }
+}
+
+function toDecimal(val) {
+  if (isNaN(val) || val === null || val === '') return null;
+  if (oddsFormat === 'decimal') return val > 1 ? val : null;
+  if (val >= 100) return (val / 100) + 1;
+  if (val <= -100) return (100 / Math.abs(val)) + 1;
+  return null;
+}
+
+function formatAmerican(dec) {
+  if (dec >= 2) return '+' + Math.round((dec - 1) * 100);
+  return String(Math.round(-100 / (dec - 1)));
+}
+
+function formatOdds(dec) {
+  if (oddsFormat === 'american') return formatAmerican(dec);
+  return dec.toFixed(3);
+}
+
+function devigMultiplicative(probs) {
+  const total = probs.reduce((a, b) => a + b, 0);
+  return probs.map(p => p / total);
+}
+
+function devigAdditive(probs) {
+  const total = probs.reduce((a, b) => a + b, 0);
+  const overround = total - 1;
+  const share = overround / probs.length;
+  const fair = probs.map(p => p - share);
+  return fair;
+}
+
+function devigPower(probs) {
+  // Iterative power devig: find k such that sum(p_i^(1/k)) = 1 ...
+  // Actually: find k such that sum(p_i^k) = 1 where p_i are the overround probs
+  // Binary search for k in (0,1)
+  let lo = 0.5, hi = 1.5;
+  for (let iter = 0; iter < 100; iter++) {
+    const mid = (lo + hi) / 2;
+    const s = probs.reduce((a, p) => a + Math.pow(p, mid), 0);
+    if (s > 1) lo = mid; else hi = mid;
+  }
+  const k = (lo + hi) / 2;
+  const fair = probs.map(p => Math.pow(p, k));
+  const total = fair.reduce((a, b) => a + b, 0);
+  return fair.map(p => p / total);
+}
+
+function calculate() {
+  const method = document.getElementById('devigMethod').value;
+  const resultsCard = document.getElementById('resultsCard');
+
+  const outcomes = [];
+  let allValid = true;
+
+  for (let i = 0; i < marketSize; i++) {
+    const name = document.getElementById(`name-${i}`)?.value || outcomeNames[i];
+    const raw = parseFloat(document.getElementById(`odds-${i}`)?.value);
+    const dec = toDecimal(raw);
+    if (!dec) { allValid = false; break; }
+    outcomes.push({ name, dec, impliedProb: 1 / dec });
+  }
+
+  if (!allValid) {
+    resultsCard.classList.add('hidden');
+    return;
+  }
+
+  const impliedProbs = outcomes.map(o => o.impliedProb);
+  const totalImplied = impliedProbs.reduce((a, b) => a + b, 0);
+  const vig = (totalImplied - 1) * 100;
+  const vigPerSide = vig / marketSize;
+
+  let fairProbs;
+  if (method === 'multiplicative') fairProbs = devigMultiplicative(impliedProbs);
+  else if (method === 'additive') fairProbs = devigAdditive(impliedProbs);
+  else fairProbs = devigPower(impliedProbs);
+
+  resultsCard.classList.remove('hidden');
+
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = `
+    <div class="result-item">
+      <div class="label">Total Overround</div>
+      <div class="value red">${(totalImplied * 100).toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Book Margin (Vig)</div>
+      <div class="value yellow">${vig.toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Vig Per Side</div>
+      <div class="value yellow">~${vigPerSide.toFixed(2)}%</div>
+    </div>
+    <div class="result-item">
+      <div class="label">Method</div>
+      <div class="value blue" style="font-size:14px;text-transform:capitalize;">${method}</div>
+    </div>
+  `;
+
+  const tbody = document.getElementById('resultsBody');
+  tbody.innerHTML = '';
+  outcomes.forEach((o, i) => {
+    const fair = fairProbs[i];
+    const fairDec = 1 / fair;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${o.name}</strong></td>
+      <td>${formatOdds(o.dec)}</td>
+      <td>${(o.impliedProb * 100).toFixed(2)}%</td>
+      <td><strong>${(fair * 100).toFixed(2)}%</strong></td>
+      <td style="color:var(--accent-green);font-weight:600;">${formatOdds(fairDec)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('infoBox').innerHTML =
+    `<strong>How to read this:</strong> The book's combined implied probability is <strong>${(totalImplied * 100).toFixed(2)}%</strong>, meaning it holds a <strong>${vig.toFixed(2)}%</strong> margin. After removing the vig using the <em>${method}</em> method, the fair probabilities sum to exactly 100%. Compare any line you're offered against the <strong>Fair Odds</strong> column — if the offered odds are better, you have a +EV bet.`;
+}
+
+buildInputs();
+</script>
+</body>
+</html>
