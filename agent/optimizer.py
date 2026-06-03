@@ -2,12 +2,24 @@
 Optimizer agent — generates candidate count_unique implementations.
 """
 
+import random
 import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from agent.llm_client import LLMClient
+
+_STRATEGY_HINTS = [
+    "Try a dict-based approach to avoid set overhead on small inputs.",
+    "Explore whether an early-exit short-circuit (return 1 immediately on first duplicate) speeds things up on high-duplication inputs.",
+    "Try a bytearray or bitarray bitmask for integer-only inputs as a fast path.",
+    "Explore whether itertools or collections helpers (e.g. Counter) are faster than a raw set.",
+    "Try a two-pass approach: sort first, then count unique adjacent elements.",
+    "Explore whether pre-sizing a set with an initial capacity hint reduces rehashing.",
+    "Try a generator expression inside sum() or a reduce pattern instead of materialising a set.",
+    "Benchmark whether `return len({*items})` (unpacking) differs from `return len(set(items))`.",
+]
 
 _SYSTEM = """\
 You are an expert Python performance engineer.
@@ -54,6 +66,8 @@ def generate_candidate(
     if critic_feedback:
         critic_section = f"\nCritic feedback on the last candidate:\n{critic_feedback}\n"
 
+    strategy_hint = random.choice(_STRATEGY_HINTS)
+
     user = f"""\
 Iteration {iteration + 1}: Optimize `count_unique(items)`.
 
@@ -70,9 +84,9 @@ def count_unique(items):
 Progress so far:
 {history_summary}
 {critic_section}
-Write a faster version. The simplest correct optimization is using a set.
-Push further if you can — explore frozenset tricks, early-exit patterns,
-or numpy if the input is numeric (but standard library only).
+**Strategy hint for this iteration:** {strategy_hint}
+Use this as a starting point, but discard it if your benchmarking intuition
+says a different approach will be faster.
 
 Return ONLY the Python function source, no markdown fences, no explanation.
 """
