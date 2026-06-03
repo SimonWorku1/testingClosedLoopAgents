@@ -30,7 +30,7 @@ from agent.evaluator import evaluate
 from agent.controller import should_accept
 from benchmarks.bench import BASELINE_SOURCE, measure_runtime_ms
 
-MAX_ITERATIONS = 10
+MAX_ITERATIONS = int(os.environ.get("MAX_ITERATIONS", "10"))
 MAX_STAGNANT = 3      # stop after this many consecutive non-improvements
 RESULTS_DIR = Path("results")
 LOG_FILE = RESULTS_DIR / "iterations.jsonl"
