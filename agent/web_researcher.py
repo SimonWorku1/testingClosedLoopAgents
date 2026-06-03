@@ -7,6 +7,7 @@ import urllib.parse
 import urllib.request
 
 import anthropic
+import random
 from rate_limit import pace as _pace
 
 
@@ -74,6 +75,17 @@ FETCH_TOOL = {
 }
 
 TOOLS = [SEARCH_TOOL, FETCH_TOOL]
+
+_DIVERSITY_HINTS = [
+    "Take an unconventional angle most researchers overlook.",
+    "Lead with data and quantitative evidence above all else.",
+    "Prioritize primary sources and expert voices over secondary summaries.",
+    "Focus on what is contested or unresolved in this area.",
+    "Approach this from a critical or skeptical perspective.",
+    "Emphasize historical context and how understanding has evolved.",
+    "Look for surprising or counterintuitive findings in the evidence.",
+    "Highlight practical real-world implications over theoretical discussion.",
+]
 
 # ---------------------------------------------------------------------------
 # Lightweight web helpers (no third-party deps beyond anthropic)
@@ -191,9 +203,11 @@ def build_user_prompt(
     iteration: int,
     previous_iterations: list[dict],
 ) -> str:
+    hint = random.choice(_DIVERSITY_HINTS)
     lines = [
         f"Research topic: {topic}",
         f"(You are Agent {agent_id + 1} in iteration {iteration + 1})",
+        f"**Your research angle for this run:** {hint}",
         "",
     ]
 
