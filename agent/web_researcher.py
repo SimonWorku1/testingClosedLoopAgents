@@ -7,40 +7,14 @@ import urllib.parse
 import urllib.request
 
 import anthropic
-from datetime import datetime, timezone
-
-
-def _pace(headers) -> None:
-    """Sleep only when the token bucket is nearly empty, based on response headers."""
-    remaining = headers.get("anthropic-ratelimit-tokens-remaining")
-    if remaining is None:
-        return
-    try:
-        remaining = int(remaining)
-    except (TypeError, ValueError):
-        return
-    # If less than one typical call's worth of tokens remains, wait for reset.
-    if remaining < 8000:
-        reset = headers.get("anthropic-ratelimit-tokens-reset")
-        wait = 0.0
-        if reset:
-            try:
-                t = datetime.fromisoformat(reset.replace("Z", "+00:00"))
-                wait = max(0.0, (t - datetime.now(timezone.utc)).total_seconds())
-            except ValueError:
-                wait = 10.0
-        if wait > 0:
-            print(f"    [rate limit] {remaining} tokens remaining — sleeping {wait:.1f}s...")
-            time.sleep(min(wait, 60))
+from rate_limit import pace as _pace
 
 
 def _api_call_with_backoff(fn, max_retries: int = 6):
     """
     Call fn() using with_raw_response, pace off headers, retry on 429.
-    fn must be a zero-arg callable that returns a raw response object
-    (client.messages.with_raw_response.create(...)).
+    fn must return a raw response object (client.messages.with_raw_response.create(...)).
     """
-    delay = 2
     for attempt in range(max_retries):
         try:
             raw = fn()
@@ -57,7 +31,6 @@ def _api_call_with_backoff(fn, max_retries: int = 6):
             wait = retry_after or (2 ** attempt)
             print(f"    [rate limit] 429 — backing off {wait:.0f}s...")
             time.sleep(min(wait, 60))
-            delay = min(delay * 2, 60)
 
 SEARCH_TOOL = {
     "name": "search_web",

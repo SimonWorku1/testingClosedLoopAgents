@@ -5,33 +5,10 @@ import re
 import time
 
 import anthropic
-from datetime import datetime, timezone
-
-
-def _pace(headers) -> None:
-    remaining = headers.get("anthropic-ratelimit-tokens-remaining")
-    if remaining is None:
-        return
-    try:
-        remaining = int(remaining)
-    except (TypeError, ValueError):
-        return
-    if remaining < 8000:
-        reset = headers.get("anthropic-ratelimit-tokens-reset")
-        wait = 0.0
-        if reset:
-            try:
-                t = datetime.fromisoformat(reset.replace("Z", "+00:00"))
-                wait = max(0.0, (t - datetime.now(timezone.utc)).total_seconds())
-            except ValueError:
-                wait = 10.0
-        if wait > 0:
-            print(f"    [evaluator rate limit] {remaining} tokens remaining — sleeping {wait:.1f}s...")
-            time.sleep(min(wait, 60))
+from rate_limit import pace as _pace
 
 
 def _api_call_with_backoff(fn, max_retries: int = 6):
-    delay = 2
     for attempt in range(max_retries):
         try:
             raw = fn()
@@ -48,7 +25,6 @@ def _api_call_with_backoff(fn, max_retries: int = 6):
             wait = retry_after or (2 ** attempt)
             print(f"    [evaluator rate limit] 429 — backing off {wait:.0f}s...")
             time.sleep(min(wait, 60))
-            delay = min(delay * 2, 60)
 
 RUBRIC = """
 You are the harshest peer reviewer at a top-tier academic journal. You reject 80% of submissions on first review. Your default is to find what's missing, not what's present. Most reports deserve 3–5/10 on first pass. A score of 8+ is reserved for work that could be published as-is.
