@@ -7,19 +7,56 @@ import urllib.parse
 import urllib.request
 
 import anthropic
+from datetime import datetime, timezone
+
+
+def _pace(headers) -> None:
+    """Sleep only when the token bucket is nearly empty, based on response headers."""
+    remaining = headers.get("anthropic-ratelimit-tokens-remaining")
+    if remaining is None:
+        return
+    try:
+        remaining = int(remaining)
+    except (TypeError, ValueError):
+        return
+    # If less than one typical call's worth of tokens remains, wait for reset.
+    if remaining < 8000:
+        reset = headers.get("anthropic-ratelimit-tokens-reset")
+        wait = 0.0
+        if reset:
+            try:
+                t = datetime.fromisoformat(reset.replace("Z", "+00:00"))
+                wait = max(0.0, (t - datetime.now(timezone.utc)).total_seconds())
+            except ValueError:
+                wait = 10.0
+        if wait > 0:
+            print(f"    [rate limit] {remaining} tokens remaining — sleeping {wait:.1f}s...")
+            time.sleep(min(wait, 60))
 
 
 def _api_call_with_backoff(fn, max_retries: int = 6):
-    """Call fn(); on RateLimitError retry with exponential backoff (2s, 4s, 8s, …)."""
+    """
+    Call fn() using with_raw_response, pace off headers, retry on 429.
+    fn must be a zero-arg callable that returns a raw response object
+    (client.messages.with_raw_response.create(...)).
+    """
     delay = 2
     for attempt in range(max_retries):
         try:
-            return fn()
-        except anthropic.RateLimitError:
+            raw = fn()
+            _pace(raw.headers)
+            return raw.parse()
+        except anthropic.RateLimitError as exc:
             if attempt == max_retries - 1:
                 raise
-            print(f"    [rate limit] backing off {delay}s...")
-            time.sleep(delay)
+            retry_after = None
+            try:
+                retry_after = float(exc.response.headers.get("retry-after"))
+            except (AttributeError, TypeError, ValueError):
+                pass
+            wait = retry_after or (2 ** attempt)
+            print(f"    [rate limit] 429 — backing off {wait:.0f}s...")
+            time.sleep(min(wait, 60))
             delay = min(delay * 2, 60)
 
 SEARCH_TOOL = {
@@ -234,7 +271,7 @@ def run_research_agent(
             return "[Cancelled]"
 
         response = _api_call_with_backoff(
-            lambda: client.messages.create(
+            lambda: client.messages.with_raw_response.create(
                 model="claude-sonnet-4-6",
                 max_tokens=4096,
                 system=build_system_prompt(),
@@ -269,7 +306,6 @@ def run_research_agent(
                         }
                     )
             messages.append({"role": "user", "content": tool_results})
-            time.sleep(12)
             continue
 
         # stop_reason == "max_tokens" or other: stop tool loop, force final report
@@ -291,7 +327,7 @@ def run_research_agent(
         ),
     })
     final = _api_call_with_backoff(
-        lambda: client.messages.create(
+        lambda: client.messages.with_raw_response.create(
             model="claude-sonnet-4-6",
             max_tokens=8192,
             system=build_system_prompt(),

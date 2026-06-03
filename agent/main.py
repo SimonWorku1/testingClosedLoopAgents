@@ -28,10 +28,10 @@ NUM_AGENTS = 3
 MAX_ITERATIONS = 5
 TARGET_SCORE = 8
 
-# Seconds between agent starts — spreads token bursts across the rate-limit window.
-# At 30s stagger + 12s inter-round sleep, peak rate stays ~20-25k tokens/min
-# which is safely under the Tier 1 30k/min cap.
-AGENT_STAGGER_SECONDS = 30
+# Small stagger so agents don't all fire their first API call simultaneously.
+# Header-based pacing in web_researcher.py handles the actual rate-limit budget;
+# this just avoids an initial token burst.
+AGENT_STAGGER_SECONDS = 5
 
 _executor = ThreadPoolExecutor(max_workers=NUM_AGENTS * 2)
 
